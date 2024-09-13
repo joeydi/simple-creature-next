@@ -1,0 +1,18 @@
+@import "../styles/variables";
+@import "../styles/functions";
+
+.header {
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: fluid(100, 300, $sm, $xxl);
+}
+
+.container {
+  display: flex;
+  justify-content: flex-end;
+}

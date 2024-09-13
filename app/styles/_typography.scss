@@ -1,0 +1,27 @@
+body {
+  line-height: 1.4;
+  font-family: var(--font-clash), sans-serif;
+  font-size: fluid(16, 32, $sm, $max);
+}
+
+h1,
+.h1 {
+  font-weight: 400;
+  font-size: fluid(80, 160, $sm, $max);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+h2,
+.h2 {
+  font-weight: 300;
+  font-size: fluid(30, 60, $sm, $max);
+  line-height: 1;
+}
+
+h3,
+.h3 {
+  font-weight: 300;
+  font-size: fluid(20, 40, $sm, $max);
+  line-height: 1;
+}

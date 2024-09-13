@@ -1,0 +1,9 @@
+@import "../styles/variables";
+@import "../styles/functions";
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: fluid(100, 300, $sm, $xxl);
+}

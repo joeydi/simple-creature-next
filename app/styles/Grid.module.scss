@@ -1,0 +1,41 @@
+@import "@/styles/variables";
+
+.row {
+  outline: 1px solid red;
+  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $grid-gutter-width;
+}
+
+.col {
+  outline: 1px solid blue;
+  padding: 10px 0;
+  flex: 0 0 auto;
+}
+
+$breakpoints: (
+  "xs": $xs,
+  "sm": $sm,
+  "md": $md,
+  "lg": $lg,
+  "xl": $xl,
+  "xxl": $xxl,
+);
+
+@for $i from 1 through 12 {
+  .col#{$i} {
+    composes: col;
+    width: calc($i / 12 * (100% - 11 * $grid-gutter-width) + (($i - 1) * $grid-gutter-width));
+  }
+}
+
+@each $name, $bp in $breakpoints {
+  @for $i from 1 through 12 {
+    .col#{$name}#{$i} {
+      @media (min-width: $bp) {
+        width: calc($i / 12 * (100% - 11 * $grid-gutter-width) + (($i - 1) * $grid-gutter-width));
+      }
+    }
+  }
+}

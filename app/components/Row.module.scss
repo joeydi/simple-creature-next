@@ -1,0 +1,7 @@
+@import "@/styles/variables";
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $grid-gutter-width;
+}
