@@ -1,7 +1,6 @@
 import Row from "@/components/Row";
 import Container from "../components/Container";
 import PageHeader from "../components/PageHeader";
-import grid from "@/styles/Grid.module.scss";
 import Column from "@/components/Column";
 
 export default function Home() {
