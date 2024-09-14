@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,7 +11,7 @@ import Row from "@/components/Row";
 import Column from "@/components/Column";
 import Image from "next/image";
 import LogoDistortion from "./LogoDistortion";
-import { useRef } from "react";
+import ScrambleText from "@/components/ScrambleText";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -63,8 +64,11 @@ const Hero = () => {
           </Column>
           <Column lg="5">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-              aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
+              <ScrambleText>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel
+                facilisis.
+              </ScrambleText>
             </p>
           </Column>
         </Row>
