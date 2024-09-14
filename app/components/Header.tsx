@@ -66,7 +66,7 @@ const Header = () => {
       ease: "expo.out",
       delay: !isScrolled && isActive ? 0.2 : 0,
     });
-  }, [isActive]);
+  }, [isActive, isScrolled]);
 
   const clickHandler = () => {
     setIsActive(!isActive);
