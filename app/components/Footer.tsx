@@ -27,18 +27,18 @@ const Footer = () => {
           <Column sm="6">
             <ul className={styles.social}>
               <li>
-                <a href="" target="_blank" rel="noopener noreferrer">
-                  twitter
+                <a href="https://x.com/_simplecreature" target="_blank" rel="noopener noreferrer">
+                  Twitter
                 </a>
               </li>
               <li>
-                <a href="" target="_blank" rel="noopener noreferrer">
-                  instagram
+                <a href="https://www.instagram.com/simple.creature/" target="_blank" rel="noopener noreferrer">
+                  Instagram
                 </a>
               </li>
               <li>
-                <a href="" target="_blank" rel="noopener noreferrer">
-                  linkedin
+                <a href="https://www.linkedin.com/company/simplecreature/" target="_blank" rel="noopener noreferrer">
+                  LinkedIn
                 </a>
               </li>
             </ul>

@@ -1,0 +1,31 @@
+@import "../styles/variables";
+@import "../styles/functions";
+
+.hero {
+  margin-bottom: fluid(80, 160, $sm, $max);
+}
+
+.heroGraphic {
+  position: relative;
+  aspect-ratio: 1.5;
+  margin-bottom: fluid(50, 100, $sm, $max);
+  border-radius: fluid(16, 32, $sm, $max);
+  overflow: hidden;
+  background: black;
+}
+
+.heroLogo {
+  position: absolute;
+  left: -4%;
+  top: -8%;
+  width: 108%;
+  max-width: none;
+  color: #222;
+}
+
+.heroImage {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}

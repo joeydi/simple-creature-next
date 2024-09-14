@@ -45,6 +45,16 @@
   display: flex;
   gap: $grid-gutter-width;
 
+  a {
+    color: inherit;
+    text-decoration: none;
+    text-transform: lowercase;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   @include sm {
     justify-content: flex-end;
   }
