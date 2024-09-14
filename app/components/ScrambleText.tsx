@@ -3,9 +3,10 @@
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import ScrambleTextPlugin from "gsap/ScrambleTextPlugin";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
 
-gsap.registerPlugin(SplitText, ScrambleTextPlugin);
+gsap.registerPlugin(SplitText, ScrambleTextPlugin, ScrollTrigger);
 
 interface Props {
   duration?: number;
@@ -24,7 +25,7 @@ const ScrambleText = ({ duration = 1, children }: React.PropsWithChildren<Props>
       return;
     }
 
-    const split = new SplitText(spanRef.current, { type: "lines,chars", position: "relative" });
+    const split = new SplitText(spanRef.current, { type: "lines,chars" });
 
     gsap.set(split.lines, {
       whiteSpace: "nowrap",
@@ -45,7 +46,7 @@ const ScrambleText = ({ duration = 1, children }: React.PropsWithChildren<Props>
           chars: "#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~",
           speed: 1,
         },
-        duration: duration / 4,
+        duration: duration / 2,
         stagger: duration / chars.length,
         scrollTrigger: {
           trigger: spanRef.current,

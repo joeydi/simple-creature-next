@@ -12,6 +12,7 @@ import Column from "@/components/Column";
 import Image from "next/image";
 import LogoDistortion from "./LogoDistortion";
 import ScrambleText from "@/components/ScrambleText";
+import SplitHeading from "./SplitHeading";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -58,8 +59,9 @@ const Hero = () => {
         <Row className="align-items-end">
           <Column lg="7">
             <h1>
-              General
-              <br /> Statement
+              <SplitHeading>
+                General <br /> Statement
+              </SplitHeading>
             </h1>
           </Column>
           <Column lg="5">
