@@ -1,6 +1,6 @@
 import Row from "@/components/Row";
-import Container from ".@/components/Container";
-import PageHeader from ".@/components/PageHeader";
+import Container from "@/components/Container";
+import PageHeader from "@/components/PageHeader";
 import Column from "@/components/Column";
 
 export default function Home() {

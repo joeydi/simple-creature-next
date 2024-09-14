@@ -1,29 +1,29 @@
 import styles from "./LogoDistortion.module.scss";
-import { Renderer, Program, Texture, Mesh, Vec2, Vec4, Geometry, Flowmap, Triangle } from "ogl";
+import { Renderer, Program, Texture, Mesh, Vec2, Vec4, Geometry, Flowmap } from "ogl";
 import { useEffect, useRef } from "react";
 import Logo from "@/images/logo.svg";
 
 const vertex = `
-attribute vec2 uv;
-attribute vec2 position;
-varying vec2 vUv;
-void main() {
+    attribute vec2 uv;
+    attribute vec2 position;
+    varying vec2 vUv;
+    void main() {
         vUv = uv;
         gl_Position = vec4(position, 0, 1);
-}
+    }
 `;
+
 const fragment = `
-precision highp float;
-precision highp int;
-uniform sampler2D tWater;
-uniform sampler2D tFlow;
-uniform float uTime;
-uniform float uDeformationSize;
-varying vec2 vUv;
-uniform vec4 res;
+    precision highp float;
+    precision highp int;
+    uniform sampler2D tWater;
+    uniform sampler2D tFlow;
+    uniform float uTime;
+    uniform float uDeformationSize;
+    varying vec2 vUv;
+    uniform vec4 res;
 
-void main() {
-
+    void main() {
         // R and G values are velocity in the x and y direction
         // B value is the velocity length
         vec3 flow = texture2D(tFlow, vUv).rgb;
@@ -36,8 +36,12 @@ void main() {
         vec3 tex = texture2D(tWater, myUV).rgb;
 
         gl_FragColor = vec4(tex.r, tex.g, tex.b, 1.0);
-}
+    }
 `;
+
+interface MyVec2 extends Vec2 {
+  needsUpdate?: boolean;
+}
 
 const LogoDistortion = () => {
   const divRef = useRef<HTMLDivElement>(null);
@@ -49,6 +53,7 @@ const LogoDistortion = () => {
     const dissipation = 0.9;
     const deformationSize = 0.2;
     const imgSize = [1218, 424];
+    const imageAspect = imgSize[1] / imgSize[0];
 
     const div = divRef.current;
     const canvas = canvasRef.current;
@@ -67,11 +72,10 @@ const LogoDistortion = () => {
     // Variable inputs to control flowmap
     let aspect = 1;
     const mouse = new Vec2(-1);
-    const velocity = new Vec2();
+    const velocity = new Vec2() as MyVec2;
 
     const resize = () => {
       let a1, a2;
-      var imageAspect = imgSize[1] / imgSize[0];
 
       if (div.clientHeight / div.clientWidth < imageAspect) {
         a1 = 1;
@@ -108,7 +112,6 @@ const LogoDistortion = () => {
     img.src = Logo.src;
 
     let a1, a2;
-    var imageAspect = imgSize[1] / imgSize[0];
     if (div.clientHeight / div.clientWidth < imageAspect) {
       a1 = 1;
       a2 = div.clientHeight / div.clientWidth / imageAspect;
@@ -139,36 +142,29 @@ const LogoDistortion = () => {
     window.addEventListener("resize", resize, false);
     resize();
 
-    let lastTime;
+    let lastTime: number;
     const lastMouse = new Vec2();
 
-    const updateMouse = (e) => {
-      e.preventDefault();
-
-      // if (e.changedTouches && e.changedTouches.length) {
-      //   e.x = e.changedTouches[0].offsetX;
-      //   e.y = e.changedTouches[0].offsetY;
-      // }
-
+    const updateMouse = (x: number, y: number) => {
       // Get mouse value in 0 to 1 range, with y flipped
-      mouse.set(e.offsetX / gl.renderer.width, 1.0 - e.offsetY / gl.renderer.height);
+      mouse.set(x / gl.renderer.width, 1.0 - y / gl.renderer.height);
 
       // Calculate velocity
       if (!lastTime) {
         // First frame
         lastTime = performance.now();
-        lastMouse.set(e.x, e.y);
+        lastMouse.set(x, y);
       }
 
-      const deltaX = e.x - lastMouse.x;
-      const deltaY = e.y - lastMouse.y;
+      const deltaX = x - lastMouse.x;
+      const deltaY = y - lastMouse.y;
 
-      lastMouse.set(e.x, e.y);
+      lastMouse.set(x, y);
 
-      let time = performance.now();
+      const time = performance.now();
 
       // Avoid dividing by 0
-      let delta = Math.max(10.4, time - lastTime);
+      const delta = Math.max(10.4, time - lastTime);
       lastTime = time;
       velocity.x = deltaX / delta;
       velocity.y = deltaY / delta;
@@ -177,13 +173,25 @@ const LogoDistortion = () => {
       velocity.needsUpdate = true;
     };
 
+    const handleMousemove = (e: MouseEvent) => {
+      updateMouse(e.offsetX, e.offsetY);
+    };
+
+    const handleTouchmove = (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      const rect = target.getBoundingClientRect();
+      const x = e.targetTouches[0].pageX - rect.left;
+      const y = e.targetTouches[0].pageY - rect.top;
+      updateMouse(x, y);
+    };
+
     // Create handlers to get mouse position and velocity
     const isTouchCapable = "ontouchstart" in window;
     if (isTouchCapable) {
-      div.addEventListener("touchstart", updateMouse, false);
-      div.addEventListener("touchmove", updateMouse, { passive: false });
+      div.addEventListener("touchstart", handleTouchmove, false);
+      div.addEventListener("touchmove", handleTouchmove, { passive: false });
     } else {
-      div.addEventListener("mousemove", updateMouse, false);
+      div.addEventListener("mousemove", handleMousemove, false);
     }
 
     const update = (t: number) => {
@@ -208,6 +216,13 @@ const LogoDistortion = () => {
     };
 
     requestAnimationFrame(update);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      div.removeEventListener("touchstart", handleTouchmove);
+      div.removeEventListener("touchmove", handleTouchmove);
+      div.removeEventListener("mousemove", handleMousemove);
+    };
   }, []);
 
   return (
