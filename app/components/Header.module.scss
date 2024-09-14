@@ -57,6 +57,10 @@
     font-weight: 450;
     color: white;
     text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
