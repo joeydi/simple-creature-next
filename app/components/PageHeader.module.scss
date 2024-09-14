@@ -7,3 +7,7 @@
   width: 100%;
   min-height: fluid(100, 300, $sm, $xxl);
 }
+
+.hgroup {
+  width: calc(100% - 120px);
+}
