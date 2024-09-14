@@ -1,25 +1,21 @@
 "use client";
 
-import { useLayoutEffect } from "react";
 import { usePathname } from "next/navigation";
-import { gsap } from "gsap/dist/gsap";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 
-const SmoothScroller = ({ children }: React.PropsWithChildren) => {
-  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother);
 
+const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   const pathname = usePathname();
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      ScrollSmoother.create({
-        smooth: 1,
-        effects: true,
-      });
+  useGSAP(() => {
+    ScrollSmoother.create({
+      smooth: 1,
+      effects: true,
     });
-
-    return () => ctx.revert();
   }, [pathname]);
 
   return (
