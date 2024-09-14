@@ -6,9 +6,9 @@ import { gsap } from "gsap/dist/gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-
 const SmoothScroller = ({ children }: React.PropsWithChildren) => {
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
   const pathname = usePathname();
 
   useLayoutEffect(() => {
