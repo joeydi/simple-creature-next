@@ -33,3 +33,9 @@
     @content;
   }
 }
+
+@mixin max {
+  @media (min-width: $max) {
+    @content;
+  }
+}

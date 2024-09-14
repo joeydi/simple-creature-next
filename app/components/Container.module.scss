@@ -5,5 +5,5 @@
   width: 100%;
   max-width: 1920px;
   margin: 0 auto;
-  padding: 0 fluid(20, 60, $sm, $xxl);
+  padding: 0 var(--container-padding);
 }

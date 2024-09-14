@@ -6,6 +6,7 @@
 
 :root {
   --grid-gutter: 20px;
+  --container-padding: #{fluid(20, 60, $sm, $xxl)};
 }
 
 html,
