@@ -18,11 +18,11 @@ const ReelGrid = () => {
   const columns = 20;
 
   const cells = useMemo(() => {
-    return Array(400)
+    return Array(rows * columns)
       .fill(0)
       .map((_, i) => {
-        const column = i % 20;
-        const row = Math.floor(i / 20);
+        const column = i % columns;
+        const row = Math.floor(i / rows);
 
         const x = column * rectSize;
         const y = row * rectSize;
