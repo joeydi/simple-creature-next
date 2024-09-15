@@ -53,10 +53,14 @@ const Reel = () => {
         stagger: 0.05,
         scrollTrigger: {
           trigger: svgRef.current,
-          start: "top 90%",
-          end: "bottom bottom",
-          scrub: 2,
+          start: "top 50%",
+          end: "top top",
+          scrub: true,
         },
+      });
+
+      gsap.set(svgRef.current, {
+        opacity: 1,
       });
     },
     { scope: svgRef }
@@ -66,6 +70,7 @@ const Reel = () => {
     <section className={styles.section}>
       <svg
         ref={svgRef}
+        style={{ opacity: 0 }}
         width={columns * rectSize}
         height={rows * rectSize}
         className={styles.svg}
@@ -74,7 +79,7 @@ const Reel = () => {
           return <rect key={`rect-${i}`} width={rectSize + 1} height={rectSize + 1} x={cell.x} y={cell.y} />;
         })}
       </svg>
-      <Container>
+      <Container className={styles.content}>
         <h2>UI Motion Design Reel</h2>
       </Container>
     </section>

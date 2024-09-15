@@ -1,6 +1,9 @@
 .section {
   position: relative;
-  height: 100vw;
+  height: 200vw;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to bottom, white 49%, black 49%, black);
 }
 
 .svg {
@@ -9,4 +12,9 @@
   top: 0;
   width: 100%;
   height: auto;
+}
+
+.content {
+  position: relative;
+  color: white;
 }
