@@ -1,3 +1,4 @@
+import gsap from "gsap";
 import styles from "./LogoDistortion.module.scss";
 import { Renderer, Program, Texture, Mesh, Vec2, Vec4, Geometry, Flowmap } from "ogl";
 import { useEffect, useRef } from "react";
@@ -107,7 +108,13 @@ const LogoDistortion = () => {
     });
 
     const img = new Image();
-    img.onload = () => (texture.image = img);
+    img.onload = () => {
+      gsap.to(divRef.current, {
+        opacity: 1,
+        duration: 1,
+      });
+      texture.image = img;
+    };
     img.crossOrigin = "Anonymous";
     img.src = Logo.src;
 

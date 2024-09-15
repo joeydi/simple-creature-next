@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -47,6 +47,13 @@ const Hero = () => {
     });
   });
 
+  const loadHandler = () => {
+    gsap.to(imageRef.current, {
+      opacity: 1,
+      duration: 1,
+    });
+  };
+
   return (
     <div className={styles.hero} ref={heroRef}>
       <Container>
@@ -54,7 +61,7 @@ const Hero = () => {
           <div ref={logoRef} className={styles.heroLogo}>
             <LogoDistortion />
           </div>
-          <Image ref={imageRef} className={styles.heroImage} src={hero} alt="" priority={true} />
+          <Image ref={imageRef} className={styles.heroImage} src={hero} alt="" priority={true} onLoad={loadHandler} />
         </div>
         <Row className="align-items-end">
           <Column lg="7">
