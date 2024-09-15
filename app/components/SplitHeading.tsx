@@ -29,12 +29,6 @@ const SplitHeading = ({ children }: React.PropsWithChildren) => {
     const line1Rect = split.lines[0].getBoundingClientRect();
     const line2Rect = split.lines[1].getBoundingClientRect();
 
-    console.log({
-      divRect: divRect.width,
-      line1Rect: line1Rect.width,
-      line2Rect: line2Rect.width,
-    });
-
     gsap.set(split.lines, {
       display: "block",
     });

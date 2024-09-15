@@ -1,6 +1,7 @@
 import PageHeader from "@/components/PageHeader";
 import Hero from "@/components/Hero";
 import ScrambleText from "@/components/ScrambleText";
+import Reel from "./components/Reel";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
         </h1>
       </PageHeader>
       <Hero />
+      <Reel />
     </>
   );
 }
