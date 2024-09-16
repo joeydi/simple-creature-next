@@ -10,8 +10,6 @@ import Container from "./Container";
 import ReelGrid from "./ReelGrid";
 import posterImage from "@/images/aston-martin-tach-ui.jpg";
 import playButton from "@/images/play-button.svg";
-import { relative } from "path";
-// import ReelVideo from "./ReelVideo";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -83,6 +81,7 @@ const Reel = () => {
 
     gsap.set(posterRef.current, {
       scale: 1.5,
+      filter: "blur(40px)",
     });
 
     videoTimeline.to(
@@ -110,6 +109,7 @@ const Reel = () => {
       posterRef.current,
       {
         scale: 1,
+        filter: "blur(0px)",
         ease: "power2.out",
         duration: 0.48,
       },
@@ -120,6 +120,7 @@ const Reel = () => {
       posterRef.current,
       {
         scale: 1.5,
+        filter: "blur(40px)",
         ease: "power2.in",
         duration: 0.48,
       },
