@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="82px" height="48px" viewBox="0 0 82 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard</title>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polyline id="Path" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" points="1 13 1 1 16 1"></polyline>
+        <polyline id="Path-Copy" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" transform="translate(73.5, 7) scale(-1, 1) translate(-73.5, -7)" points="66 13 66 1 81 1"></polyline>
+        <polyline id="Path-Copy-2" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" transform="translate(73.5, 41) scale(-1, -1) translate(-73.5, -41)" points="66 47 66 35 81 35"></polyline>
+        <polyline id="Path-Copy-3" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" transform="translate(8.5, 41) scale(1, -1) translate(-8.5, -41)" points="1 47 1 35 16 35"></polyline>
+        <g id="pause" transform="translate(34, 15)" fill="#FFFFFF">
+            <rect id="Rectangle" x="0" y="0" width="5" height="18" rx="1"></rect>
+            <rect id="Rectangle-Copy" x="9" y="0" width="5" height="18" rx="1"></rect>
+        </g>
+    </g>
+</svg>
