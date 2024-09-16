@@ -32,10 +32,13 @@
   }
 }
 
-.playButton {
-  cursor: pointer;
+.playButtonWrapper {
   position: relative;
   z-index: 1;
+}
+
+.playButton {
+  cursor: pointer;
   display: block;
   padding: 0;
   border: none;

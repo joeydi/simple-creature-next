@@ -46,7 +46,7 @@ const Reel = () => {
       yPercent: 100,
     });
 
-    gsap.set(playButtonRef.current, {
+    gsap.set(playButtonWrapperRef.current, {
       xPercent: 75,
       opacity: 0,
     });
@@ -62,7 +62,7 @@ const Reel = () => {
     );
 
     headingTimeline.to(
-      playButtonRef.current,
+      playButtonWrapperRef.current,
       {
         xPercent: 0,
         opacity: 1,
@@ -234,7 +234,7 @@ const Reel = () => {
               <h2>
                 <span ref={headingSpanRef}>UI Motion Design Reel</span>
               </h2>
-              <div ref={playButtonWrapperRef}>
+              <div ref={playButtonWrapperRef} className={styles.playButtonWrapper}>
                 <button ref={playButtonRef} className={styles.playButton} onClick={clickHandler}>
                   <Image src={isPlaying ? pauseButton : playButton} alt="" />
                 </button>
