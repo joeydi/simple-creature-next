@@ -39,7 +39,7 @@ const Reel = () => {
     });
 
     gsap.set(playButtonRef.current, {
-      xPercent: 100,
+      xPercent: 75,
       opacity: 0,
     });
 
@@ -59,9 +59,9 @@ const Reel = () => {
         xPercent: 0,
         opacity: 1,
         ease: "power2.out",
-        duration: 1,
+        duration: 0.5,
       },
-      0
+      0.25
     );
 
     const videoTimeline = gsap.timeline({

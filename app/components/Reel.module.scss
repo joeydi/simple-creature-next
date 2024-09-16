@@ -33,8 +33,14 @@
 }
 
 .playButton {
+  padding: 0;
   border: none;
   background: transparent;
+
+  img {
+    width: auto;
+    height: 40px;
+  }
 }
 
 .wrapper {
