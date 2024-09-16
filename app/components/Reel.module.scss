@@ -1,9 +1,11 @@
+@import "../styles/variables";
+@import "../styles/functions";
+
 .section {
   position: relative;
-  height: 200vw;
+  height: 100vw;
   display: flex;
   align-items: center;
-  background: linear-gradient(to bottom, white 49%, black 49%, black);
 }
 
 .svg {
@@ -17,4 +19,42 @@
 .content {
   position: relative;
   color: white;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+
+  h2 {
+    overflow: hidden;
+  }
+}
+
+.playButton {
+  border: none;
+  background: transparent;
+}
+
+.wrapper {
+  position: relative;
+  aspect-ratio: 2.5;
+  perspective: 100vw;
+}
+
+.mask {
+  position: absolute;
+  inset: 0;
+  border-radius: fluid(16, 32, $sm, $max);
+  overflow: hidden;
+}
+
+.poster {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

@@ -51,6 +51,7 @@ const ReelGrid = () => {
         ease: "expo.out",
         stagger: 0.1,
         scrollTrigger: {
+          //   markers: true,
           trigger: svgRef.current,
           start: "top 75%",
           end: "bottom bottom",

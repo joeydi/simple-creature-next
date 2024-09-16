@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="82px" height="48px" viewBox="0 0 82 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard</title>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polyline id="Path" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" points="1 13 1 1 16 1"></polyline>
+        <polyline id="Path-Copy" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" transform="translate(73.5, 7) scale(-1, 1) translate(-73.5, -7)" points="66 13 66 1 81 1"></polyline>
+        <polyline id="Path-Copy-2" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" transform="translate(73.5, 41) scale(-1, -1) translate(-73.5, -41)" points="66 47 66 35 81 35"></polyline>
+        <polyline id="Path-Copy-3" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" transform="translate(8.5, 41) scale(1, -1) translate(-8.5, -41)" points="1 47 1 35 16 35"></polyline>
+        <path d="M34.5,16.9463594 L34.5,31.086669 C34.5,32.1912385 35.3954305,33.086669 36.5,33.086669 C36.8835032,33.086669 37.2589205,32.9764082 37.5815152,32.769026 L49.2264761,25.2829797 C50.1556162,24.6856753 50.4246222,23.4482476 49.8273178,22.5191075 C49.6533256,22.248453 49.4166016,22.0237723 49.1372388,21.8641364 L37.4922779,15.2098731 C36.533243,14.6618531 35.3115337,14.9950466 34.7635137,15.9540815 C34.5908306,16.2562769 34.5,16.5983055 34.5,16.9463594 Z" id="Path-2" fill="#FFFFFF"></path>
+    </g>
+</svg>
