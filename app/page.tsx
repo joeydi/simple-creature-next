@@ -1,7 +1,8 @@
 import PageHeader from "@/components/PageHeader";
 import Hero from "@/components/Hero";
 import ScrambleText from "@/components/ScrambleText";
-import Reel from "./components/Reel";
+import Reel from "@/components/Reel";
+import FeaturedProjects from "@/components/FeaturedProjects";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       </PageHeader>
       <Hero />
       <Reel />
+      <FeaturedProjects />
     </>
   );
 }

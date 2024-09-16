@@ -1,0 +1,16 @@
+@import "../styles/variables";
+@import "../styles/functions";
+
+.mask {
+  border-radius: fluid(16, 32, $sm, $max);
+  overflow: hidden;
+}
+
+.image {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.content {
+  margin: 1rem 1rem 0;
+}
