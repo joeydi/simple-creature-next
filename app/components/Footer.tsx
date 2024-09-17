@@ -1,15 +1,27 @@
+"use client";
+
+import { useRef } from "react";
 import Image from "next/image";
-import styles from "./Footer.module.scss";
-import Container from "./Container";
-import Logo from "./Logo";
-import footerBg from "../images/footer-bg.jpg";
-import Row from "./Row";
-import Column from "./Column";
+import gsap from "gsap";
+import styles from "@/components/Footer.module.scss";
+import Container from "@/components/Container";
+import Logo from "@/components/Logo";
+import footerBg from "@/images/footer-bg.jpg";
+import Row from "@/components/Row";
+import Column from "@/components/Column";
 
 const Footer = () => {
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  const loadHandler = () => {
+    gsap.to(imageRef.current, {
+      opacity: 1,
+      duration: 1,
+    });
+  };
   return (
     <footer className={styles.footer}>
-      <Image className={styles.background} src={footerBg} alt="" />
+      <Image ref={imageRef} className={styles.background} src={footerBg} alt="" onLoad={loadHandler} />
       <Container className={styles.content}>
         <p className={styles.cta} data-lag="0.2">
           Have a project in mind? <br />
