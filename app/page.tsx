@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import ScrambleText from "@/components/ScrambleText";
 import Reel from "@/components/Reel";
 import FeaturedProjects from "@/components/FeaturedProjects";
+import ServicesMarquee from "./components/ServicesMarquee";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <Hero />
       <Reel />
       <FeaturedProjects />
+      <ServicesMarquee />
     </>
   );
 }

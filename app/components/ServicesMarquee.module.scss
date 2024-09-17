@@ -1,0 +1,41 @@
+@import "../styles/variables";
+@import "../styles/functions";
+
+.spacer {
+  height: 300vh;
+}
+
+.heading {
+  margin-bottom: 40px;
+}
+
+.marquee {
+  display: flex;
+  flex-direction: column;
+  padding: fluid(40, 120, $sm, $max) 0;
+  background-color: black;
+  color: white;
+
+  @media (min-aspect-ratio: 1.5) {
+    padding: 10vh 0;
+  }
+
+  span {
+    display: block;
+    white-space: nowrap;
+
+    &:nth-child(odd) {
+      align-self: flex-start;
+    }
+
+    &:nth-child(even) {
+      align-self: flex-end;
+    }
+  }
+}
+
+.span {
+  @media (min-aspect-ratio: 1.5) {
+    font-size: 12vh;
+  }
+}
