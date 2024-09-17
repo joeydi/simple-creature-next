@@ -1,19 +1,15 @@
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
-gsap.registerPlugin(SplitText, ScrollTrigger);
+gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
 
 const SplitHeading = ({ children }: React.PropsWithChildren) => {
-  const isSplit = useRef(false);
   const divRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (isSplit.current) {
-      return;
-    }
-
+  useGSAP(() => {
     if (!divRef.current) {
       return;
     }
@@ -91,9 +87,9 @@ const SplitHeading = ({ children }: React.PropsWithChildren) => {
       0
     );
 
-    divRef.current.style.opacity = "1";
-
-    isSplit.current = true;
+    gsap.set(divRef.current, {
+      opacity: 1,
+    });
   });
 
   return (

@@ -1,13 +1,24 @@
+@import "../styles/mixins";
 @import "../styles/variables";
 @import "../styles/functions";
 
 .section {
   margin: fluid(40, 120, $sm, $max) 0;
+  perspective: 100vw;
 }
 
 .heading {
-  outline: 1px solid red;
   margin: fluid(40, 80, $sm, $max) 0;
   width: 60%;
   min-width: min-content;
+}
+
+@include md {
+  .even {
+    perspective-origin: 100% 0;
+  }
+
+  .odd {
+    perspective-origin: 0 0;
+  }
 }

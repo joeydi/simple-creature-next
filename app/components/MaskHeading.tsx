@@ -4,24 +4,26 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
 
-const MaskHeading = ({ children }: React.PropsWithChildren) => {
+interface Props {
+  delay?: number;
+  reset?: boolean;
+}
+
+const MaskHeading = ({ delay = 0, reset = false, children }: React.PropsWithChildren<Props>) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const childRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!parentRef.current) {
-      return;
-    }
-
+  useGSAP(() => {
     const split = new SplitText(childRef.current, { type: "words" });
 
     const timeline = gsap.timeline({
       scrollTrigger: {
         trigger: parentRef.current,
+        toggleActions: `play resume resume ${reset ? "reset" : "resume"}`,
       },
     });
 
@@ -36,7 +38,7 @@ const MaskHeading = ({ children }: React.PropsWithChildren) => {
         ease: "power3.out",
         stagger: 0.1,
       },
-      0
+      0 + delay
     );
 
     timeline.fromTo(
@@ -50,7 +52,7 @@ const MaskHeading = ({ children }: React.PropsWithChildren) => {
         ease: "power3.inOut",
         stagger: 0.1,
       },
-      0
+      0 + delay
     );
 
     gsap.set(parentRef.current, {

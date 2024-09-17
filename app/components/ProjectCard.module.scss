@@ -1,7 +1,13 @@
 @import "../styles/variables";
 @import "../styles/functions";
 
+.card {
+  perspective: 100vw;
+}
+
 .mask {
+  position: relative;
+  z-index: 1;
   border-radius: fluid(16, 32, $sm, $max);
   overflow: hidden;
 }
