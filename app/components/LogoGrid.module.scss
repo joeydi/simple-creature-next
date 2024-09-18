@@ -1,0 +1,32 @@
+@import "../styles/mixins";
+@import "../styles/variables";
+@import "../styles/functions";
+
+.section {
+  position: relative;
+  margin: fluid(40, 120, $sm, $max) 0;
+}
+
+.heading {
+  margin-bottom: 40px;
+}
+
+.mask {
+  position: relative;
+  width: 100vw;
+  height: 75vh;
+  overflow: hidden;
+  background-color: black;
+  perspective: 100vw;
+}
+
+.grid {
+  position: relative;
+  width: 200%;
+  height: 200%;
+  transform-style: preserve-3d;
+}
+
+.logo {
+  position: absolute;
+}

@@ -1,12 +1,12 @@
 "use client";
 
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./ServicesMarquee.module.scss";
 import Container from "@/components/Container";
 import MaskHeading from "@/components/MaskHeading";
-import { useRef } from "react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
