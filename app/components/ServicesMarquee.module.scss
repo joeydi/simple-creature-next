@@ -3,6 +3,7 @@
 
 .spacer {
   overflow: hidden;
+  background-color: black;
 }
 
 .heading {
@@ -23,7 +24,7 @@
 
   span {
     display: block;
-    margin: 5vh 0;
+    // margin: 5vh 0;
     white-space: nowrap;
 
     &:nth-child(odd) {
