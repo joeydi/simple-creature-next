@@ -45,6 +45,8 @@ interface MyVec2 extends Vec2 {
 }
 
 const LogoDistortion = () => {
+  let rAFRef = useRef<number | null>(null);
+
   const divRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -180,29 +182,8 @@ const LogoDistortion = () => {
       velocity.needsUpdate = true;
     };
 
-    const handleMousemove = (e: MouseEvent) => {
-      updateMouse(e.offsetX, e.offsetY);
-    };
-
-    const handleTouchmove = (e: TouchEvent) => {
-      const target = e.target as HTMLElement;
-      const rect = target.getBoundingClientRect();
-      const x = e.targetTouches[0].pageX - rect.left;
-      const y = e.targetTouches[0].pageY - rect.top;
-      updateMouse(x, y);
-    };
-
-    // Create handlers to get mouse position and velocity
-    const isTouchCapable = "ontouchstart" in window;
-    if (isTouchCapable) {
-      div.addEventListener("touchstart", handleTouchmove, false);
-      div.addEventListener("touchmove", handleTouchmove, { passive: false });
-    } else {
-      div.addEventListener("mousemove", handleMousemove, false);
-    }
-
     const update = (t: number) => {
-      requestAnimationFrame(update);
+      rAFRef.current = requestAnimationFrame(update);
 
       // Reset velocity when mouse not moving
       if (!velocity.needsUpdate) {
@@ -222,13 +203,27 @@ const LogoDistortion = () => {
       renderer.render({ scene: mesh });
     };
 
-    requestAnimationFrame(update);
+    update(0);
+
+    const mouseEnterHandler = () => {
+      rAFRef.current = requestAnimationFrame(update);
+    };
+
+    div.addEventListener("mouseenter", mouseEnterHandler, { passive: true });
+
+    const mouseMoveHandler = (e: MouseEvent) => {
+      updateMouse(e.offsetX, e.offsetY);
+    };
+
+    div.addEventListener("mousemove", mouseMoveHandler, { passive: true });
 
     return () => {
+      if (rAFRef.current) {
+        window.cancelAnimationFrame(rAFRef.current);
+      }
       window.removeEventListener("resize", resize);
-      div.removeEventListener("touchstart", handleTouchmove);
-      div.removeEventListener("touchmove", handleTouchmove);
-      div.removeEventListener("mousemove", handleMousemove);
+      div.removeEventListener("mouseenter", mouseEnterHandler);
+      div.removeEventListener("mousemove", mouseMoveHandler);
     };
   }, []);
 
