@@ -21,7 +21,7 @@ const ServicesMarquee = () => {
         invalidateOnRefresh: true,
         trigger: spacerRef.current,
         start: "top bottom",
-        end: "bottom bottom-=50%",
+        end: "bottom top",
         scrub: 1,
       },
     });
@@ -55,14 +55,6 @@ const ServicesMarquee = () => {
         0
       );
     }
-
-    ScrollTrigger.create({
-      trigger: contentRef.current,
-      start: "center center",
-      endTrigger: spacerRef.current,
-      end: "bottom bottom",
-      pin: true,
-    });
   });
 
   return (
@@ -74,7 +66,7 @@ const ServicesMarquee = () => {
               <MaskHeading>Our Services</MaskHeading>
             </h2>
           </Container>
-          <div ref={marqueeRef} className={`h1 ${styles.marquee}`}>
+          <div ref={marqueeRef} className={`h1 ${styles.marquee}`} data-speed="0.5">
             <span className={styles.span}>
               Strategy &bull; Design &bull; Motion &bull; Consulting &bull; Interactive &bull; Production
             </span>

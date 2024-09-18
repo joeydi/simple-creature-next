@@ -2,7 +2,7 @@
 @import "../styles/functions";
 
 .spacer {
-  height: 300vh;
+  overflow: hidden;
 }
 
 .heading {
@@ -22,6 +22,7 @@
 
   span {
     display: block;
+    margin: 5vh 0;
     white-space: nowrap;
 
     &:nth-child(odd) {
