@@ -6,7 +6,11 @@ import { useRef } from "react";
 
 gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
 
-const SplitHeading = ({ children }: React.PropsWithChildren) => {
+interface Props {
+  reset?: boolean;
+}
+
+const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props>) => {
   const divRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -32,6 +36,7 @@ const SplitHeading = ({ children }: React.PropsWithChildren) => {
     const timeline = gsap.timeline({
       scrollTrigger: {
         trigger: divRef.current,
+        toggleActions: `play resume resume ${reset ? "reset" : "resume"}`,
       },
     });
 

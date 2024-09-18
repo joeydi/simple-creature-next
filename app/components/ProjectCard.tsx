@@ -45,7 +45,7 @@ const ProjectCard = ({ className = "", image, title, description }: Props) => {
       {
         yPercent: 0,
         rotateX: 0,
-        duration: 2,
+        duration: 1.5,
         ease: "expo.out",
       },
       0
@@ -57,7 +57,7 @@ const ProjectCard = ({ className = "", image, title, description }: Props) => {
         scale: 1,
         filter: "blur(0px)",
         ease: "expo.out",
-        duration: 2,
+        duration: 1.5,
       },
       0
     );

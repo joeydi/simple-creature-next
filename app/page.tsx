@@ -4,6 +4,7 @@ import ScrambleText from "@/components/ScrambleText";
 import Reel from "@/components/Reel";
 import FeaturedProjects from "@/components/FeaturedProjects";
 import ServicesMarquee from "./components/ServicesMarquee";
+import { ProjectLifecycle } from "./components/ProjectLifecycle";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <Reel />
       <FeaturedProjects />
       <ServicesMarquee />
+      <ProjectLifecycle />
     </>
   );
 }

@@ -16,6 +16,9 @@ const ServicesMarquee = () => {
   const marqueeRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    const oddChildren = marqueeRef.current?.querySelectorAll("span:nth-child(odd)");
+    const evenChildren = marqueeRef.current?.querySelectorAll("span:nth-child(even)");
+
     const timeline = gsap.timeline({
       scrollTrigger: {
         invalidateOnRefresh: true,
@@ -26,7 +29,6 @@ const ServicesMarquee = () => {
       },
     });
 
-    const oddChildren = marqueeRef.current?.querySelectorAll("span:nth-child(odd)");
     if (oddChildren) {
       timeline.to(
         oddChildren,
@@ -41,7 +43,6 @@ const ServicesMarquee = () => {
       );
     }
 
-    const evenChildren = marqueeRef.current?.querySelectorAll("span:nth-child(even)");
     if (evenChildren) {
       timeline.to(
         evenChildren,
