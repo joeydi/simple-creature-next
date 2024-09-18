@@ -45,8 +45,6 @@ interface MyVec2 extends Vec2 {
 }
 
 const LogoDistortion = () => {
-  let rAFRef = useRef<number | null>(null);
-
   const divRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -182,8 +180,8 @@ const LogoDistortion = () => {
       velocity.needsUpdate = true;
     };
 
-    const update = (t: number) => {
-      rAFRef.current = requestAnimationFrame(update);
+    const update = (t: number, loop: boolean = true) => {
+      requestAnimationFrame(update);
 
       // Reset velocity when mouse not moving
       if (!velocity.needsUpdate) {
@@ -203,13 +201,7 @@ const LogoDistortion = () => {
       renderer.render({ scene: mesh });
     };
 
-    update(0);
-
-    const mouseEnterHandler = () => {
-      rAFRef.current = requestAnimationFrame(update);
-    };
-
-    div.addEventListener("mouseenter", mouseEnterHandler, { passive: true });
+    requestAnimationFrame(update);
 
     const mouseMoveHandler = (e: MouseEvent) => {
       updateMouse(e.offsetX, e.offsetY);
@@ -218,11 +210,7 @@ const LogoDistortion = () => {
     div.addEventListener("mousemove", mouseMoveHandler, { passive: true });
 
     return () => {
-      if (rAFRef.current) {
-        window.cancelAnimationFrame(rAFRef.current);
-      }
       window.removeEventListener("resize", resize);
-      div.removeEventListener("mouseenter", mouseEnterHandler);
       div.removeEventListener("mousemove", mouseMoveHandler);
     };
   }, []);
