@@ -180,7 +180,7 @@ const LogoDistortion = () => {
       velocity.needsUpdate = true;
     };
 
-    const update = (t: number, loop: boolean = true) => {
+    const update = (t: number) => {
       requestAnimationFrame(update);
 
       // Reset velocity when mouse not moving

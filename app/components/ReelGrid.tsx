@@ -22,7 +22,7 @@ const ReelGrid = () => {
       .fill(0)
       .map((_, i) => {
         const column = i % columns;
-        const row = Math.floor(i / rows);
+        const row = Math.floor(i / columns);
 
         const x = column * rectSize;
         const y = row * rectSize;

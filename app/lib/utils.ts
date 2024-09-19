@@ -16,3 +16,8 @@ export function getRandomInt(min: number, max: number) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+export const randomHexColor = () => {
+  const n = (Math.random() * 0xfffff * 1000000).toString(16);
+  return "#" + n.slice(0, 6);
+};

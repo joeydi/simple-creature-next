@@ -9,35 +9,97 @@ import MaskHeading from "./MaskHeading";
 import styles from "./LogoGrid.module.scss";
 import { getRandom, getRandomInt } from "@/lib/utils";
 
+import astonMartin from "@/images/logos/aston-martin.svg";
+import arizonaStateUninversity from "@/images/logos/arizona-state-uninversity.svg";
+import capitalOne from "@/images/logos/capital-one.svg";
+import dell from "@/images/logos/dell.svg";
+import fantasy from "@/images/logos/fantasy.svg";
+import ford from "@/images/logos/ford.svg";
+import generalMills from "@/images/logos/general-mills.svg";
+import keurig from "@/images/logos/keurig.svg";
+import lincoln from "@/images/logos/lincoln.svg";
+import mamava from "@/images/logos/mamava.svg";
+import meta from "@/images/logos/meta.svg";
+import nickelodeon from "@/images/logos/nickelodeon.svg";
+import nissan from "@/images/logos/nissan.svg";
+import nokianTyres from "@/images/logos/nokian-tyres.svg";
+import onePercent from "@/images/logos/one-percent.svg";
+import popularScience from "@/images/logos/popular-science.svg";
+import principal from "@/images/logos/principal.svg";
+import ramble from "@/images/logos/ramble.svg";
+import sandwich from "@/images/logos/sandwich.svg";
+import zeiss from "@/images/logos/zeiss.svg";
+import Image from "next/image";
+
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const randomHexColor = () => {
-  let n = (Math.random() * 0xfffff * 1000000).toString(16);
-  return "#" + n.slice(0, 6);
-};
+const logos = [
+  astonMartin,
+  arizonaStateUninversity,
+  capitalOne,
+  dell,
+  fantasy,
+  ford,
+  generalMills,
+  keurig,
+  lincoln,
+  mamava,
+  meta,
+  nickelodeon,
+  nissan,
+  nokianTyres,
+  onePercent,
+  popularScience,
+  principal,
+  ramble,
+  sandwich,
+  zeiss,
+].sort(() => 0.5 - Math.random());
 
 export const LogoGrid = () => {
+  const columns = 6;
+  const rows = 12;
+
   const maskRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    const grid = gridRef.current;
     const logos = maskRef?.current?.querySelectorAll(".logo");
     const stars = maskRef?.current?.querySelectorAll(".star");
 
-    if (!logos || !stars) {
+    if (!grid || !logos || !stars) {
       return;
     }
 
-    const zValues = Array.from(logos).map(() => {
-      return getRandom(-window.innerWidth, 0);
+    const gridWidth = grid?.clientWidth;
+    const gridHeight = grid?.clientWidth;
+
+    logos.forEach((logo, i) => {
+      const column = i % columns;
+      const row = Math.floor(i / columns);
+
+      const x = column * (gridWidth / columns) + (row % 2) * (gridWidth / columns / 2);
+      const y = row * (gridHeight / rows);
+      const z = getRandom(-window.innerWidth / 2, window.innerWidth / 4);
+
+      gsap.set(logo, {
+        x,
+        y,
+        z,
+      });
     });
 
-    gsap.set(logos, {
-      z: (i) => zValues[i],
+    const sizeValues = Array.from(stars).map(() => {
+      return getRandomInt(5, 20);
     });
 
     gsap.set(stars, {
+      x: () => getRandomInt(window.innerWidth * -1, window.innerWidth * 3),
+      y: () => getRandomInt(window.innerHeight * -1, window.innerHeight * 2.5),
       z: () => getRandom(-window.innerWidth * 10, -window.innerWidth),
+      width: (i) => sizeValues[i],
+      height: (i) => sizeValues[i],
     });
 
     const timeline = gsap.timeline({
@@ -73,40 +135,21 @@ export const LogoGrid = () => {
       </Container>
       <div ref={maskRef} className={styles.mask}>
         <div ref={gridRef} className={styles.grid}>
-          {Array(40)
+          {Array(columns * rows)
             .fill(0)
             .map((_, i) => {
+              const logo = logos[i % logos.length];
+
               return (
-                <div
-                  key={`div-${i}`}
-                  className={`${styles.logo} logo`}
-                  style={{
-                    backgroundColor: randomHexColor(),
-                    width: 200,
-                    height: 100,
-                    left: getRandomInt(0, window.innerWidth * 2),
-                    top: getRandomInt(0, window.innerHeight * 1.5),
-                  }}></div>
+                <div key={`div-${i}`} className={`${styles.logo} logo`}>
+                  <Image src={logo} alt="" />
+                </div>
               );
             })}
           {Array(100)
             .fill(0)
             .map((_, i) => {
-              const size = getRandomInt(5, 20);
-              return (
-                <div
-                  key={`star-${i}`}
-                  className={`${styles.star} star`}
-                  style={{
-                    position: "absolute",
-                    backgroundColor: "white",
-                    borderRadius: "50%",
-                    width: size,
-                    height: size,
-                    left: getRandomInt(window.innerWidth * -1, window.innerWidth * 3),
-                    top: getRandomInt(window.innerHeight * -1, window.innerHeight * 2.5),
-                  }}></div>
-              );
+              return <div key={`star-${i}`} className={`${styles.star} star`}></div>;
             })}
         </div>
       </div>
