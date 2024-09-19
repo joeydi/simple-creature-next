@@ -54,9 +54,11 @@ const logos = [
   ramble,
   sandwich,
   zeiss,
-].sort(() => 0.5 - Math.random());
+];
 
 export const LogoGrid = () => {
+  const randomLogos = logos.sort(() => 0.5 - Math.random());
+
   const columns = 6;
   const rows = 12;
 
@@ -138,7 +140,7 @@ export const LogoGrid = () => {
           {Array(columns * rows)
             .fill(0)
             .map((_, i) => {
-              const logo = logos[i % logos.length];
+              const logo = randomLogos[i % randomLogos.length];
 
               return (
                 <div key={`div-${i}`} className={`${styles.logo} logo`}>

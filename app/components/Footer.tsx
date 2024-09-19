@@ -1,27 +1,41 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "@/components/Footer.module.scss";
 import Container from "@/components/Container";
 import Logo from "@/components/Logo";
-import footerBg from "@/images/footer-bg.jpg";
 import Row from "@/components/Row";
 import Column from "@/components/Column";
+import { FluidSim } from "@/lib/FluidSim";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const Footer = () => {
-  const imageRef = useRef<HTMLImageElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const FluidSimAPI = useRef<{ multipleSplats: (amount: number) => void } | null>(null);
 
-  const loadHandler = () => {
-    gsap.to(imageRef.current, {
-      opacity: 1,
-      duration: 1,
+  useGSAP(() => {
+    if (!canvasRef.current) {
+      return;
+    }
+
+    FluidSimAPI.current = FluidSim(canvasRef.current);
+
+    ScrollTrigger.create({
+      trigger: canvasRef.current,
+      start: "top bottom",
+      onEnter: () => {
+        FluidSimAPI.current && FluidSimAPI.current.multipleSplats(40);
+      },
     });
-  };
+  });
+
   return (
     <footer className={styles.footer}>
-      <Image ref={imageRef} className={styles.background} src={footerBg} alt="" onLoad={loadHandler} />
+      <canvas ref={canvasRef} className={styles.background}></canvas>
       <Container className={styles.content}>
         <p className={styles.cta} data-lag="0.2">
           Have a project in mind? <br />

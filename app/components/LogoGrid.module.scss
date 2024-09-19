@@ -4,7 +4,6 @@
 
 .section {
   position: relative;
-  margin: fluid(40, 120, $sm, $max) 0;
 }
 
 .heading {
@@ -14,7 +13,7 @@
 .mask {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 150vh;
   overflow: hidden;
   background-color: black;
   perspective: 100vw;
