@@ -24,7 +24,9 @@ SOFTWARE.
 
 "use strict";
 
-export const FluidSim = (canvas) => {
+export const FluidSim = (canvas, eventProxy) => {
+  eventProxy = eventProxy ? eventProxy : canvas;
+
   resizeCanvas();
 
   let config = {
@@ -33,10 +35,10 @@ export const FluidSim = (canvas) => {
     CAPTURE_RESOLUTION: 512,
     DENSITY_DISSIPATION: 1,
     VELOCITY_DISSIPATION: 1,
-    PRESSURE: 0.8,
+    PRESSURE: 0.5,
     PRESSURE_ITERATIONS: 20,
-    CURL: 4,
-    SPLAT_RADIUS: 0.25,
+    CURL: 0,
+    SPLAT_RADIUS: 0.5,
     SPLAT_FORCE: 6000,
     SHADING: true,
     COLORFUL: true,
@@ -1320,11 +1322,13 @@ export const FluidSim = (canvas) => {
     updatePointerDownData(pointer, -1, posX, posY);
   });
 
-  canvas.addEventListener("mousemove", (e) => {
+  eventProxy.addEventListener("mousemove", (e) => {
     let pointer = pointers[0];
     if (!pointer.down) return;
-    let posX = scaleByPixelRatio(e.offsetX);
-    let posY = scaleByPixelRatio(e.offsetY);
+
+    let rect = eventProxy.getBoundingClientRect();
+    let posX = scaleByPixelRatio(e.clientX - rect.x);
+    let posY = scaleByPixelRatio(e.clientY - rect.y);
     updatePointerMoveData(pointer, posX, posY);
   });
 

@@ -14,27 +14,28 @@ import { FluidSim } from "@/lib/FluidSim";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const Footer = () => {
+  const footerRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const FluidSimAPI = useRef<{ multipleSplats: (amount: number) => void } | null>(null);
 
   useGSAP(() => {
-    if (!canvasRef.current) {
+    if (!footerRef.current || !canvasRef.current) {
       return;
     }
 
-    FluidSimAPI.current = FluidSim(canvasRef.current);
+    FluidSimAPI.current = FluidSim(canvasRef.current, footerRef.current);
 
     ScrollTrigger.create({
       trigger: canvasRef.current,
       start: "top bottom",
       onEnter: () => {
-        FluidSimAPI.current && FluidSimAPI.current.multipleSplats(40);
+        FluidSimAPI.current && FluidSimAPI.current.multipleSplats(10);
       },
     });
   });
 
   return (
-    <footer className={styles.footer}>
+    <footer ref={footerRef} className={styles.footer}>
       <canvas ref={canvasRef} className={styles.background}></canvas>
       <Container className={styles.content}>
         <p className={styles.cta} data-lag="0.2">

@@ -4,7 +4,7 @@
 
 .footer {
   position: relative;
-  padding: clamp(40px, 10vh, 160px) 0;
+  padding: clamp(60px, 6vh, 100px) 0;
 }
 
 .background {
@@ -16,7 +16,6 @@
 
 .content {
   position: relative;
-  pointer-events: none;
 }
 
 .cta {
@@ -33,7 +32,7 @@
 
 .logo {
   width: 100%;
-  margin: clamp(40px, 10vh, 120px) 0;
+  margin: clamp(40px, 10vh, 80px) 0;
   color: white;
 }
 
