@@ -16,6 +16,7 @@ import dell from "@/images/logos/dell.svg";
 import fantasy from "@/images/logos/fantasy.svg";
 import ford from "@/images/logos/ford.svg";
 import generalMills from "@/images/logos/general-mills.svg";
+import huge from "@/images/logos/huge.svg";
 import keurig from "@/images/logos/keurig.svg";
 import lincoln from "@/images/logos/lincoln.svg";
 import mamava from "@/images/logos/mamava.svg";
@@ -23,10 +24,12 @@ import meta from "@/images/logos/meta.svg";
 import nickelodeon from "@/images/logos/nickelodeon.svg";
 import nissan from "@/images/logos/nissan.svg";
 import nokianTyres from "@/images/logos/nokian-tyres.svg";
+import olg from "@/images/logos/olg.svg";
 import onePercent from "@/images/logos/one-percent.svg";
 import popularScience from "@/images/logos/popular-science.svg";
 import principal from "@/images/logos/principal.svg";
 import ramble from "@/images/logos/ramble.svg";
+import razorfish from "@/images/logos/razorfish.svg";
 import sandwich from "@/images/logos/sandwich.svg";
 import zeiss from "@/images/logos/zeiss.svg";
 import Image from "next/image";
@@ -41,6 +44,7 @@ const logos = [
   fantasy,
   ford,
   generalMills,
+  huge,
   keurig,
   lincoln,
   mamava,
@@ -48,10 +52,12 @@ const logos = [
   nickelodeon,
   nissan,
   nokianTyres,
+  olg,
   onePercent,
   popularScience,
   principal,
   ramble,
+  razorfish,
   sandwich,
   zeiss,
 ];
