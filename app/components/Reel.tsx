@@ -236,7 +236,7 @@ const Reel = () => {
               </h2>
               <div ref={playButtonWrapperRef} className={styles.playButtonWrapper}>
                 <button ref={playButtonRef} className={styles.playButton} onClick={clickHandler}>
-                  <Image src={isPlaying ? pauseButton : playButton} alt="" />
+                  <Image src={isPlaying ? pauseButton : playButton} alt={isPlaying ? "Pause Video" : "Play Video"} />
                 </button>
               </div>
             </div>
