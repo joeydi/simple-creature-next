@@ -22,7 +22,7 @@ export default function Project({ params }: Props) {
       </PageHeader>
       <Container>
         {project?.media.map((media) => {
-          return <RemoteImage src={media.src} alt={media.alt} />;
+          return <RemoteImage key={media.src} src={media.src} alt={media.alt} />;
         })}
       </Container>
     </>
