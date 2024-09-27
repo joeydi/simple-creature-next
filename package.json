@@ -13,12 +13,14 @@
     "gsap": "npm:@gsap/shockingly@^3.12.5",
     "next": "14.2.11",
     "ogl": "^1.0.8",
+    "probe-image-size": "^7.2.3",
     "react": "^18",
     "react-dom": "^18",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/probe-image-size": "^7.2.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
