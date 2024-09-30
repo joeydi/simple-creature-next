@@ -13,15 +13,19 @@ interface Props {
 export default function Project({ params }: Props) {
   const project = projects.find((project) => project.slug === params.slug);
 
+  if (!project) {
+    return null;
+  }
+
   return (
     <>
       <PageHeader>
-        <h1>
-          <MaskHeading>Our Work</MaskHeading>
+        <h1 className="h2">
+          <MaskHeading>{project.title}</MaskHeading>
         </h1>
       </PageHeader>
-      <Container>
-        {project?.media.map((media) => {
+      <Container className="section-margin-bottom">
+        {project.media.map((media) => {
           return <RemoteImage key={media.src} src={media.src} alt={media.alt} />;
         })}
       </Container>

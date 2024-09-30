@@ -1,28 +1,34 @@
-import Image, { StaticImageData } from "next/image";
-import { useRef } from "react";
+"use client";
+
+import { ReactNode, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./ProjectCard.module.scss";
 import ScrambleText from "@/components/ScrambleText";
 import MaskHeading from "@/components/MaskHeading";
+import Link from "next/link";
+import { error, log } from "console";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 interface Props {
   className?: string;
-  image: StaticImageData;
+  align?: string;
+  slug: string;
+  image: ReactNode;
   title: string;
   description: string;
 }
 
-const ProjectCard = ({ className = "", image, title, description }: Props) => {
-  const cardRef = useRef<HTMLDivElement>(null);
+const ProjectCard = ({ className = "", align = "left", slug, image, title, description }: Props) => {
+  const cardRef = useRef<HTMLAnchorElement>(null);
   const maskRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
   useGSAP(() => {
     gsap.set(maskRef.current, {
+      opacity: 1,
       yPercent: 100,
       rotateX: 45,
     });
@@ -64,9 +70,9 @@ const ProjectCard = ({ className = "", image, title, description }: Props) => {
   });
 
   return (
-    <div ref={cardRef} className={`${styles.card} ${className}`}>
+    <Link ref={cardRef} href={`/work/${slug}`} className={`${styles.card} ${styles[align]} ${className}`}>
       <div ref={maskRef} className={styles.mask}>
-        <Image ref={imageRef} className={styles.image} src={image} alt="" />
+        <div ref={imageRef}>{image}</div>
       </div>
       <div className={styles.content}>
         <h2>
@@ -80,7 +86,7 @@ const ProjectCard = ({ className = "", image, title, description }: Props) => {
           </ScrambleText>
         </p>
       </div>
-    </div>
+    </Link>
   );
 };
 

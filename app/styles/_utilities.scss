@@ -1,3 +1,6 @@
+@import "../styles/variables";
+@import "../styles/functions";
+
 .align-items-start {
   align-items: flex-start;
 }
@@ -32,4 +35,30 @@
 
 .justify-content-evenly {
   justify-content: space-evenly;
+}
+
+.section-margin {
+  margin-top: fluid(80, 160, $sm, $max);
+  margin-bottom: fluid(80, 160, $sm, $max);
+}
+
+.section-margin-top {
+  margin-top: fluid(80, 160, $sm, $max);
+}
+
+.section-margin-bottom {
+  margin-bottom: fluid(80, 160, $sm, $max);
+}
+
+.section-padding {
+  padding-top: fluid(60, 120, $sm, $max);
+  padding-bottom: fluid(60, 120, $sm, $max);
+}
+
+.section-padding-top {
+  padding-top: fluid(60, 120, $sm, $max);
+}
+
+.section-padding-bottom {
+  padding-bottom: fluid(60, 120, $sm, $max);
 }

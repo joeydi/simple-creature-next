@@ -1,8 +1,17 @@
+@import "../styles/mixins";
 @import "../styles/variables";
 @import "../styles/functions";
 
 .card {
+  display: block;
   perspective: 100vw;
+  text-decoration: none;
+  color: inherit;
+
+  img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
 }
 
 .mask {
@@ -10,13 +19,21 @@
   z-index: 1;
   border-radius: fluid(16, 32, $sm, $max);
   overflow: hidden;
-}
-
-.image {
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
+  opacity: 0;
 }
 
 .content {
   margin: 1rem 1rem 0;
+}
+
+.left {
+  @include md {
+    perspective-origin: 100% 0;
+  }
+}
+
+.right {
+  @include md {
+    perspective-origin: 0 0;
+  }
 }
