@@ -7,7 +7,7 @@
 
 .heroGraphic {
   position: relative;
-  aspect-ratio: 1.5;
+  aspect-ratio: 16 / 9;
   margin-bottom: fluid(50, 100, $sm, $max);
   border-radius: fluid(16, 32, $sm, $max);
   overflow: hidden;
@@ -16,19 +16,13 @@
 
 .heroLogo {
   position: absolute;
-  left: -2%;
-  top: -4%;
-  width: 104%;
+  //   left: -2%;
+  //   top: -4%;
+  //   width: 104%;
+  left: 2%;
+  top: 4%;
+  width: 96%;
   max-width: none;
   aspect-ratio: 1218/424;
   color: #222;
-}
-
-.heroImage {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  pointer-events: none;
-  opacity: 0;
 }

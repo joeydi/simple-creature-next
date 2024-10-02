@@ -8,7 +8,6 @@ import styles from "./ProjectCard.module.scss";
 import ScrambleText from "@/components/ScrambleText";
 import MaskHeading from "@/components/MaskHeading";
 import Link from "next/link";
-import { error, log } from "console";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 

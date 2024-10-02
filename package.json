@@ -16,7 +16,8 @@
     "probe-image-size": "^7.2.3",
     "react": "^18",
     "react-dom": "^18",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "stacked-alpha-video": "^1.0.8"
   },
   "devDependencies": {
     "@types/node": "^20",
