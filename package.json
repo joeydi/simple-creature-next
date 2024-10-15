@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,11 +11,11 @@
   "dependencies": {
     "@gsap/react": "^2.1.1",
     "gsap": "npm:@gsap/shockingly@^3.12.5",
-    "next": "14.2.11",
+    "next": "^15.0.0-canary.191",
     "ogl": "^1.0.8",
     "probe-image-size": "^7.2.3",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^19.0.0-rc-cd22717c-20241013",
+    "react-dom": "^19.0.0-rc-cd22717c-20241013",
     "sharp": "^0.33.5",
     "stacked-alpha-video": "^1.0.8"
   },
