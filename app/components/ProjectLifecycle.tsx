@@ -151,8 +151,8 @@ export const ProjectLifecycle = () => {
           <Column lg="5">
             <p>
               <ScrambleText reset={true}>
-                Each project is unique and requires different considerations. In each case we offer support and collaboration from
-                the spark of an idea throughout an asset&rsquo;s digital existence.
+                Every project begins with its own unique shape and considerations. We offer close partnership from the first
+                flicker of an idea through every phase of its digital evolution.
               </ScrambleText>
             </p>
           </Column>
