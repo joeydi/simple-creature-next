@@ -50,6 +50,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
       {
         yPercent: 0,
         duration: 2,
+        stagger: 0.125,
         ease: "power3.out",
       },
       0
@@ -63,6 +64,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
       {
         x: 0,
         duration: 2,
+        stagger: 0.125,
         ease: "power3.inOut",
       },
       0
@@ -76,6 +78,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
       {
         yPercent: 0,
         duration: 2,
+        stagger: 0.125,
         ease: "power3.out",
       },
       0
@@ -89,6 +92,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
       {
         x: 0,
         duration: 2,
+        stagger: 0.125,
         ease: "power3.inOut",
       },
       0
