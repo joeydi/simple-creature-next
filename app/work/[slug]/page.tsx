@@ -10,12 +10,20 @@ interface Props {
   };
 }
 
-export default function Project({ params }: Props) {
+async function getPageData(id: number) {
+  const res = await fetch(`http://qcdg.localhost/wp-json/wp/v2/pages/${id}`);
+  return res.json();
+}
+
+export default async function Project({ params }: Props) {
   const project = projects.find((project) => project.slug === params.slug);
+  const pageData = await getPageData(653);
 
   if (!project) {
     return null;
   }
+
+  console.log({ pageData });
 
   return (
     <>

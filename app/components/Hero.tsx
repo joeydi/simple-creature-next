@@ -1,39 +1,39 @@
-"use client";
+'use client'
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import styles from "./Hero.module.scss";
+import { useRef } from 'react'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import styles from './Hero.module.scss'
 // import hero from "@/images/hero.png";
-import Container from "@/components/Container";
-import Row from "@/components/Row";
-import Column from "@/components/Column";
+import Container from '@/components/Container'
+import Row from '@/components/Row'
+import Column from '@/components/Column'
 // import Image from "next/image";
-import LogoDistortion from "./LogoDistortion";
-import ScrambleText from "@/components/ScrambleText";
-import SplitHeading from "./SplitHeading";
-import { HeroVideo } from "./HeroVideo";
+import LogoDistortion from './LogoDistortion'
+import ScrambleText from '@/components/ScrambleText'
+import SplitHeading from './SplitHeading'
+import { HeroVideo } from './HeroVideo'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const Hero = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null)
+  const logoRef = useRef<HTMLDivElement>(null)
   //   const imageRef = useRef<HTMLImageElement>(null);
 
   useGSAP(() => {
     gsap.to(logoRef.current, {
       yPercent: 80,
-      ease: "none",
+      ease: 'none',
       scrollTrigger: {
-        trigger: "main",
-        start: "top top",
+        trigger: 'main',
+        start: 'top top',
         endTrigger: heroRef.current,
-        end: "bottom top",
+        end: 'bottom top',
         scrub: true,
       },
-    });
+    })
 
     // gsap.to(imageRef.current, {
     //   yPercent: 40,
@@ -46,7 +46,7 @@ const Hero = () => {
     //     scrub: true,
     //   },
     // });
-  });
+  })
 
   //   const loadHandler = () => {
   //     gsap.to(imageRef.current, {
@@ -69,22 +69,22 @@ const Hero = () => {
           <Column lg="7">
             <h1>
               <SplitHeading>
-                General <br /> Statement
+                Technically <br />
+                Creative
               </SplitHeading>
             </h1>
           </Column>
           <Column lg="5">
             <p data-lag="0.05">
               <ScrambleText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel
-                facilisis.
+                Since 2014, we&rsquo;ve been quietly threading technical craft into the fabric of our work—never loud, always present, and always in service of
+                the story at the center.
               </ScrambleText>
             </p>
           </Column>
         </Row>
       </Container>
     </div>
-  );
-};
-export default Hero;
+  )
+}
+export default Hero
