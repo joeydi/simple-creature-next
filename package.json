@@ -9,13 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@gsap/react": "^2.1.1",
-    "gsap": "npm:@gsap/shockingly@^3.12.5",
-    "next": "14.2.11",
+    "@gsap/react": "^2.1.2",
+    "@react-three/drei": "^10.7.3",
+    "@react-three/fiber": "^9.3.0",
+    "gsap": "^3.13.0",
+    "next": "^15.5.0",
     "ogl": "^1.0.8",
     "probe-image-size": "^7.2.3",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "sharp": "^0.33.5",
     "stacked-alpha-video": "^1.0.8"
   },
