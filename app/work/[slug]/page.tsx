@@ -4,26 +4,17 @@ import MaskHeading from "@/components/MaskHeading";
 import { RemoteImage } from "@/components/RemoteImage";
 import Container from "@/components/Container";
 
-interface Props {
-  params: {
-    slug: string;
-  };
-}
+// Use the built-in PageProps helper with your route literal
+export default async function Project(
+  props: PageProps<"/work/[slug]">
+) {
+  const { slug } = await props.params;        // <-- await params
+  const project = projects.find((p) => p.slug === slug);
 
-async function getPageData(id: number) {
-  const res = await fetch(`http://qcdg.localhost/wp-json/wp/v2/pages/${id}`);
-  return res.json();
-}
+  // const pageData = await getPageData(653);
+  // console.log({ pageData });
 
-export default async function Project({ params }: Props) {
-  const project = projects.find((project) => project.slug === params.slug);
-  const pageData = await getPageData(653);
-
-  if (!project) {
-    return null;
-  }
-
-  console.log({ pageData });
+  if (!project) return null;
 
   return (
     <>
@@ -33,16 +24,20 @@ export default async function Project({ params }: Props) {
         </h1>
       </PageHeader>
       <Container className="section-margin-bottom">
-        {project.media.map((media) => {
-          return <RemoteImage key={media.src} src={media.src} alt={media.alt} />;
-        })}
+        {project.media.map((m) => (
+          <RemoteImage key={m.src} src={m.src} alt={m.alt} />
+        ))}
       </Container>
     </>
   );
 }
 
+// async function getPageData(id: number) {
+//   const res = await fetch(`http://qcdg.localhost/wp-json/wp/v2/pages/${id}`);
+//   return res.json();
+// }
+
+// This stays the same
 export async function generateStaticParams() {
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
+  return projects.map((project) => ({ slug: project.slug }));
 }
