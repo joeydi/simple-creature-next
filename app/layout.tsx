@@ -3,7 +3,7 @@ import localFont from 'next/font/local'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import './styles/global.scss'
-import SmoothScroller from './components/SmoothScroller'
+// import SmoothScroller from './components/SmoothScroller'
 
 const clash = localFont({
   src: './fonts/ClashGrotesk-Variable.woff2',

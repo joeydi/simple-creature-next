@@ -1,7 +1,7 @@
 import PageHeader from '@/components/PageHeader'
 import Hero from '@/components/Hero'
 import ScrambleText from '@/components/ScrambleText'
-import Reel from '@/components/Reel'
+// import Reel from '@/components/Reel'
 import FeaturedProjects from '@/components/FeaturedProjects'
 import ServicesMarquee from './components/ServicesMarquee'
 import { ProjectLifecycle } from './components/ProjectLifecycle'
