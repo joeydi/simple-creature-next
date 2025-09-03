@@ -54,12 +54,13 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
             toneMapped={false}
             color={'#fff'}
             transmission={0.9}
+            opacity={0.75}
             transparent
-            roughness={0.1}
+            ior={1.5}
+            roughness={.1}
             thickness={0.5}
-            // emissive={new THREE.Color('#feca57').multiplyScalar(0.5)}
-            // emissive={'#feca57'}
-            // emissiveIntensity={0.125}
+            emissive={new THREE.Color(color).multiplyScalar(0.5)}
+            emissiveIntensity={2}
           />
         );
       case 'neon':
@@ -67,10 +68,13 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
           <meshPhysicalMaterial
             toneMapped={false}
             color={color}
-            transmission={0.4}
+            ior={1.4}
             transparent
-            roughness={0.5}
+            transmission={0.4}
+            roughness={0.25}
             thickness={0.75}
+            emissive={new THREE.Color(color).multiplyScalar(0.5)}
+            emissiveIntensity={0.5}
           />
         );
       case 'plasma':
@@ -78,6 +82,8 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
           <meshPhysicalMaterial
             toneMapped={false}
             color={color}
+            ior={1.2}
+            transparent
             transmission={0.2}
             emissive={new THREE.Color(color).multiplyScalar(0.5)}
             emissiveIntensity={2}

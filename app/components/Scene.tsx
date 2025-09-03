@@ -2,7 +2,7 @@
 
 import { PropsWithChildren } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Environment } from '@react-three/drei'
+import { Environment } from '@react-three/drei'
 import { Bloom, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
 
 type FullscreenSceneProps = PropsWithChildren<{
@@ -33,7 +33,7 @@ export default function Scene({
         <directionalLight position={[5, 8, 5]} intensity={1} castShadow />
 
         {/* Controls */}
-        <OrbitControls makeDefault enableDamping dampingFactor={0.1} />
+        {/* <OrbitControls makeDefault enableDamping dampingFactor={0.1} /> */}
 
         {/* Drop anything here – it will be centered on 0,0,0 */}
         {children}
@@ -42,16 +42,7 @@ export default function Scene({
         <Environment preset="studio" backgroundIntensity={.1} environmentIntensity={.1} />
 
         <EffectComposer>
-            <Bloom
-              intensity={1} // The bloom intensity.
-              // blurPass={undefined} // A blur pass.
-              // kernelSize={KernelSize.LARGE} // blur kernel size
-              luminanceThreshold={0.25} // luminance threshold. Raise this value to mask out darker elements in the scene.
-              luminanceSmoothing={0.025} // smoothness of the luminance threshold. Range is [0, 1]
-              mipmapBlur={true} // Enables or disables mipmap blur.
-              // resolutionX={Resolution.AUTO_SIZE} // The horizontal resolution.
-              // resolutionY={Resolution.AUTO_SIZE} // The vertical resolution.
-            />
+            <Bloom luminanceThreshold={0.5} intensity={1.5} levels={9} mipmapBlur />
           <Noise opacity={0.025} />
           <Vignette eskil={false} offset={0.1} darkness={1} />
         </EffectComposer>
