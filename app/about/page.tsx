@@ -9,6 +9,7 @@ import Scene from "@/components/Scene";
 import { Model } from "@/components/Model";
 import { SpringGroup } from '@/components/SpringGroup';
 import { useSpringGroup } from '@/hooks/useSpringGroup';
+import { Stats } from '@react-three/drei';
 
 // Sphere component with random material and animation
 interface AnimatedSphereProps {
@@ -17,9 +18,10 @@ interface AnimatedSphereProps {
   radius: number;
   materialType: 'metallic' | 'glass' | 'neon' | 'holographic' | 'plasma';
   color: string;
+  type: 'sphere' | 'capsule' | 'box' | 'torus'
 }
 
-function AnimatedSphere({ position, radius, materialType, color }: AnimatedSphereProps) {
+function AnimatedSphere({ position, radius, materialType, color, type }: AnimatedSphereProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const rigidBodyRef = useRef<RapierRigidBody>(null);
   const originalPosition = useMemo(() => new THREE.Vector3(...position), [position]);
@@ -52,6 +54,7 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       case 'metallic':
         return (
           <meshStandardMaterial
+            toneMapped={false}
             color={color}
             metalness={0.9}
             roughness={0.1}
@@ -60,6 +63,7 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       case 'glass':
         return (
           <meshPhysicalMaterial
+            toneMapped={false}
             color={color}
             transmission={0.8}
             opacity={0.3}
@@ -71,14 +75,16 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       case 'neon':
         return (
           <meshStandardMaterial
+            toneMapped={false}
             color={color}
             emissive={color}
-            emissiveIntensity={0.3}
+            emissiveIntensity={0.75}
           />
         );
       case 'holographic':
         return (
           <meshStandardMaterial
+            toneMapped={false}
             color={color}
             metalness={0.7}
             roughness={0.3}
@@ -88,8 +94,10 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       case 'plasma':
         return (
           <meshStandardMaterial
+            toneMapped={false}
             color={color}
-            emissive={new THREE.Color(color).multiplyScalar(0.2)}
+            emissive={new THREE.Color(color).multiplyScalar(0.5)}
+            emissiveIntensity={2}
             roughness={0.8}
           />
         );
@@ -109,9 +117,10 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       angularDamping={0.5}
     >
       <mesh ref={meshRef} castShadow receiveShadow>
-        {/* <sphereGeometry args={[radius, 32, 32]} /> */}
-        {/* <boxGeometry args={[radius, radius, radius]} /> */}
-        <capsuleGeometry args={[radius, radius*1.5, 32, 32]} />
+        {type === 'sphere' && <sphereGeometry args={[radius, 32, 32]} />}
+        {type === 'capsule' && <capsuleGeometry args={[radius, radius*1.5, 32, 32]} />}
+        {type === 'box' && <boxGeometry args={[radius, radius, radius]} />}
+        {type === 'torus' && <torusGeometry args={[radius, radius/2]} />}
         {material}
       </mesh>
     </RigidBody>
@@ -159,20 +168,26 @@ function MouseCollider() {
       restitution={0}
     >
       <BallCollider ref={colliderRef} args={[1]} />
-      <mesh ref={meshRef} visible={false}>
+      <mesh ref={meshRef} visible={true}>
         <sphereGeometry args={[0, 16, 16]} />
-        <meshBasicMaterial transparent opacity={0.3} color={'#ff0000'} />
+        <meshBasicMaterial transparent opacity={1} color={'#ff0000'} />
       </mesh>
     </RigidBody>
   );
 }
 
-// Main sphere collection component
-function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius = 1, numMeshes = 5 }) {
+interface SphereCollectionProps {
+  distanceFromCenter: number
+  minRadius: number
+  maxRadius: number
+  numMeshes: number
+  type: AnimatedSphereProps['type']
+}
+function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius = 1, numMeshes = 5, type = 'sphere' }: SphereCollectionProps) {
   const spheres = useMemo(() => {
     // const materials: AnimatedSphereProps['materialType'][] = ['metallic', 'glass', 'neon', 'holographic', 'plasma'];
     const materials: AnimatedSphereProps['materialType'][] = ['glass', 'neon', 'plasma'];
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
     const positions: THREE.Vector3[] = [];
 
     const generateValidPosition = (attempts = 0): THREE.Vector3 => {
@@ -220,10 +235,11 @@ function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius 
         position: [position.x, position.y, position.z],
         radius: Math.max(0.1, radius),
         materialType: materials[i % materials.length],
-        color: colors[Math.floor(Math.random() * colors.length)]
+        color: colors[Math.floor(Math.random() * colors.length)],
+        type
       };
     });
-  }, [distanceFromCenter, minRadius, maxRadius, numMeshes]);
+  }, [distanceFromCenter, minRadius, maxRadius, numMeshes, type]);
 
   return (
     <>
@@ -234,6 +250,7 @@ function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius 
           radius={sphere.radius}
           materialType={sphere.materialType}
           color={sphere.color}
+          type={type}
         />
       ))}
     </>
@@ -269,10 +286,10 @@ function AnimatedModel({position = [0, 0, 0]}: {position?: [number, number, numb
 
 export default function About() {
   const sphereProps = {
-    distanceFromCenter: 1,
-    minRadius: 0.25,
+    distanceFromCenter: 1.5,
+    minRadius: 0.2,
     maxRadius: 0.25,
-    numMeshes: 128,
+    numMeshes: 24,
   };
 
   return (
@@ -287,14 +304,32 @@ export default function About() {
             <AnimatedModel />
           </RigidBody>
           <SphereCollection
-            key={`${sphereProps.distanceFromCenter}-${sphereProps.minRadius}-${sphereProps.maxRadius}-${sphereProps.numMeshes}`}
+            key={`sphere-${sphereProps.distanceFromCenter}-${sphereProps.minRadius}-${sphereProps.maxRadius}-${sphereProps.numMeshes}`}
             distanceFromCenter={sphereProps.distanceFromCenter}
             minRadius={sphereProps.minRadius}
             maxRadius={sphereProps.maxRadius}
             numMeshes={sphereProps.numMeshes}
+            type="sphere"
+          />
+          <SphereCollection
+            key={`capsule-${sphereProps.distanceFromCenter}-${sphereProps.minRadius}-${sphereProps.maxRadius}-${sphereProps.numMeshes}`}
+            distanceFromCenter={sphereProps.distanceFromCenter}
+            minRadius={sphereProps.minRadius}
+            maxRadius={sphereProps.maxRadius}
+            numMeshes={sphereProps.numMeshes}
+            type="capsule"
+          />
+          <SphereCollection
+            key={`torus-${sphereProps.distanceFromCenter}-${sphereProps.minRadius}-${sphereProps.maxRadius}-${sphereProps.numMeshes}`}
+            distanceFromCenter={sphereProps.distanceFromCenter}
+            minRadius={sphereProps.minRadius}
+            maxRadius={sphereProps.maxRadius}
+            numMeshes={sphereProps.numMeshes}
+            type="torus"
           />
         </Physics>
       </SpringGroup>
+      <Stats />
     </Scene>
   );
 }
