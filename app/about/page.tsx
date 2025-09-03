@@ -3,6 +3,7 @@
 import React, { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from "@react-three/fiber";
+import { RigidBody, Physics } from "@react-three/rapier";
 
 import Scene from "@/components/Scene";
 import { Model } from "@/components/Model";
@@ -19,61 +20,41 @@ interface AnimatedSphereProps {
 }
 
 function AnimatedSphere({ position, radius, materialType, color }: AnimatedSphereProps) {
-  // Spring physics configuration
-  const SPRING_CONFIG = {
-    tension: 1000,
-    friction: 50,
-    mass: 1
-  };
-
-  const CURSOR_FORCE_RADIUS = 2;
-  const CURSOR_FORCE_STRENGTH = 1.5;
-
   const meshRef = useRef<THREE.Mesh>(null);
+  const rigidBodyRef = useRef<any>(null);
   const originalPosition = useMemo(() => new THREE.Vector3(...position), [position]);
-  const currentPosition = useMemo(() => new THREE.Vector3(...position), [position]);
-  const velocity = useMemo(() => new THREE.Vector3(0, 0, 0), []);
   const { mouse } = useSpringGroup();
 
   useFrame((state) => {
-    if (!meshRef.current) return;
+    if (!rigidBodyRef.current || !meshRef.current) return;
 
-    // Calculate distance from mouse to sphere
-    const mouseDistance = currentPosition.distanceTo(mouse);
+    // Gentle rotation every frame
+    meshRef.current.rotation.x += 0.003;
+    meshRef.current.rotation.y += 0.002;
 
-    // Apply cursor force (repulsion)
-    const force = new THREE.Vector3();
-    if (mouseDistance < CURSOR_FORCE_RADIUS && mouseDistance > 0) {
-      const forceDirection = currentPosition.clone().sub(mouse).normalize();
-      const forceStrength = (1 - mouseDistance / CURSOR_FORCE_RADIUS) * CURSOR_FORCE_STRENGTH;
-      force.copy(forceDirection.multiplyScalar(forceStrength));
+    // Apply forces only every few frames to prevent recursion
+    const frameCount = Math.floor(state.clock.elapsedTime * 60);
+    if (frameCount % 4 !== 0) return;
+
+    // Get current position
+    const currentPos = rigidBodyRef.current.translation();
+    const current = new THREE.Vector3(currentPos.x, currentPos.y, currentPos.z);
+
+    // Spring force back to original position (use impulse instead of force)
+    const distanceToOrigin = current.distanceTo(originalPosition);
+    if (distanceToOrigin > 0.1) {
+      const springForce = originalPosition.clone().sub(current).normalize().multiplyScalar(0.02);
+      rigidBodyRef.current.applyImpulse({ x: springForce.x, y: springForce.y, z: springForce.z }, true);
     }
 
-    // Spring force back to original position
-    const springForce = originalPosition.clone()
-      .sub(currentPosition)
-      .multiplyScalar(SPRING_CONFIG.tension / 1000);
-
-    // Damping force
-    const dampingForce = velocity.clone().multiplyScalar(-SPRING_CONFIG.friction / 1000);
-
-    // Apply all forces
-    const totalForce = force.add(springForce).add(dampingForce);
-
-    // Update velocity and position using simple physics integration
-    velocity.add(totalForce.multiplyScalar(1 / SPRING_CONFIG.mass));
-    currentPosition.add(velocity.clone().multiplyScalar(0.016)); // 60fps assumption
-
-    // Apply position to mesh
-    meshRef.current.position.copy(currentPosition);
-
-    // Add rotation animation
-    meshRef.current.rotation.x += 0.01;
-    meshRef.current.rotation.y += 0.005;
-
-    // Add subtle floating animation on top of physics
-    const floatOffset = Math.sin(state.clock.elapsedTime + originalPosition.x) * 0.05;
-    meshRef.current.position.y += floatOffset;
+    // Mouse repulsion force
+    const mouseDistance = current.distanceTo(mouse);
+    if (mouseDistance < 2 && mouseDistance > 0.1) {
+      const repelDirection = current.clone().sub(mouse).normalize();
+      const repelStrength = (2 - mouseDistance) * 0.05;
+      const repelForce = repelDirection.multiplyScalar(repelStrength);
+      rigidBodyRef.current.applyImpulse({ x: repelForce.x, y: repelForce.y, z: repelForce.z }, true);
+    }
   });
 
   const material = useMemo(() => {
@@ -128,15 +109,25 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
   }, [materialType, color]);
 
   return (
-    <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[radius, 32, 32]} />
-      {material}
-    </mesh>
+    <RigidBody
+      ref={rigidBodyRef}
+      position={position}
+      type="dynamic"
+      restitution={0.6}
+      friction={0.3}
+      linearDamping={2}
+      angularDamping={1.5}
+    >
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[radius, 32, 32]} />
+        {material}
+      </mesh>
+    </RigidBody>
   );
 }
 
 // Main sphere collection component
-function SphereCollection({ distanceFromCenter = 3, baseRadius = 0.5, radiusRandomization = 0.3, numMeshes = 5 }) {
+function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius = 1, numMeshes = 5 }) {
   const spheres = useMemo(() => {
     const materials: AnimatedSphereProps['materialType'][] = ['metallic', 'glass', 'neon', 'holographic', 'plasma'];
     const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
@@ -146,13 +137,13 @@ function SphereCollection({ distanceFromCenter = 3, baseRadius = 0.5, radiusRand
       const theta = Math.random() * Math.PI * 2; // azimuthal angle
       const phi = Math.acos(2 * Math.random() - 1); // polar angle (uniform distribution)
 
-      const distance = distanceFromCenter + Math.random() * distanceFromCenter * 0.25; // Add some distance variation
+      const distance = distanceFromCenter + Math.random() * distanceFromCenter * 0.00025; // Add some distance variation
 
       const x = distance * Math.sin(phi) * Math.cos(theta);
       const y = distance * Math.sin(phi) * Math.sin(theta);
       const z = distance * Math.cos(phi);
 
-      const radius = baseRadius + (Math.random() - 0.5) * radiusRandomization * 2;
+      const radius = minRadius + Math.random() * (maxRadius - minRadius);
 
       return {
         id: i,
@@ -162,7 +153,7 @@ function SphereCollection({ distanceFromCenter = 3, baseRadius = 0.5, radiusRand
         color: colors[Math.floor(Math.random() * colors.length)]
       };
     });
-  }, [distanceFromCenter, baseRadius, radiusRandomization, numMeshes]);
+  }, [distanceFromCenter, minRadius, maxRadius, numMeshes]);
 
   return (
     <>
@@ -179,7 +170,7 @@ function SphereCollection({ distanceFromCenter = 3, baseRadius = 0.5, radiusRand
   );
 }
 
-function AnimateModel({position = [0, 0, 0]}: {position?: [number, number, number]}) {
+function AnimatedModel({position = [0, 0, 0]}: {position?: [number, number, number]}) {
   const modelRef = useRef<THREE.Group>(null);
   const originalPosition = useMemo(() => new THREE.Vector3(...position), [position]);
   const currentPosition = useMemo(() => new THREE.Vector3(...position), [position]);
@@ -209,26 +200,27 @@ function AnimateModel({position = [0, 0, 0]}: {position?: [number, number, numbe
 export default function About() {
   const sphereProps = {
     distanceFromCenter: 1,
-    baseRadius: 0.25,
-    radiusRandomization: 0.25,
-    numMeshes: 8,
+    minRadius: 0.25,
+    maxRadius: 0.25,
+    numMeshes: 48,
   };
 
   return (
     <Scene>
-      {/* <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[0.1, 32, 32]} />
-        <meshPhysicalMaterial color={'#ff0000'} />
-      </mesh> */}
       <SpringGroup>
-        <AnimateModel />
-        <SphereCollection
-          key={`${sphereProps.distanceFromCenter}-${sphereProps.baseRadius}-${sphereProps.radiusRandomization}-${sphereProps.numMeshes}`}
-          distanceFromCenter={sphereProps.distanceFromCenter}
-          baseRadius={sphereProps.baseRadius}
-          radiusRandomization={sphereProps.radiusRandomization}
-          numMeshes={sphereProps.numMeshes}
-        />
+        <Physics
+          gravity={[0, 0, 0]}
+          debug={false}
+        >
+          <AnimatedModel />
+          <SphereCollection
+            key={`${sphereProps.distanceFromCenter}-${sphereProps.minRadius}-${sphereProps.maxRadius}-${sphereProps.numMeshes}`}
+            distanceFromCenter={sphereProps.distanceFromCenter}
+            minRadius={sphereProps.minRadius}
+            maxRadius={sphereProps.maxRadius}
+            numMeshes={sphereProps.numMeshes}
+          />
+        </Physics>
       </SpringGroup>
     </Scene>
   );
