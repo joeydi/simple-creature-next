@@ -43,7 +43,7 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
     // Spring force back to original position
     const distanceToOrigin = current.distanceTo(originalPosition);
     if (distanceToOrigin > 0.1) {
-      const springForce = originalPosition.clone().sub(current).normalize().multiplyScalar(0.02);
+      const springForce = originalPosition.clone().sub(current).normalize().multiplyScalar(0.04);
       rigidBodyRef.current.applyImpulse({ x: springForce.x, y: springForce.y, z: springForce.z }, true);
     }
   });
@@ -104,13 +104,14 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       ref={rigidBodyRef}
       position={position}
       type="dynamic"
-      restitution={0.6}
-      friction={0.3}
+      restitution={1}
+      friction={1}
       linearDamping={1}
       angularDamping={1.5}
     >
       <mesh ref={meshRef}>
         <sphereGeometry args={[radius, 32, 32]} />
+        {/* <boxGeometry args={[radius, radius, radius]} /> */}
         {material}
       </mesh>
     </RigidBody>
@@ -124,6 +125,7 @@ function MouseCollider() {
   const meshRef = useRef<THREE.Mesh>(null);
   const { mouse } = useSpringGroup();
   const previousMouse = useRef(new THREE.Vector3());
+  const currentScale = useRef(0.25);
 
   useFrame(() => {
     if (!rigidBodyRef.current || !colliderRef.current || !meshRef.current) return;
@@ -133,13 +135,20 @@ function MouseCollider() {
     const velocity = currentMouse.distanceTo(previousMouse.current);
     previousMouse.current.copy(currentMouse);
 
-    // Scale collider based on velocity (min 0.5, max 3)
-    const baseSize = 0.25;
-    const velocityMultiplier = Math.min(velocity * 10, 2); // Scale velocity
-    const colliderSize = baseSize + velocityMultiplier;
+    // Calculate target scale based on velocity
+    const baseSize = 0
+    const velocityMultiplier = Math.min(velocity * 8, 2);
+    const targetScale = baseSize + velocityMultiplier;
 
-    // Update collider size
-    colliderRef.current.setRadius(colliderSize);
+    console.log(targetScale);
+
+
+    // Lerp current scale towards target (smooth transition)
+    const lerpSpeed = 0.05;
+    currentScale.current = THREE.MathUtils.lerp(currentScale.current, targetScale, lerpSpeed);
+
+    // Update collider size with lerped value
+    colliderRef.current.setRadius(currentScale.current);
 
     // Move the collider to follow mouse position
     rigidBodyRef.current.setTranslation({ x: mouse.x, y: mouse.y, z: mouse.z }, true);
@@ -150,11 +159,11 @@ function MouseCollider() {
       ref={rigidBodyRef}
       position={[0, 0, 0]}
       type="kinematicPosition"
-      restitution={0.8}
+      restitution={0}
     >
       <BallCollider ref={colliderRef} args={[1]} />
-      <mesh ref={meshRef} visible={true}>
-        <sphereGeometry args={[0.125, 16, 16]} />
+      <mesh ref={meshRef} visible={false}>
+        <sphereGeometry args={[0, 16, 16]} />
         <meshBasicMaterial transparent opacity={0.3} color={'#ff0000'} />
       </mesh>
     </RigidBody>
@@ -166,23 +175,51 @@ function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius 
   const spheres = useMemo(() => {
     const materials: AnimatedSphereProps['materialType'][] = ['metallic', 'glass', 'neon', 'holographic', 'plasma'];
     const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
+    const positions: THREE.Vector3[] = [];
+
+    const generateValidPosition = (attempts = 0): THREE.Vector3 => {
+      if (attempts > 100) {
+        // Fallback to avoid infinite loop
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const distance = distanceFromCenter + Math.random() * distanceFromCenter * 0.25;
+        return new THREE.Vector3(
+          distance * Math.sin(phi) * Math.cos(theta),
+          distance * Math.sin(phi) * Math.sin(theta),
+          distance * Math.cos(phi)
+        );
+      }
+
+      // Generate random position on sphere surface at specified distance
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const distance = distanceFromCenter + Math.random() * distanceFromCenter * 0.25;
+
+      const newPos = new THREE.Vector3(
+        distance * Math.sin(phi) * Math.cos(theta),
+        distance * Math.sin(phi) * Math.sin(theta),
+        distance * Math.cos(phi)
+      );
+
+      // Check if position is at least 1 unit away from existing positions
+      const tooClose = positions.some(pos => pos.distanceTo(newPos) < 1.0);
+
+      if (tooClose) {
+        return generateValidPosition(attempts + 1);
+      }
+
+      return newPos;
+    };
 
     return Array.from({ length: numMeshes }, (_, i): AnimatedSphereProps => {
-      // Generate random position on sphere surface at specified distance
-      const theta = Math.random() * Math.PI * 2; // azimuthal angle
-      const phi = Math.acos(2 * Math.random() - 1); // polar angle (uniform distribution)
-
-      const distance = distanceFromCenter + Math.random() * distanceFromCenter * 0.00025; // Add some distance variation
-
-      const x = distance * Math.sin(phi) * Math.cos(theta);
-      const y = distance * Math.sin(phi) * Math.sin(theta);
-      const z = distance * Math.cos(phi);
+      const position = generateValidPosition();
+      positions.push(position);
 
       const radius = minRadius + Math.random() * (maxRadius - minRadius);
 
       return {
         id: i,
-        position: [x, y, z],
+        position: [position.x, position.y, position.z],
         radius: Math.max(0.1, radius),
         materialType: materials[i % materials.length],
         color: colors[Math.floor(Math.random() * colors.length)]
@@ -237,7 +274,7 @@ export default function About() {
     distanceFromCenter: 1,
     minRadius: 0.25,
     maxRadius: 0.25,
-    numMeshes: 48,
+    numMeshes: 12,
   };
 
   return (

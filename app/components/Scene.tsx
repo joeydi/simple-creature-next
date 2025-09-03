@@ -3,6 +3,7 @@
 import { PropsWithChildren } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
+import { Bloom, DepthOfField, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
 
 type FullscreenSceneProps = PropsWithChildren<{
   /** Optional: camera position */
@@ -14,10 +15,10 @@ type FullscreenSceneProps = PropsWithChildren<{
 export default function Scene({
   children,
   camera = [0, 1, -3],
-  bg = '#0b0f14',
+  bg = '#6e16a0',
 }: FullscreenSceneProps) {
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100vw', height: '100vh', backgroundColor: '#6e16a0' }}>
       <Canvas
         shadows
         dpr={[1, 2]}
@@ -27,8 +28,8 @@ export default function Scene({
         <color attach="background" args={[bg]} />
 
         {/* Lights */}
-        <ambientLight intensity={0.35} />
-        <directionalLight position={[5, 8, 5]} intensity={1.1} castShadow />
+        <ambientLight intensity={0.1} />
+        <directionalLight position={[5, 8, 5]} intensity={4} castShadow />
 
         {/* Controls */}
         <OrbitControls makeDefault enableDamping dampingFactor={0.1} />
@@ -37,7 +38,14 @@ export default function Scene({
         {children}
 
         {/* Nice IBL so models look good out of the box */}
-        <Environment preset="city" />
+        <Environment preset="studio" backgroundIntensity={.1} environmentIntensity={.1} />
+
+        {/* <EffectComposer>
+          <DepthOfField focusDistance={0} focalLength={0.0075} bokehScale={1} height={480} />
+          <Bloom luminanceThreshold={0.25} luminanceSmoothing={0.9} height={100} />
+          <Noise opacity={0.025} />
+          <Vignette eskil={false} offset={0.1} darkness={1} />
+        </EffectComposer> */}
       </Canvas>
     </div>
   )
