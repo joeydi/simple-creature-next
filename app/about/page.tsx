@@ -3,7 +3,7 @@
 import React, { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from "@react-three/fiber";
-import { RigidBody, Physics, BallCollider, RapierRigidBody, RapierCollider } from "@react-three/rapier";
+import { RigidBody, Physics, BallCollider, RapierRigidBody, RapierCollider, useSpringJoint } from "@react-three/rapier";
 
 import Scene from "@/components/Scene";
 import { Model } from "@/components/Model";
@@ -24,30 +24,20 @@ interface AnimatedSphereProps {
 function AnimatedSphere({ position, radius, materialType, color, type }: AnimatedSphereProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const rigidBodyRef = useRef<RapierRigidBody>(null);
-  const originalPosition = useMemo(() => new THREE.Vector3(...position), [position]);
+  const anchorRef = useRef<RapierRigidBody>(null);
 
-  useFrame((state) => {
-    if (!rigidBodyRef.current || !meshRef.current) return;
-
-    // Gentle rotation every frame
-    // meshRef.current.rotation.x += 0.003;
-    // meshRef.current.rotation.y += 0.002;
-
-    // Apply spring force only every few frames to prevent recursion
-    const frameCount = Math.floor(state.clock.elapsedTime * 60);
-    if (frameCount % 4 !== 0) return;
-
-    // Get current position
-    const currentPos = rigidBodyRef.current.translation();
-    const current = new THREE.Vector3(currentPos.x, currentPos.y, currentPos.z);
-
-    // Spring force back to original position
-    const distanceToOrigin = current.distanceTo(originalPosition);
-    if (distanceToOrigin > 0.1) {
-      const springForce = originalPosition.clone().sub(current).normalize().multiplyScalar(0.025);
-      rigidBodyRef.current.applyImpulse({ x: springForce.x, y: springForce.y, z: springForce.z }, true);
-    }
-  });
+  // Create spring joint between the sphere and a fixed anchor point
+  useSpringJoint(
+    rigidBodyRef,
+    anchorRef,
+    [
+      [0, 0, 0], // Attach point on sphere (center)
+      [0, 0, 0], // Attach point on anchor (center)
+      0.1, // Rest length
+      4, // Stiffness
+      4, // Damping
+    ]
+  );
 
   const material = useMemo(() => {
     switch (materialType) {
@@ -107,23 +97,39 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
   }, [materialType, color]);
 
   return (
-    <RigidBody
-      ref={rigidBodyRef}
-      position={position}
-      type="dynamic"
-      restitution={1}
-      friction={1}
-      linearDamping={1}
-      angularDamping={0.5}
-    >
-      <mesh ref={meshRef} castShadow receiveShadow>
-        {type === 'sphere' && <sphereGeometry args={[radius, 32, 32]} />}
-        {type === 'capsule' && <capsuleGeometry args={[radius, radius*1.5, 32, 32]} />}
-        {type === 'box' && <boxGeometry args={[radius, radius, radius]} />}
-        {type === 'torus' && <torusGeometry args={[radius, radius/2]} />}
-        {material}
-      </mesh>
-    </RigidBody>
+    <>
+      {/* Fixed anchor point at the original position */}
+      <RigidBody
+        ref={anchorRef}
+        position={position}
+        type="fixed"
+      >
+        <mesh visible={false}>
+          <boxGeometry args={[0.01, 0.01, 0.01]} />
+          <meshBasicMaterial />
+        </mesh>
+      </RigidBody>
+
+      {/* The actual dynamic sphere */}
+      <RigidBody
+        ref={rigidBodyRef}
+        position={position}
+        type="dynamic"
+        restitution={1}
+        friction={1}
+        linearDamping={1}
+        angularDamping={0.5}
+        rotation={[Math.PI * Math.random(), Math.PI * Math.random(), Math.PI * Math.random()]}
+      >
+        <mesh ref={meshRef} castShadow receiveShadow>
+          {type === 'sphere' && <sphereGeometry args={[radius, 32, 32]} />}
+          {type === 'capsule' && <capsuleGeometry args={[radius, radius*1.5, 32, 32]} />}
+          {type === 'box' && <boxGeometry args={[radius, radius, radius]} />}
+          {type === 'torus' && <torusGeometry args={[radius, radius/2]} />}
+          {material}
+        </mesh>
+      </RigidBody>
+    </>
   );
 }
 
@@ -289,7 +295,7 @@ export default function About() {
     distanceFromCenter: 1.5,
     minRadius: 0.2,
     maxRadius: 0.25,
-    numMeshes: 24,
+    numMeshes: 16,
   };
 
   return (
