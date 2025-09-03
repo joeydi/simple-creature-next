@@ -9,6 +9,7 @@ import Scene from "@/components/Scene";
 import { Model } from "@/components/Model";
 import { SpringGroup } from '@/components/SpringGroup';
 import { useSpringGroup } from '@/hooks/useSpringGroup';
+import { MeshTransmissionMaterial } from '@react-three/drei';
 
 // Sphere component with random material and animation
 interface AnimatedSphereProps {
@@ -29,8 +30,8 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
     if (!rigidBodyRef.current || !meshRef.current) return;
 
     // Gentle rotation every frame
-    meshRef.current.rotation.x += 0.003;
-    meshRef.current.rotation.y += 0.002;
+    // meshRef.current.rotation.x += 0.003;
+    // meshRef.current.rotation.y += 0.002;
 
     // Apply spring force only every few frames to prevent recursion
     const frameCount = Math.floor(state.clock.elapsedTime * 60);
@@ -43,7 +44,7 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
     // Spring force back to original position
     const distanceToOrigin = current.distanceTo(originalPosition);
     if (distanceToOrigin > 0.1) {
-      const springForce = originalPosition.clone().sub(current).normalize().multiplyScalar(0.04);
+      const springForce = originalPosition.clone().sub(current).normalize().multiplyScalar(0.025);
       rigidBodyRef.current.applyImpulse({ x: springForce.x, y: springForce.y, z: springForce.z }, true);
     }
   });
@@ -97,6 +98,28 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       default:
         return <meshStandardMaterial color={color} />;
     }
+    // const options = {
+    //   transmissionSampler: false,
+    //   backside: false,
+    //   samples: 10,
+    //   resolution: 1024,
+    //   transmission: 1,
+    //   roughness: 0.05,
+    //   thickness: 3.5,
+    //   ior: 1.5,
+    //   chromaticAberration: 0.06,
+    //   anisotropy: 0.1,
+    //   distortion: 0.0,
+    //   distortionScale: 0.3,
+    //   temporalDistortion: 0.5,
+    //   clearcoat: 1,
+    //   attenuationDistance: 0.5,
+    //   // attenuationColor: '#ffffff',
+    //   // color: '#c9ffa1',
+    //   // bg: '#839681'
+    // };
+
+    // return <MeshTransmissionMaterial color={color} {...options} />
   }, [materialType, color]);
 
   return (
@@ -107,11 +130,12 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       restitution={1}
       friction={1}
       linearDamping={1}
-      angularDamping={1.5}
+      angularDamping={0.5}
     >
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[radius, 32, 32]} />
+      <mesh ref={meshRef} castShadow receiveShadow>
+        {/* <sphereGeometry args={[radius, 32, 32]} /> */}
         {/* <boxGeometry args={[radius, radius, radius]} /> */}
+        <capsuleGeometry args={[radius, radius*1.5, 32, 32]} />
         {material}
       </mesh>
     </RigidBody>
@@ -136,15 +160,13 @@ function MouseCollider() {
     previousMouse.current.copy(currentMouse);
 
     // Calculate target scale based on velocity
-    const baseSize = 0
+    const baseSize = 0.5
     const velocityMultiplier = Math.min(velocity * 8, 2);
     const targetScale = baseSize + velocityMultiplier;
 
-    console.log(targetScale);
-
-
     // Lerp current scale towards target (smooth transition)
-    const lerpSpeed = 0.05;
+    // const lerpSpeed = currentScale.current > targetScale ? 0.1 : 1;
+    const lerpSpeed = 0.1;
     currentScale.current = THREE.MathUtils.lerp(currentScale.current, targetScale, lerpSpeed);
 
     // Update collider size with lerped value
@@ -173,7 +195,8 @@ function MouseCollider() {
 // Main sphere collection component
 function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius = 1, numMeshes = 5 }) {
   const spheres = useMemo(() => {
-    const materials: AnimatedSphereProps['materialType'][] = ['metallic', 'glass', 'neon', 'holographic', 'plasma'];
+    // const materials: AnimatedSphereProps['materialType'][] = ['metallic', 'glass', 'neon', 'holographic', 'plasma'];
+    const materials: AnimatedSphereProps['materialType'][] = ['glass', 'neon', 'plasma'];
     const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
     const positions: THREE.Vector3[] = [];
 
@@ -274,7 +297,7 @@ export default function About() {
     distanceFromCenter: 1,
     minRadius: 0.25,
     maxRadius: 0.25,
-    numMeshes: 12,
+    numMeshes: 128,
   };
 
   return (
@@ -282,7 +305,7 @@ export default function About() {
       <SpringGroup>
         <Physics
           gravity={[0, 0, 0]}
-          debug={true}
+          // debug={true}
         >
           <MouseCollider />
           <RigidBody type="kinematicPosition">
