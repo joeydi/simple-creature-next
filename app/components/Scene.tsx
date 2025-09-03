@@ -43,10 +43,10 @@ export default function Scene({
 
         <EffectComposer>
             <Bloom
-              intensity={0.5} // The bloom intensity.
+              intensity={1} // The bloom intensity.
               // blurPass={undefined} // A blur pass.
               // kernelSize={KernelSize.LARGE} // blur kernel size
-              luminanceThreshold={0.75} // luminance threshold. Raise this value to mask out darker elements in the scene.
+              luminanceThreshold={0.25} // luminance threshold. Raise this value to mask out darker elements in the scene.
               luminanceSmoothing={0.025} // smoothness of the luminance threshold. Range is [0, 1]
               mipmapBlur={true} // Enables or disables mipmap blur.
               // resolutionX={Resolution.AUTO_SIZE} // The horizontal resolution.

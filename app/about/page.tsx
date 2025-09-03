@@ -16,7 +16,7 @@ interface AnimatedSphereProps {
   id?: number;
   position: [number, number, number];
   radius: number;
-  materialType: 'metallic' | 'glass' | 'neon' | 'holographic' | 'plasma';
+  materialType: 'glass' | 'neon' | 'plasma';
   color: string;
   type: 'sphere' | 'capsule' | 'box' | 'torus'
 }
@@ -45,45 +45,31 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
   );
 
   const material = useMemo(() => {
+    console.log(materialType);
+
     switch (materialType) {
-      case 'metallic':
-        return (
-          <meshStandardMaterial
-            toneMapped={false}
-            color={color}
-            metalness={0.9}
-            roughness={0.1}
-          />
-        );
       case 'glass':
         return (
           <meshPhysicalMaterial
             toneMapped={false}
             color={color}
             transmission={0.8}
-            opacity={0.3}
+            opacity={0.4}
             transparent
             roughness={0.1}
-            thickness={0.5}
+            thickness={0.75}
           />
         );
       case 'neon':
         return (
-          <meshStandardMaterial
+          <meshPhysicalMaterial
             toneMapped={false}
             color={color}
-            emissive={color}
-            emissiveIntensity={0.75}
-          />
-        );
-      case 'holographic':
-        return (
-          <meshStandardMaterial
-            toneMapped={false}
-            color={color}
-            metalness={0.7}
-            roughness={0.3}
-            envMapIntensity={2}
+            transmission={0.2}
+            opacity={0.8}
+            transparent
+            roughness={0.1}
+            thickness={0.75}
           />
         );
       case 'plasma':
@@ -93,7 +79,7 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
             color={color}
             emissive={new THREE.Color(color).multiplyScalar(0.5)}
             emissiveIntensity={2}
-            roughness={0.8}
+            roughness={1}
           />
         );
       default:
@@ -300,7 +286,7 @@ export default function About() {
     distanceFromCenter: 1.5,
     minRadius: 0.2,
     maxRadius: 0.25,
-    numMeshes: 16,
+    numMeshes: 8,
   };
 
   return (
