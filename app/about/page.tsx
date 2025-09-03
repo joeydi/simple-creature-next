@@ -26,6 +26,11 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
   const rigidBodyRef = useRef<RapierRigidBody>(null);
   const anchorRef = useRef<RapierRigidBody>(null);
 
+  const mass = 1;
+  const springRestLength = 0;
+  const stiffness = 4;
+  const damping = 1.0 * Math.sqrt(stiffness * mass);
+
   // Create spring joint between the sphere and a fixed anchor point
   useSpringJoint(
     rigidBodyRef,
@@ -33,9 +38,9 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
     [
       [0, 0, 0], // Attach point on sphere (center)
       [0, 0, 0], // Attach point on anchor (center)
-      0.1, // Rest length
-      4, // Stiffness
-      4, // Damping
+      springRestLength,
+      stiffness,
+      damping,
     ]
   );
 
