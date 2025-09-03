@@ -14,7 +14,7 @@ type FullscreenSceneProps = PropsWithChildren<{
 
 export default function Scene({
   children,
-  camera = [0, 1, -3],
+  camera = [0, 1, -5],
   // bg = '#6e16a0',
   bg = '#B944FC',
 }: FullscreenSceneProps) {
