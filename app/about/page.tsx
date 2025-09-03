@@ -3,7 +3,7 @@
 import React, { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from "@react-three/fiber";
-import { RigidBody, Physics } from "@react-three/rapier";
+import { RigidBody, Physics, BallCollider } from "@react-three/rapier";
 
 import Scene from "@/components/Scene";
 import { Model } from "@/components/Model";
@@ -32,7 +32,7 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
     meshRef.current.rotation.x += 0.003;
     meshRef.current.rotation.y += 0.002;
 
-    // Apply forces only every few frames to prevent recursion
+    // Apply spring force only every few frames to prevent recursion
     const frameCount = Math.floor(state.clock.elapsedTime * 60);
     if (frameCount % 4 !== 0) return;
 
@@ -40,20 +40,11 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
     const currentPos = rigidBodyRef.current.translation();
     const current = new THREE.Vector3(currentPos.x, currentPos.y, currentPos.z);
 
-    // Spring force back to original position (use impulse instead of force)
+    // Spring force back to original position
     const distanceToOrigin = current.distanceTo(originalPosition);
     if (distanceToOrigin > 0.1) {
       const springForce = originalPosition.clone().sub(current).normalize().multiplyScalar(0.02);
       rigidBodyRef.current.applyImpulse({ x: springForce.x, y: springForce.y, z: springForce.z }, true);
-    }
-
-    // Mouse repulsion force
-    const mouseDistance = current.distanceTo(mouse);
-    if (mouseDistance < 2 && mouseDistance > 0.1) {
-      const repelDirection = current.clone().sub(mouse).normalize();
-      const repelStrength = (2 - mouseDistance) * 0.05;
-      const repelForce = repelDirection.multiplyScalar(repelStrength);
-      rigidBodyRef.current.applyImpulse({ x: repelForce.x, y: repelForce.y, z: repelForce.z }, true);
     }
   });
 
@@ -115,12 +106,56 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       type="dynamic"
       restitution={0.6}
       friction={0.3}
-      linearDamping={2}
+      linearDamping={1}
       angularDamping={1.5}
     >
       <mesh ref={meshRef}>
         <sphereGeometry args={[radius, 32, 32]} />
         {material}
+      </mesh>
+    </RigidBody>
+  );
+}
+
+// Invisible mouse collider
+function MouseCollider() {
+  const rigidBodyRef = useRef<any>(null);
+  const colliderRef = useRef<any>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
+  const { mouse } = useSpringGroup();
+  const previousMouse = useRef(new THREE.Vector3());
+
+  useFrame(() => {
+    if (!rigidBodyRef.current || !colliderRef.current || !meshRef.current) return;
+
+    // Calculate mouse velocity
+    const currentMouse = mouse.clone();
+    const velocity = currentMouse.distanceTo(previousMouse.current);
+    previousMouse.current.copy(currentMouse);
+
+    // Scale collider based on velocity (min 0.5, max 3)
+    const baseSize = 0.25;
+    const velocityMultiplier = Math.min(velocity * 10, 2); // Scale velocity
+    const colliderSize = baseSize + velocityMultiplier;
+
+    // Update collider size
+    colliderRef.current.setRadius(colliderSize);
+
+    // Move the collider to follow mouse position
+    rigidBodyRef.current.setTranslation({ x: mouse.x, y: mouse.y, z: mouse.z }, true);
+  });
+
+  return (
+    <RigidBody
+      ref={rigidBodyRef}
+      position={[0, 0, 0]}
+      type="kinematicPosition"
+      restitution={0.8}
+    >
+      <BallCollider ref={colliderRef} args={[1]} />
+      <mesh ref={meshRef} visible={true}>
+        <sphereGeometry args={[0.125, 16, 16]} />
+        <meshBasicMaterial transparent opacity={0.3} color={'#ff0000'} />
       </mesh>
     </RigidBody>
   );
@@ -210,9 +245,12 @@ export default function About() {
       <SpringGroup>
         <Physics
           gravity={[0, 0, 0]}
-          debug={false}
+          debug={true}
         >
-          <AnimatedModel />
+          <MouseCollider />
+          <RigidBody type="kinematicPosition">
+            <AnimatedModel />
+          </RigidBody>
           <SphereCollection
             key={`${sphereProps.distanceFromCenter}-${sphereProps.minRadius}-${sphereProps.maxRadius}-${sphereProps.numMeshes}`}
             distanceFromCenter={sphereProps.distanceFromCenter}
