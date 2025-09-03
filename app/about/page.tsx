@@ -116,7 +116,7 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
           {type === 'sphere' && <sphereGeometry args={[radius, 32, 32]} />}
           {type === 'capsule' && <capsuleGeometry args={[radius, radius*1.5, 32, 32]} />}
           {type === 'box' && <boxGeometry args={[radius, radius, radius]} />}
-          {type === 'torus' && <torusGeometry args={[radius, radius/2]} />}
+          {type === 'torus' && <torusGeometry args={[radius, radius/2, 24, 24]} />}
           {material}
         </mesh>
       </RigidBody>
