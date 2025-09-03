@@ -3,13 +3,12 @@
 import React, { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from "@react-three/fiber";
-import { RigidBody, Physics, BallCollider } from "@react-three/rapier";
+import { RigidBody, Physics, BallCollider, RapierRigidBody, RapierCollider } from "@react-three/rapier";
 
 import Scene from "@/components/Scene";
 import { Model } from "@/components/Model";
 import { SpringGroup } from '@/components/SpringGroup';
 import { useSpringGroup } from '@/hooks/useSpringGroup';
-import { MeshTransmissionMaterial } from '@react-three/drei';
 
 // Sphere component with random material and animation
 interface AnimatedSphereProps {
@@ -22,9 +21,8 @@ interface AnimatedSphereProps {
 
 function AnimatedSphere({ position, radius, materialType, color }: AnimatedSphereProps) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const rigidBodyRef = useRef<any>(null);
+  const rigidBodyRef = useRef<RapierRigidBody>(null);
   const originalPosition = useMemo(() => new THREE.Vector3(...position), [position]);
-  const { mouse } = useSpringGroup();
 
   useFrame((state) => {
     if (!rigidBodyRef.current || !meshRef.current) return;
@@ -98,28 +96,6 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
       default:
         return <meshStandardMaterial color={color} />;
     }
-    // const options = {
-    //   transmissionSampler: false,
-    //   backside: false,
-    //   samples: 10,
-    //   resolution: 1024,
-    //   transmission: 1,
-    //   roughness: 0.05,
-    //   thickness: 3.5,
-    //   ior: 1.5,
-    //   chromaticAberration: 0.06,
-    //   anisotropy: 0.1,
-    //   distortion: 0.0,
-    //   distortionScale: 0.3,
-    //   temporalDistortion: 0.5,
-    //   clearcoat: 1,
-    //   attenuationDistance: 0.5,
-    //   // attenuationColor: '#ffffff',
-    //   // color: '#c9ffa1',
-    //   // bg: '#839681'
-    // };
-
-    // return <MeshTransmissionMaterial color={color} {...options} />
   }, [materialType, color]);
 
   return (
@@ -144,8 +120,8 @@ function AnimatedSphere({ position, radius, materialType, color }: AnimatedSpher
 
 // Invisible mouse collider
 function MouseCollider() {
-  const rigidBodyRef = useRef<any>(null);
-  const colliderRef = useRef<any>(null);
+  const rigidBodyRef = useRef<RapierRigidBody>(null);
+  const colliderRef = useRef<RapierCollider>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const { mouse } = useSpringGroup();
   const previousMouse = useRef(new THREE.Vector3());
@@ -165,7 +141,6 @@ function MouseCollider() {
     const targetScale = baseSize + velocityMultiplier;
 
     // Lerp current scale towards target (smooth transition)
-    // const lerpSpeed = currentScale.current > targetScale ? 0.1 : 1;
     const lerpSpeed = 0.1;
     currentScale.current = THREE.MathUtils.lerp(currentScale.current, targetScale, lerpSpeed);
 
