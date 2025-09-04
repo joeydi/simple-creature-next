@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from "@react-three/fiber";
 import { RigidBody, Physics, BallCollider, RapierRigidBody, RapierCollider, useSpringJoint } from "@react-three/rapier";
@@ -13,7 +13,7 @@ import { Stats } from '@react-three/drei';
 
 // Sphere component with random material and animation
 interface AnimatedSphereProps {
-  id?: number;
+  id?: string;
   position: [number, number, number];
   radius: number;
   materialType: 'glass' | 'neon' | 'plasma';
@@ -21,15 +21,33 @@ interface AnimatedSphereProps {
   type: 'sphere' | 'capsule' | 'box' | 'torus'
 }
 
-function AnimatedSphere({ position, radius, materialType, color, type }: AnimatedSphereProps) {
+function AnimatedSphere({ id, position, radius, materialType, color, type }: AnimatedSphereProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const rigidBodyRef = useRef<RapierRigidBody>(null);
   const anchorRef = useRef<RapierRigidBody>(null);
+  const { mouse, draggedSphereId, setDraggedSphereId } = useSpringGroup();
+
+  const sphereId = useMemo(() => `sphere-${id || Math.random()}`, [id]);
+  const isDragging = draggedSphereId === sphereId;
+  const originalPosition = useMemo(() => new THREE.Vector3(...position), [position]);
+  const previousDragging = useRef(false);
 
   const mass = 1;
   const springRestLength = 0;
-  const stiffness = 4;
-  const damping = 1.0 * Math.sqrt(stiffness * mass);
+
+  // Different spring parameters for dragging vs resting
+  const restingStiffness = 4;
+  const draggingStiffness = 1000; // Very high stiffness for tight following
+  const restingDamping = 1.0 * Math.sqrt(restingStiffness * mass);
+  const draggingDamping = 200 * Math.sqrt(draggingStiffness * mass); // High damping to prevent oscillation
+
+  const currentStiffness = isDragging ? draggingStiffness : restingStiffness;
+  const currentDamping = isDragging ? draggingDamping : restingDamping;
+
+  if (isDragging) {
+    console.log({currentStiffness, currentDamping});
+
+  }
 
   // Create spring joint between the sphere and a fixed anchor point
   useSpringJoint(
@@ -39,10 +57,58 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
       [0, 0, 0], // Attach point on sphere (center)
       [0, 0, 0], // Attach point on anchor (center)
       springRestLength,
-      stiffness,
-      damping,
+      currentStiffness,
+      currentDamping,
     ]
   );
+
+  // Handle click detection and dragging
+  const handlePointerDown = (e: any) => {
+    e.stopPropagation();
+    setDraggedSphereId(sphereId);
+  };
+
+  const handlePointerUp = () => {
+    setDraggedSphereId(null);
+  };
+
+  // Add global mouse up event listener to handle mouse release anywhere
+  useEffect(() => {
+    const handleGlobalPointerUp = () => {
+      setDraggedSphereId(null);
+    };
+
+    window.addEventListener('pointerup', handleGlobalPointerUp);
+    window.addEventListener('mouseup', handleGlobalPointerUp);
+
+    return () => {
+      window.removeEventListener('pointerup', handleGlobalPointerUp);
+      window.removeEventListener('mouseup', handleGlobalPointerUp);
+    };
+  }, [setDraggedSphereId]);
+
+  // Update anchor position when dragging
+  useFrame(() => {
+    if (!anchorRef.current) return;
+
+    if (isDragging) {
+      // Update anchor to follow mouse position
+      anchorRef.current.setTranslation({ x: mouse.x, y: mouse.y, z: mouse.z }, true);
+    } else if (previousDragging.current) {
+      // Only return to original position once when dragging stops
+      anchorRef.current.setTranslation({
+        x: originalPosition.x,
+        y: originalPosition.y,
+        z: originalPosition.z
+      }, true);
+    }
+
+    previousDragging.current = isDragging;
+  });
+
+  const initialRotation: [number, number, number] = useMemo(() => {
+    return [Math.PI * Math.random(), Math.PI * Math.random(), Math.PI * Math.random()];
+  }, []);
 
   const material = useMemo(() => {
     console.log(materialType);
@@ -101,7 +167,8 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
       <RigidBody
         ref={anchorRef}
         position={position}
-        type="fixed"
+        type="kinematicPosition"
+        canSleep={true}
       >
         <mesh visible={false}>
           <boxGeometry args={[0.01, 0.01, 0.01]} />
@@ -118,9 +185,15 @@ function AnimatedSphere({ position, radius, materialType, color, type }: Animate
         friction={1}
         linearDamping={1}
         angularDamping={0.5}
-        rotation={[Math.PI * Math.random(), Math.PI * Math.random(), Math.PI * Math.random()]}
+        rotation={initialRotation}
       >
-        <mesh ref={meshRef} castShadow receiveShadow>
+        <mesh
+          ref={meshRef}
+          castShadow
+          receiveShadow
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+        >
           {type === 'sphere' && <sphereGeometry args={[radius, 32, 32]} />}
           {type === 'capsule' && <capsuleGeometry args={[radius, radius*1.5, 32, 32]} />}
           {type === 'box' && <boxGeometry args={[radius, radius, radius]} />}
@@ -137,12 +210,19 @@ function MouseCollider() {
   const rigidBodyRef = useRef<RapierRigidBody>(null);
   const colliderRef = useRef<RapierCollider>(null);
   const meshRef = useRef<THREE.Mesh>(null);
-  const { mouse } = useSpringGroup();
+  const { mouse, draggedSphereId } = useSpringGroup();
   const previousMouse = useRef(new THREE.Vector3());
   const currentScale = useRef(0.25);
 
   useFrame(() => {
     if (!rigidBodyRef.current || !colliderRef.current || !meshRef.current) return;
+
+    // Disable MouseCollider when a sphere is being dragged
+    if (draggedSphereId) {
+      // Disable the collider by setting its radius to 0
+      colliderRef.current.setRadius(0);
+      return;
+    }
 
     // Calculate mouse velocity
     const currentMouse = mouse.clone();
@@ -236,7 +316,7 @@ function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius 
       const radius = minRadius + Math.random() * (maxRadius - minRadius);
 
       return {
-        id: i,
+        id: `${type}-${i}`,
         position: [position.x, position.y, position.z],
         radius: Math.max(0.1, radius),
         materialType: materials[i % materials.length],
@@ -251,6 +331,7 @@ function SphereCollection({ distanceFromCenter = 3, minRadius = 0.25, maxRadius 
       {spheres.map(sphere => (
         <AnimatedSphere
           key={sphere.id}
+          id={sphere.id}
           position={sphere.position}
           radius={sphere.radius}
           materialType={sphere.materialType}

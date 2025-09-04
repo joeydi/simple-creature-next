@@ -3,6 +3,8 @@ import { createContext, useContext } from "react";
 
 interface SpringGroupContextType {
   mouse: THREE.Vector3;
+  draggedSphereId: string | null;
+  setDraggedSphereId: (id: string | null) => void;
 }
 
 export const SpringGroupContext = createContext<SpringGroupContextType | null>(null);
