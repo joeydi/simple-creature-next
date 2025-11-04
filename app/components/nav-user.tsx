@@ -1,7 +1,8 @@
 "use client"
 
 import { BellIcon, CreditCardIcon, LogOutIcon, MoreVerticalIcon, UserCircleIcon } from "lucide-react"
-import { useSession } from "@/lib/auth-client"
+import { useSession, signOut } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -18,6 +19,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/c
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { data: session, isPending } = useSession()
+  const router = useRouter()
 
   // Default user data while loading or if no session
   const user = session?.user
@@ -41,6 +43,11 @@ export function NavUser() {
         .toUpperCase()
         .slice(0, 2)
     : "GU"
+
+  const handleSignOut = async () => {
+    await signOut()
+    router.push("/login")
+  }
 
   return (
     <SidebarMenu>
@@ -96,7 +103,7 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignOut}>
               <LogOutIcon />
               Log out
             </DropdownMenuItem>
