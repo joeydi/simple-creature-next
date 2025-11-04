@@ -2,7 +2,7 @@
 
 import React, { useRef, useMemo, useEffect } from "react"
 import * as THREE from "three"
-import { useFrame } from "@react-three/fiber"
+import { useFrame, ThreeEvent } from "@react-three/fiber"
 import { RigidBody, Physics, BallCollider, RapierRigidBody, RapierCollider, useSpringJoint } from "@react-three/rapier"
 
 import Scene from "@/components/Scene"
@@ -58,7 +58,7 @@ function AnimatedSphere({ id, position, radius, materialType, color, type }: Ani
   ])
 
   // Handle click detection and dragging
-  const handlePointerDown = (e: any) => {
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation()
     setDraggedSphereId(sphereId)
   }
