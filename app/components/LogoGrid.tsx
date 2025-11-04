@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -63,13 +63,18 @@ const logos = [
 ];
 
 export const LogoGrid = () => {
-  const randomLogos = logos.sort(() => 0.5 - Math.random());
+  const [randomLogos, setRandomLogos] = useState(logos);
 
   const columns = 6;
   const rows = 12;
 
   const maskRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  // Shuffle logos only on the client to avoid hydration mismatch
+  useEffect(() => {
+    setRandomLogos([...logos].sort(() => 0.5 - Math.random()));
+  }, []);
 
   useGSAP(() => {
     const grid = gridRef.current;
