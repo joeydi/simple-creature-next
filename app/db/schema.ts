@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, boolean, jsonb } from "drizzle-orm/pg-core"
 
 // Better Auth Schema - https://www.better-auth.com/docs/concepts/database
 
@@ -50,4 +50,15 @@ export const verification = pgTable("verification", {
   expiresAt: timestamp("expiresAt").notNull(),
   createdAt: timestamp("createdAt"),
   updatedAt: timestamp("updatedAt"),
+})
+
+export const project = pgTable("project", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  shortDescription: text("shortDescription").notNull(),
+  longDescription: text("longDescription"),
+  tags: jsonb("tags"),
+  content: jsonb("content"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 })
