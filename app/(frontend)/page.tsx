@@ -3,9 +3,9 @@ import Hero from '@/components/Hero'
 import ScrambleText from '@/components/ScrambleText'
 // import Reel from '@/components/Reel'
 import FeaturedProjects from '@/components/FeaturedProjects'
-import ServicesMarquee from './components/ServicesMarquee'
-import { ProjectLifecycle } from './components/ProjectLifecycle'
-import { LogoGrid } from './components/LogoGrid'
+import ServicesMarquee from '@/components/ServicesMarquee'
+import { ProjectLifecycle } from '@/components/ProjectLifecycle'
+import { LogoGrid } from '@/components/LogoGrid'
 
 export default function Home() {
   return (
