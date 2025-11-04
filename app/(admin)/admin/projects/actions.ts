@@ -1,12 +1,12 @@
 "use server"
 
 import { db } from "@/db"
-import { project } from "@/db/schema"
+import { project, projectCategory, category } from "@/db/schema"
 import { auth } from "@/lib/auth-server"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { nanoid } from "nanoid"
-import { desc, count, eq } from "drizzle-orm"
+import { desc, count, eq, inArray } from "drizzle-orm"
 
 export async function createProject(formData: FormData) {
   // Check authentication
@@ -24,6 +24,7 @@ export async function createProject(formData: FormData) {
   const longDescription = formData.get("longDescription") as string
   const tagsInput = formData.get("tags") as string
   const contentInput = formData.get("content") as string
+  const categoriesInput = formData.get("categories") as string
 
   // Validate required fields
   if (!title || !shortDescription) {
@@ -49,9 +50,19 @@ export async function createProject(formData: FormData) {
     }
   }
 
+  let categoryIds: string[] = []
+  if (categoriesInput) {
+    try {
+      categoryIds = JSON.parse(categoriesInput)
+    } catch (e) {
+      throw new Error("Categories must be valid JSON")
+    }
+  }
+
   // Insert project
+  const projectId = nanoid()
   await db.insert(project).values({
-    id: nanoid(),
+    id: projectId,
     title,
     shortDescription,
     longDescription: longDescription || null,
@@ -60,6 +71,16 @@ export async function createProject(formData: FormData) {
     createdAt: new Date(),
     updatedAt: new Date(),
   })
+
+  // Insert project-category associations
+  if (categoryIds.length > 0) {
+    await db.insert(projectCategory).values(
+      categoryIds.map((categoryId) => ({
+        projectId,
+        categoryId,
+      }))
+    )
+  }
 
   redirect("/admin/projects")
 }
@@ -83,14 +104,45 @@ export async function getProjects(page: number = 1, pageSize: number = 20) {
 
   // Get paginated projects
   const projects = await db
-    .select()
+    .select({
+      id: project.id,
+      title: project.title,
+      shortDescription: project.shortDescription,
+      longDescription: project.longDescription,
+      tags: project.tags,
+      content: project.content,
+      createdAt: project.createdAt,
+      updatedAt: project.updatedAt,
+    })
     .from(project)
     .orderBy(desc(project.createdAt))
     .limit(pageSize)
     .offset(offset)
 
+  // Get categories for all projects
+  const projectIds = projects.map((p) => p.id)
+  const categoriesData = projectIds.length > 0
+    ? await db
+        .select({
+          projectId: projectCategory.projectId,
+          categoryId: category.id,
+          categoryName: category.name,
+        })
+        .from(projectCategory)
+        .innerJoin(category, eq(projectCategory.categoryId, category.id))
+        .where(inArray(projectCategory.projectId, projectIds))
+    : []
+
+  // Map categories to projects
+  const projectsWithCategories = projects.map((p) => ({
+    ...p,
+    categories: categoriesData
+      .filter((c) => c.projectId === p.id)
+      .map((c) => ({ id: c.categoryId, name: c.categoryName })),
+  }))
+
   return {
-    projects,
+    projects: projectsWithCategories,
     total,
     page,
     pageSize,
@@ -113,7 +165,16 @@ export async function getProject(id: string) {
     .from(project)
     .where(eq(project.id, id))
 
-  return projectData
+  // Get project categories
+  const projectCategories = await db
+    .select({ categoryId: projectCategory.categoryId })
+    .from(projectCategory)
+    .where(eq(projectCategory.projectId, id))
+
+  return {
+    ...projectData,
+    categoryIds: projectCategories.map((pc) => pc.categoryId),
+  }
 }
 
 export async function updateProject(id: string, formData: FormData) {
@@ -132,6 +193,7 @@ export async function updateProject(id: string, formData: FormData) {
   const longDescription = formData.get("longDescription") as string
   const tagsInput = formData.get("tags") as string
   const contentInput = formData.get("content") as string
+  const categoriesInput = formData.get("categories") as string
 
   // Validate required fields
   if (!title || !shortDescription) {
@@ -157,6 +219,15 @@ export async function updateProject(id: string, formData: FormData) {
     }
   }
 
+  let categoryIds: string[] = []
+  if (categoriesInput) {
+    try {
+      categoryIds = JSON.parse(categoriesInput)
+    } catch (e) {
+      throw new Error("Categories must be valid JSON")
+    }
+  }
+
   // Update project
   await db
     .update(project)
@@ -169,6 +240,20 @@ export async function updateProject(id: string, formData: FormData) {
       updatedAt: new Date(),
     })
     .where(eq(project.id, id))
+
+  // Update project-category associations
+  // Delete existing associations
+  await db.delete(projectCategory).where(eq(projectCategory.projectId, id))
+
+  // Insert new associations
+  if (categoryIds.length > 0) {
+    await db.insert(projectCategory).values(
+      categoryIds.map((categoryId) => ({
+        projectId: id,
+        categoryId,
+      }))
+    )
+  }
 
   redirect("/admin/projects")
 }

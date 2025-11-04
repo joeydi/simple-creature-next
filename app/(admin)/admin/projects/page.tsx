@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 import { auth } from "@/lib/auth-server"
 import { Plus, ChevronLeft, ChevronRight } from "lucide-react"
 import { headers } from "next/headers"
@@ -55,6 +56,7 @@ export default async function ProjectsPage({
                   <TableRow>
                     <TableHead>Title</TableHead>
                     <TableHead>Short Description</TableHead>
+                    <TableHead>Categories</TableHead>
                     <TableHead className="w-[180px]">Created</TableHead>
                     <TableHead className="w-[100px]">Actions</TableHead>
                   </TableRow>
@@ -65,6 +67,19 @@ export default async function ProjectsPage({
                       <TableCell className="font-medium">{project.title}</TableCell>
                       <TableCell className="max-w-md truncate">
                         {project.shortDescription}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-wrap gap-1">
+                          {project.categories.length > 0 ? (
+                            project.categories.map((category) => (
+                              <Badge key={category.id} variant="secondary">
+                                {category.name}
+                              </Badge>
+                            ))
+                          ) : (
+                            <span className="text-sm text-muted-foreground">—</span>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         {new Date(project.createdAt).toLocaleDateString()}

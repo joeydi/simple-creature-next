@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, jsonb } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, boolean, jsonb, primaryKey } from "drizzle-orm/pg-core"
 
 // Better Auth Schema - https://www.better-auth.com/docs/concepts/database
 
@@ -62,3 +62,23 @@ export const project = pgTable("project", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 })
+
+export const category = pgTable("category", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+})
+
+export const projectCategory = pgTable("projectCategory", {
+  projectId: text("projectId")
+    .notNull()
+    .references(() => project.id, { onDelete: "cascade" }),
+  categoryId: text("categoryId")
+    .notNull()
+    .references(() => category.id, { onDelete: "cascade" }),
+}, (table) => ({
+  pk: primaryKey({ columns: [table.projectId, table.categoryId] }),
+}))
