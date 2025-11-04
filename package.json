@@ -15,12 +15,12 @@
     "@react-three/postprocessing": "^3.0.4",
     "@react-three/rapier": "^2.1.0",
     "gsap": "^3.13.0",
-    "next": "^15.5.0",
+    "next": "^16.0.1",
     "ogl": "^1.0.8",
     "postprocessing": "^6.37.7",
     "probe-image-size": "^7.2.3",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "sharp": "^0.33.5",
     "stacked-alpha-video": "^1.0.8"
   },
@@ -29,8 +29,8 @@
     "@types/probe-image-size": "^7.2.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.11",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.1",
     "sass": "^1.90.0",
     "typescript": "^5"
   }
