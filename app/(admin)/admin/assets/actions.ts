@@ -11,6 +11,7 @@ import { uploadToS3, deleteFromS3, generateS3Key } from "@/lib/s3"
 import { nanoid } from "nanoid"
 import sharp from "sharp"
 import type { AssetType, ImageMetadata, VideoMetadata, PDFMetadata } from "./types"
+import OpenAI from "openai"
 
 // Re-export types for convenience
 export type { AssetType, ImageMetadata, VideoMetadata, PDFMetadata } from "./types"
@@ -243,4 +244,75 @@ export async function deleteAsset(id: string) {
 
   revalidatePath("/admin/assets")
   redirect("/admin/assets")
+}
+
+// Generate alt text using OpenAI Vision API
+export async function generateAltText(imageUrl: string, keywords?: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY!,
+  })
+
+  const prompt = `Generate alt text for the following image.
+
+Write in one clear sentence, 125 characters or fewer.
+
+Prioritize accessibility: accurately describe the main subject, action, and relevant context so a visually impaired user understands the image.
+
+Prioritize SEO: naturally include 1–2 high-value keywords related to the subject of the image without keyword stuffing.
+
+Do not start with "Image of" or "Picture of."
+
+Avoid overly artistic interpretation or assumptions that can't be confirmed from the image.
+
+If text is visible in the image, include it briefly.
+
+${keywords ? `Keywords: ${keywords}` : ""}`
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: imageUrl } },
+          ],
+        },
+      ],
+      max_tokens: 100,
+      temperature: 0.7,
+    })
+
+    const altText = response.choices[0]?.message?.content?.trim()
+
+    if (!altText) {
+      throw new Error("No alt text generated")
+    }
+
+    return altText
+  } catch (error: any) {
+    console.error("Error generating alt text:", error)
+
+    // Provide user-friendly error messages
+    if (error.status === 429) {
+      throw new Error("Too many requests. Please wait a moment and try again.")
+    } else if (error.status === 401) {
+      throw new Error("Invalid API key. Please contact support.")
+    } else if (error.message?.includes("image")) {
+      throw new Error("Unable to analyze this image. Please try a different image.")
+    } else if (error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
+      throw new Error("Unable to connect to AI service. Check your connection.")
+    } else {
+      throw new Error("Failed to generate alt text. Please try again.")
+    }
+  }
 }
