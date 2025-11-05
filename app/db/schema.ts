@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, jsonb, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, boolean, jsonb, primaryKey, integer } from "drizzle-orm/pg-core"
 
 // Better Auth Schema - https://www.better-auth.com/docs/concepts/database
 
@@ -82,3 +82,32 @@ export const projectCategory = pgTable("projectCategory", {
 }, (table) => ({
   pk: primaryKey({ columns: [table.projectId, table.categoryId] }),
 }))
+
+export const asset = pgTable("asset", {
+  id: text("id").primaryKey(),
+  // Core file fields
+  filename: text("filename").notNull(),
+  originalFilename: text("originalFilename").notNull(),
+  mimeType: text("mimeType").notNull(),
+  fileSize: integer("fileSize").notNull(),
+  // S3 references
+  s3Key: text("s3Key").notNull().unique(),
+  s3Bucket: text("s3Bucket").notNull(),
+  s3Url: text("s3Url").notNull(),
+  // Asset type discriminator: 'image' | 'video' | 'pdf'
+  assetType: text("assetType").notNull(),
+  // Type-specific metadata stored as JSONB
+  metadata: jsonb("metadata"),
+  // Optional descriptive fields
+  title: text("title"),
+  description: text("description"),
+  altText: text("altText"),
+  tags: jsonb("tags"),
+  // User tracking
+  uploadedBy: text("uploadedBy")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  // Timestamps
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+})

@@ -1,0 +1,246 @@
+"use server"
+
+import { db } from "@/db"
+import { asset } from "@/db/schema"
+import { auth } from "@/lib/auth-server"
+import { headers } from "next/headers"
+import { eq, desc, or, ilike, and } from "drizzle-orm"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
+import { uploadToS3, deleteFromS3, generateS3Key } from "@/lib/s3"
+import { nanoid } from "nanoid"
+import sharp from "sharp"
+import type { AssetType, ImageMetadata, VideoMetadata, PDFMetadata } from "./types"
+
+// Re-export types for convenience
+export type { AssetType, ImageMetadata, VideoMetadata, PDFMetadata } from "./types"
+
+// Helper function to determine asset type from mime type
+function getAssetType(mimeType: string): AssetType {
+  if (mimeType.startsWith("image/")) return "image"
+  if (mimeType.startsWith("video/")) return "video"
+  if (mimeType === "application/pdf") return "pdf"
+  throw new Error(`Unsupported file type: ${mimeType}`)
+}
+
+// Helper function to extract metadata based on file type
+async function extractMetadata(buffer: Buffer, mimeType: string): Promise<ImageMetadata | VideoMetadata | PDFMetadata | null> {
+  const assetType = getAssetType(mimeType)
+
+  if (assetType === "image") {
+    try {
+      const metadata = await sharp(buffer).metadata()
+      return {
+        width: metadata.width || 0,
+        height: metadata.height || 0,
+        aspectRatio: metadata.width && metadata.height ? metadata.width / metadata.height : 0,
+        format: metadata.format || "unknown",
+      } as ImageMetadata
+    } catch (error) {
+      console.error("Error extracting image metadata:", error)
+      return null
+    }
+  }
+
+  // For video and PDF, return basic metadata (can be enhanced later)
+  if (assetType === "video") {
+    return {} as VideoMetadata
+  }
+
+  if (assetType === "pdf") {
+    return {} as PDFMetadata
+  }
+
+  return null
+}
+
+// Upload asset
+export async function uploadAsset(formData: FormData) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  const file = formData.get("file") as File
+
+  if (!file) {
+    throw new Error("No file provided")
+  }
+
+  try {
+    // Convert file to buffer
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    // Validate file type
+    const assetType = getAssetType(file.type)
+
+    // Extract metadata
+    const metadata = await extractMetadata(buffer, file.type)
+
+    // Generate S3 key and upload
+    const s3Key = generateS3Key(file.name)
+    const uploadResult = await uploadToS3(buffer, s3Key, file.type)
+
+    // Insert into database
+    const newAsset = await db.insert(asset).values({
+      id: nanoid(),
+      filename: file.name,
+      originalFilename: file.name,
+      mimeType: file.type,
+      fileSize: file.size,
+      s3Key: uploadResult.key,
+      s3Bucket: uploadResult.bucket,
+      s3Url: uploadResult.url,
+      assetType,
+      metadata: metadata as any,
+      uploadedBy: session.user.id,
+    }).returning()
+
+    revalidatePath("/admin/assets")
+    return newAsset[0]
+  } catch (error) {
+    console.error("Error uploading asset:", error)
+    throw error
+  }
+}
+
+// Get assets with pagination and filters
+export async function getAssets(
+  page: number = 1,
+  pageSize: number = 20,
+  search?: string,
+  typeFilter?: AssetType
+) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  const offset = (page - 1) * pageSize
+
+  // Build where clause
+  const conditions = []
+
+  if (search) {
+    conditions.push(
+      or(
+        ilike(asset.filename, `%${search}%`),
+        ilike(asset.title, `%${search}%`)
+      )
+    )
+  }
+
+  if (typeFilter) {
+    conditions.push(eq(asset.assetType, typeFilter))
+  }
+
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+
+  // Get assets
+  const assets = await db
+    .select()
+    .from(asset)
+    .where(whereClause)
+    .orderBy(desc(asset.createdAt))
+    .limit(pageSize)
+    .offset(offset)
+
+  // Get total count
+  const totalResult = await db
+    .select({ count: asset.id })
+    .from(asset)
+    .where(whereClause)
+
+  const total = totalResult.length
+
+  return {
+    assets,
+    total,
+    page,
+    pageSize,
+    totalPages: Math.ceil(total / pageSize),
+  }
+}
+
+// Get single asset
+export async function getAsset(id: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  const result = await db.select().from(asset).where(eq(asset.id, id))
+
+  if (result.length === 0) {
+    throw new Error("Asset not found")
+  }
+
+  return result[0]
+}
+
+// Update asset metadata
+export async function updateAsset(id: string, formData: FormData) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  const title = formData.get("title") as string | null
+  const description = formData.get("description") as string | null
+  const altText = formData.get("altText") as string | null
+  const tagsStr = formData.get("tags") as string | null
+  const tags = tagsStr ? JSON.parse(tagsStr) : null
+
+  await db
+    .update(asset)
+    .set({
+      title: title || null,
+      description: description || null,
+      altText: altText || null,
+      tags,
+      updatedAt: new Date(),
+    })
+    .where(eq(asset.id, id))
+
+  revalidatePath("/admin/assets")
+}
+
+// Delete asset
+export async function deleteAsset(id: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  // Get asset to retrieve S3 key
+  const assetToDelete = await getAsset(id)
+
+  if (!assetToDelete) {
+    throw new Error("Asset not found")
+  }
+
+  // Delete from S3
+  await deleteFromS3(assetToDelete.s3Key)
+
+  // Delete from database
+  await db.delete(asset).where(eq(asset.id, id))
+
+  revalidatePath("/admin/assets")
+  redirect("/admin/assets")
+}
