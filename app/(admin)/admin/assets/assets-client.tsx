@@ -52,7 +52,7 @@ export function AssetsClient({
       <SearchFilters viewMode={viewMode} onViewModeChange={handleViewModeChange} />
 
       {viewMode === "grid" ? (
-        <AssetGrid assets={assets} onEdit={setSelectedAsset} onDelete={setAssetToDelete} />
+        <AssetGrid assets={assets} onEdit={setSelectedAsset} />
       ) : (
         <AssetTable assets={assets} onEdit={setSelectedAsset} onDelete={setAssetToDelete} />
       )}

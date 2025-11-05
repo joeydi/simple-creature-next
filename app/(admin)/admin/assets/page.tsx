@@ -4,7 +4,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { getAssets, type AssetType } from "./actions"
 import { AssetsClient } from "./assets-client"
-import { UploadDropzone } from "./upload-dropzone"
+import { UploadModal } from "./upload-modal"
 
 export default async function AssetsPage({
   searchParams,
@@ -28,12 +28,11 @@ export default async function AssetsPage({
 
   return (
     <main>
-      <SiteHeader title="Assets" />
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="space-y-6">
-          <UploadDropzone />
-          <AssetsClient assets={assets} currentPage={page} totalPages={totalPages} total={total} />
-        </div>
+      <SiteHeader title="Assets">
+        <UploadModal />
+      </SiteHeader>
+      <div className="px-4 py-8 sm:px-6 lg:px-8">
+        <AssetsClient assets={assets} currentPage={page} totalPages={totalPages} total={total} />
       </div>
     </main>
   )

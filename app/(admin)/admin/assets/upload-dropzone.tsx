@@ -15,7 +15,7 @@ const ACCEPTED_FILE_TYPES = {
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
 
-export function UploadDropzone() {
+export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => void }) {
   const router = useRouter()
   const [isDragging, setIsDragging] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -92,6 +92,11 @@ export function UploadDropzone() {
       // Reset state
       setSelectedFile(null)
       router.refresh()
+
+      // Call the callback if provided
+      if (onUploadComplete) {
+        onUploadComplete()
+      }
     } catch (err) {
       console.error("Upload error:", err)
       setError(err instanceof Error ? err.message : "Failed to upload file")
@@ -112,90 +117,65 @@ export function UploadDropzone() {
     const k = 1024
     const sizes = ["Bytes", "KB", "MB", "GB"]
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + " " + sizes[i]
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i]
   }
 
   return (
-    <Card>
-      <CardContent className="p-6">
-        {!selectedFile ? (
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`
-              flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 transition-colors
-              ${isDragging ? "border-primary bg-primary/5" : "border-muted-foreground/25"}
-              cursor-pointer hover:border-primary hover:bg-primary/5
-            `}
-          >
-            <Upload className="mb-4 h-12 w-12 text-muted-foreground" />
-            <p className="mb-2 text-sm font-medium">
-              Drag and drop a file here, or click to select
-            </p>
-            <p className="mb-4 text-xs text-muted-foreground">
-              Images, Videos, or PDFs (max {MAX_FILE_SIZE / 1024 / 1024}MB)
-            </p>
-            <input
-              type="file"
-              onChange={handleFileSelect}
-              accept={Object.values(ACCEPTED_FILE_TYPES).flat().join(",")}
-              className="hidden"
-              id="file-input"
-            />
-            <Button asChild variant="outline" size="sm">
-              <label htmlFor="file-input" className="cursor-pointer">
-                Select File
-              </label>
+    <div>
+      {!selectedFile ? (
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 transition-colors ${isDragging ? "border-primary bg-primary/5" : "border-muted-foreground/25"} cursor-pointer hover:border-primary hover:bg-primary/5`}
+        >
+          <Upload className="mb-4 h-12 w-12 text-muted-foreground" />
+          <p className="mb-2 text-sm font-medium">Drag and drop a file here, or click to select</p>
+          <p className="mb-4 text-xs text-muted-foreground">
+            Images, Videos, or PDFs (max {MAX_FILE_SIZE / 1024 / 1024}MB)
+          </p>
+          <input
+            type="file"
+            onChange={handleFileSelect}
+            accept={Object.values(ACCEPTED_FILE_TYPES).flat().join(",")}
+            className="hidden"
+            id="file-input"
+          />
+          <Button asChild variant="outline" size="sm">
+            <label htmlFor="file-input" className="cursor-pointer">
+              Select File
+            </label>
+          </Button>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex items-center gap-4 rounded-lg border p-4">
+            <div className="text-muted-foreground">{getFileIcon(selectedFile)}</div>
+            <div className="flex-1 overflow-hidden">
+              <p className="truncate font-medium">{selectedFile.name}</p>
+              <p className="text-sm text-muted-foreground">{formatFileSize(selectedFile.size)}</p>
+            </div>
+            <Button variant="ghost" size="icon" onClick={() => setSelectedFile(null)} disabled={isUploading}>
+              <X className="h-4 w-4" />
             </Button>
           </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="flex items-center gap-4 rounded-lg border p-4">
-              <div className="text-muted-foreground">{getFileIcon(selectedFile)}</div>
-              <div className="flex-1 overflow-hidden">
-                <p className="truncate font-medium">{selectedFile.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {formatFileSize(selectedFile.size)}
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setSelectedFile(null)}
-                disabled={isUploading}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
 
-            {error && (
-              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-                {error}
-              </div>
-            )}
+          {error && <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>}
 
-            <div className="flex gap-2">
-              <Button onClick={handleUpload} disabled={isUploading} className="flex-1">
-                {isUploading ? "Uploading..." : "Upload"}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setSelectedFile(null)}
-                disabled={isUploading}
-              >
-                Cancel
-              </Button>
-            </div>
+          <div className="flex gap-2">
+            <Button onClick={handleUpload} disabled={isUploading} className="flex-1">
+              {isUploading ? "Uploading..." : "Upload"}
+            </Button>
+            <Button variant="outline" onClick={() => setSelectedFile(null)} disabled={isUploading}>
+              Cancel
+            </Button>
           </div>
-        )}
+        </div>
+      )}
 
-        {error && !selectedFile && (
-          <div className="mt-4 rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-            {error}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      {error && !selectedFile && (
+        <div className="mt-4 rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>
+      )}
+    </div>
   )
 }
