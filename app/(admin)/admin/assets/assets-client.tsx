@@ -69,7 +69,7 @@ export function AssetsClient({
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="size-4" />
               Previous
             </Button>
             <span className="text-sm">
@@ -82,7 +82,7 @@ export function AssetsClient({
               disabled={currentPage === totalPages}
             >
               Next
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="size-4" />
             </Button>
           </div>
         </div>

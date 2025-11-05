@@ -55,7 +55,7 @@ export function CategoryModal({ mode, category }: CategoryModalProps) {
           </Button>
         ) : (
           <Button size="sm" variant="outline">
-            <Pencil className="h-4 w-4" />
+            <Pencil className="size-4" />
             Edit
           </Button>
         )}

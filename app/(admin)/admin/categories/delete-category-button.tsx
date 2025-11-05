@@ -15,13 +15,7 @@ import {
 import { Trash2 } from "lucide-react"
 import { deleteCategory } from "./actions"
 
-export function DeleteCategoryButton({
-  categoryId,
-  categoryName,
-}: {
-  categoryId: string
-  categoryName: string
-}) {
+export function DeleteCategoryButton({ categoryId, categoryName }: { categoryId: string; categoryName: string }) {
   const handleDelete = async () => {
     await deleteCategory(categoryId)
   }
@@ -30,7 +24,7 @@ export function DeleteCategoryButton({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button type="button" variant="destructive" size="sm">
-          <Trash2 className="h-4 w-4" />
+          <Trash2 className="size-4" />
           Delete
         </Button>
       </AlertDialogTrigger>
@@ -38,9 +32,8 @@ export function DeleteCategoryButton({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete the category{" "}
-            <strong>{categoryName}</strong> and remove it from all projects. This
-            action cannot be undone.
+            This will permanently delete the category <strong>{categoryName}</strong> and remove it from all projects.
+            This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

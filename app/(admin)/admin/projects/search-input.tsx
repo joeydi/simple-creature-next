@@ -44,7 +44,7 @@ export function SearchInput() {
 
   return (
     <div className="relative w-full lg:max-w-sm">
-      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
       <Input
         type="text"
         placeholder="Search projects..."
@@ -62,7 +62,7 @@ export function SearchInput() {
         )}
         onClick={clearSearch}
       >
-        <X className="h-4 w-4" />
+        <X className="size-4" />
       </Button>
       <div
         className={cn(

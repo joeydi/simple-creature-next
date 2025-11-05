@@ -6,7 +6,11 @@ import { FileImage, FileVideo, FileText, Edit, Trash2 } from "lucide-react"
 import Image from "next/image"
 import type { Asset } from "./types"
 
-export function AssetTable({ assets, onEdit, onDelete }: {
+export function AssetTable({
+  assets,
+  onEdit,
+  onDelete,
+}: {
   assets: Asset[]
   onEdit: (asset: Asset) => void
   onDelete: (asset: Asset) => void
@@ -16,20 +20,14 @@ export function AssetTable({ assets, onEdit, onDelete }: {
     const k = 1024
     const sizes = ["Bytes", "KB", "MB", "GB"]
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + " " + sizes[i]
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i]
   }
 
   const renderThumbnail = (asset: Asset) => {
     if (asset.assetType === "image") {
       return (
         <div className="relative h-12 w-12 overflow-hidden rounded bg-muted">
-          <Image
-            src={asset.s3Url}
-            alt={asset.title || asset.filename}
-            fill
-            className="object-cover"
-            sizes="48px"
-          />
+          <Image src={asset.s3Url} alt={asset.title || asset.filename} fill className="object-cover" sizes="48px" />
         </div>
       )
     }
@@ -90,9 +88,7 @@ export function AssetTable({ assets, onEdit, onDelete }: {
                   {getTypeLabel(asset.assetType)}
                 </span>
               </TableCell>
-              <TableCell className="text-muted-foreground">
-                {formatFileSize(asset.fileSize)}
-              </TableCell>
+              <TableCell className="text-muted-foreground">{formatFileSize(asset.fileSize)}</TableCell>
               <TableCell className="text-muted-foreground">
                 {new Date(asset.createdAt).toLocaleDateString("en-US", {
                   month: "short",
@@ -103,10 +99,10 @@ export function AssetTable({ assets, onEdit, onDelete }: {
               <TableCell>
                 <div className="flex gap-1">
                   <Button variant="ghost" size="icon" onClick={() => onEdit(asset)}>
-                    <Edit className="h-4 w-4" />
+                    <Edit className="size-4" />
                   </Button>
                   <Button variant="ghost" size="icon" onClick={() => onDelete(asset)}>
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="size-4" />
                   </Button>
                 </div>
               </TableCell>

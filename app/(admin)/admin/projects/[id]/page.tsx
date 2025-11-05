@@ -125,7 +125,7 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
                 <div className="space-y-3 text-sm">
                   <div>
                     <div className="mb-1 flex items-center gap-2 text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
+                      <Calendar className="size-4" />
                       Created
                     </div>
                     <div className="font-medium">
@@ -145,7 +145,7 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
 
                   <div>
                     <div className="mb-1 flex items-center gap-2 text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
+                      <Calendar className="size-4" />
                       Last Updated
                     </div>
                     <div className="font-medium">

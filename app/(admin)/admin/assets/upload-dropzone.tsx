@@ -85,15 +85,18 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
     setIsDragging(false)
   }, [])
 
-  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setIsDragging(false)
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault()
+      setIsDragging(false)
 
-    const droppedFiles = Array.from(e.dataTransfer.files)
-    if (droppedFiles.length > 0) {
-      addFiles(droppedFiles)
-    }
-  }, [files.length])
+      const droppedFiles = Array.from(e.dataTransfer.files)
+      if (droppedFiles.length > 0) {
+        addFiles(droppedFiles)
+      }
+    },
+    [files.length],
+  )
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files
@@ -113,9 +116,7 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
   }
 
   const updateFileStatus = (id: string, status: FileStatus, error?: string) => {
-    setFiles((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, status, error } : f))
-    )
+    setFiles((prev) => prev.map((f) => (f.id === id ? { ...f, status, error } : f)))
   }
 
   const uploadSingleFile = async (fileWithStatus: FileWithStatus) => {
@@ -194,13 +195,13 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
   const getStatusIcon = (status: FileStatus) => {
     switch (status) {
       case "pending":
-        return <Clock className="h-4 w-4 text-muted-foreground" />
+        return <Clock className="size-4 text-muted-foreground" />
       case "uploading":
-        return <Loader2 className="h-4 w-4 animate-spin text-primary" />
+        return <Loader2 className="size-4 animate-spin text-primary" />
       case "success":
-        return <Check className="h-4 w-4 text-green-600" />
+        return <Check className="size-4 text-green-600" />
       case "error":
-        return <AlertCircle className="h-4 w-4 text-destructive" />
+        return <AlertCircle className="size-4 text-destructive" />
     }
   }
 
@@ -277,22 +278,15 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
           {/* Files */}
           <div className="max-h-[300px] space-y-2 overflow-y-auto">
             {files.map((fileWithStatus) => (
-              <div
-                key={fileWithStatus.id}
-                className="flex items-center gap-3 rounded-lg border p-3"
-              >
+              <div key={fileWithStatus.id} className="flex items-center gap-3 rounded-lg border p-3">
                 <div className="text-muted-foreground">{getFileIcon(fileWithStatus.file, "h-6 w-6")}</div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium" title={fileWithStatus.file.name}>
                     {fileWithStatus.file.name}
                   </p>
                   <div className="flex items-center gap-2">
-                    <p className="text-xs text-muted-foreground">
-                      {formatFileSize(fileWithStatus.file.size)}
-                    </p>
-                    {fileWithStatus.error && (
-                      <p className="text-xs text-destructive">• {fileWithStatus.error}</p>
-                    )}
+                    <p className="text-xs text-muted-foreground">{formatFileSize(fileWithStatus.file.size)}</p>
+                    {fileWithStatus.error && <p className="text-xs text-destructive">• {fileWithStatus.error}</p>}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -305,7 +299,7 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
                       onClick={() => retryFile(fileWithStatus.id)}
                       title="Retry upload"
                     >
-                      <RotateCw className="h-4 w-4" />
+                      <RotateCw className="size-4" />
                     </Button>
                   )}
                   {fileWithStatus.status !== "uploading" && (
@@ -316,7 +310,7 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
                       onClick={() => removeFile(fileWithStatus.id)}
                       disabled={isUploading}
                     >
-                      <X className="h-4 w-4" />
+                      <X className="size-4" />
                     </Button>
                   )}
                 </div>

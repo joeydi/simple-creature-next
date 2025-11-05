@@ -39,14 +39,7 @@ interface SortableTagProps {
 }
 
 function SortableTag({ id, tag, index, onUpdate, onRemove, disabled }: SortableTagProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id })
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -60,11 +53,11 @@ function SortableTag({ id, tag, index, onUpdate, onRemove, disabled }: SortableT
         type="button"
         variant="ghost"
         size="icon"
-        className="cursor-grab active:cursor-grabbing touch-none"
+        className="cursor-grab touch-none active:cursor-grabbing"
         {...attributes}
         {...listeners}
       >
-        <GripVertical className="h-4 w-4" />
+        <GripVertical className="size-4" />
       </Button>
       <div className="flex-1">
         <Input
@@ -82,29 +75,21 @@ function SortableTag({ id, tag, index, onUpdate, onRemove, disabled }: SortableT
           name={`tag-${index}-value`}
         />
       </div>
-      <Button
-        type="button"
-        variant="outline"
-        size="icon"
-        onClick={() => onRemove(index)}
-        disabled={disabled}
-      >
-        <Trash2 className="h-4 w-4" />
+      <Button type="button" variant="outline" size="icon" onClick={() => onRemove(index)} disabled={disabled}>
+        <Trash2 className="size-4" />
       </Button>
     </div>
   )
 }
 
 export function TagsInput({ defaultValue = [] }: TagsInputProps) {
-  const [tags, setTags] = useState<Tag[]>(
-    defaultValue && defaultValue.length > 0 ? defaultValue : [["", ""]]
-  )
+  const [tags, setTags] = useState<Tag[]>(defaultValue && defaultValue.length > 0 ? defaultValue : [["", ""]])
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   )
 
   const addTag = () => {
@@ -138,15 +123,8 @@ export function TagsInput({ defaultValue = [] }: TagsInputProps) {
   return (
     <div className="space-y-2">
       <Label>Tags</Label>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={tags.map((_, i) => `tag-${i}`)}
-          strategy={verticalListSortingStrategy}
-        >
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={tags.map((_, i) => `tag-${i}`)} strategy={verticalListSortingStrategy}>
           <div className="space-y-3">
             {tags.map((tag, index) => (
               <SortableTag
@@ -163,16 +141,14 @@ export function TagsInput({ defaultValue = [] }: TagsInputProps) {
         </SortableContext>
       </DndContext>
       <Button type="button" variant="outline" size="sm" onClick={addTag}>
-        <Plus className="h-4 w-4" />
+        <Plus className="size-4" />
         Add Tag
       </Button>
       {/* Hidden input to submit tags as JSON */}
       <input
         type="hidden"
         name="tags"
-        value={JSON.stringify(
-          tags.filter((tag) => tag[0].trim() !== "" || tag[1].trim() !== "")
-        )}
+        value={JSON.stringify(tags.filter((tag) => tag[0].trim() !== "" || tag[1].trim() !== ""))}
       />
     </div>
   )
