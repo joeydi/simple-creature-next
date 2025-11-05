@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth-server"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { nanoid } from "nanoid"
-import { desc, count, eq, inArray } from "drizzle-orm"
+import { desc, count, eq, inArray, or, ilike } from "drizzle-orm"
 
 export async function createProject(formData: FormData) {
   // Check authentication
@@ -85,7 +85,7 @@ export async function createProject(formData: FormData) {
   redirect("/admin/projects")
 }
 
-export async function getProjects(page: number = 1, pageSize: number = 20) {
+export async function getProjects(page: number = 1, pageSize: number = 20, search?: string) {
   // Check authentication
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -97,10 +97,19 @@ export async function getProjects(page: number = 1, pageSize: number = 20) {
 
   const offset = (page - 1) * pageSize
 
+  // Build where clause for search
+  const whereClause = search
+    ? or(
+        ilike(project.title, `%${search}%`),
+        ilike(project.shortDescription, `%${search}%`)
+      )
+    : undefined
+
   // Get total count
   const [{ total }] = await db
     .select({ total: count() })
     .from(project)
+    .where(whereClause)
 
   // Get paginated projects
   const projects = await db
@@ -115,6 +124,7 @@ export async function getProjects(page: number = 1, pageSize: number = 20) {
       updatedAt: project.updatedAt,
     })
     .from(project)
+    .where(whereClause)
     .orderBy(desc(project.createdAt))
     .limit(pageSize)
     .offset(offset)

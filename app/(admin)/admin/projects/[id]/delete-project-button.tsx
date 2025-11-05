@@ -23,7 +23,7 @@ export function DeleteProjectButton({ projectId, projectTitle }: { projectId: st
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button type="button" variant="destructive" size="sm">
+        <Button type="button" variant="destructive">
           <Trash2 />
           Delete Project
         </Button>
