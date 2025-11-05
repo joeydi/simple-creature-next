@@ -58,7 +58,7 @@ export function SearchInput() {
         size="icon"
         className={cn(
           "z-1 absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 transition-all duration-300",
-          isPending || !searchValue ? "blur-xs scale-50 opacity-0" : "",
+          isPending || !searchValue ? "blur-xs scale-75 opacity-0" : "",
         )}
         onClick={clearSearch}
       >
@@ -67,7 +67,7 @@ export function SearchInput() {
       <div
         className={cn(
           "absolute right-[9px] top-1/2 -translate-y-1/2 transition-all duration-300",
-          isPending ? "" : "blur-xs scale-50 opacity-0",
+          isPending ? "" : "blur-xs scale-75 opacity-0",
         )}
       >
         <div className="size-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
