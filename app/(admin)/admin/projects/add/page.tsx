@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/site-header"
+import { DashboardHeader } from "@/components/dashboard-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,6 +14,7 @@ import { createProject } from "../actions"
 import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { getCategories } from "../../categories/actions"
+import { DashboardContent } from "@/components/dashboard-content"
 
 export default async function AddProjectPage() {
   const session = await auth.api.getSession({
@@ -28,15 +29,15 @@ export default async function AddProjectPage() {
 
   return (
     <main>
-      <SiteHeader title="Add New Project">
+      <DashboardHeader title="Add New Project">
         <Button size={"sm"} variant={"outline"} asChild>
           <Link href="/admin/projects">
             <ArrowLeft />
             Back to Projects
           </Link>
         </Button>
-      </SiteHeader>
-      <div className="px-4 py-8 sm:px-6 lg:px-8">
+      </DashboardHeader>
+      <DashboardContent>
         <div className="flex gap-6">
           {/* Main Form */}
           <div className="flex-1">
@@ -99,12 +100,8 @@ export default async function AddProjectPage() {
                 <Separator />
 
                 <div className="space-y-3 text-sm text-muted-foreground">
-                  <p>
-                    Fill out the form to create a new project. All fields except long description are required.
-                  </p>
-                  <p>
-                    Tags and categories can be added to help organize and categorize your project.
-                  </p>
+                  <p>Fill out the form to create a new project. All fields except long description are required.</p>
+                  <p>Tags and categories can be added to help organize and categorize your project.</p>
                 </div>
 
                 <Separator />
@@ -116,7 +113,7 @@ export default async function AddProjectPage() {
             </Card>
           </div>
         </div>
-      </div>
+      </DashboardContent>
     </main>
   )
 }

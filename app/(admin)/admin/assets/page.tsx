@@ -1,10 +1,11 @@
-import { SiteHeader } from "@/components/site-header"
+import { DashboardHeader } from "@/components/dashboard-header"
 import { auth } from "@/lib/auth-server"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { getAssets, type AssetType } from "./actions"
 import { AssetsClient } from "./assets-client"
 import { UploadModal } from "./upload-modal"
+import { DashboardContent } from "@/components/dashboard-content"
 
 export default async function AssetsPage({
   searchParams,
@@ -28,12 +29,12 @@ export default async function AssetsPage({
 
   return (
     <main>
-      <SiteHeader title="Assets">
+      <DashboardHeader title="Assets">
         <UploadModal />
-      </SiteHeader>
-      <div className="px-4 py-8 sm:px-6 lg:px-8">
+      </DashboardHeader>
+      <DashboardContent>
         <AssetsClient assets={assets} currentPage={page} totalPages={totalPages} total={total} />
-      </div>
+      </DashboardContent>
     </main>
   )
 }

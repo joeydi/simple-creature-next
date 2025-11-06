@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/site-header"
+import { DashboardHeader } from "@/components/dashboard-header"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
@@ -10,6 +10,7 @@ import { redirect } from "next/navigation"
 import { getProjects } from "./actions"
 import { SearchInput } from "./search-input"
 import { Card } from "@/components/ui/card"
+import { DashboardContent } from "@/components/dashboard-content"
 
 export default async function ProjectsPage({
   searchParams,
@@ -24,7 +25,7 @@ export default async function ProjectsPage({
     redirect("/login")
   }
 
-  const pageSize = 20
+  const pageSize = 10
   const params = await searchParams
   const currentPage = Number(params.page) || 1
   const search = params.search
@@ -32,15 +33,15 @@ export default async function ProjectsPage({
 
   return (
     <main>
-      <SiteHeader title="Projects">
+      <DashboardHeader title="Projects">
         <Button size={"sm"} asChild>
           <Link href="/admin/projects/add">
             <Plus />
             Add New Project
           </Link>
         </Button>
-      </SiteHeader>
-      <div className="px-4 py-8 sm:px-6 lg:px-8">
+      </DashboardHeader>
+      <DashboardContent>
         <div className="mb-4 flex flex-col items-center justify-between gap-4 lg:flex-row">
           <SearchInput />
           <div className="flex w-full items-center justify-between gap-4 lg:justify-end">
@@ -131,7 +132,7 @@ export default async function ProjectsPage({
             </Table>
           )}
         </Card>
-      </div>
+      </DashboardContent>
     </main>
   )
 }

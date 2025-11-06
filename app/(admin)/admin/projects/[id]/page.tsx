@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/site-header"
+import { DashboardHeader } from "@/components/dashboard-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,6 +15,7 @@ import { DeleteProjectButton } from "./delete-project-button"
 import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { getCategories } from "../../categories/actions"
+import { DashboardContent } from "@/components/dashboard-content"
 
 export default async function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({
@@ -37,15 +38,15 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
 
   return (
     <main>
-      <SiteHeader title="Edit Project">
+      <DashboardHeader title="Edit Project">
         <Button size={"sm"} variant={"outline"} asChild>
           <Link href="/admin/projects">
             <ArrowLeft />
             Back to Projects
           </Link>
         </Button>
-      </SiteHeader>
-      <div className="px-4 py-8 sm:px-6 lg:px-8">
+      </DashboardHeader>
+      <DashboardContent>
         <div className="flex gap-6">
           {/* Main Form */}
           <div className="flex-1">
@@ -176,7 +177,7 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
             </Card>
           </div>
         </div>
-      </div>
+      </DashboardContent>
     </main>
   )
 }

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { deleteAsset } from "./actions"
 import type { Asset } from "./types"
+import { buttonVariants } from "@/components/ui/button"
 
 export function DeleteAssetButton({ asset, onClose }: { asset: Asset; onClose: () => void }) {
   const [isPending, startTransition] = useTransition()
@@ -34,13 +35,17 @@ export function DeleteAssetButton({ asset, onClose }: { asset: Asset; onClose: (
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Asset</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete "{asset.title || asset.filename}"? This action cannot be undone.
-            The file will be permanently removed from storage.
+            Are you sure you want to delete "{asset.title || asset.filename}"? This action cannot be undone. The file
+            will be permanently removed from storage.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete} disabled={isPending} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+          <AlertDialogAction
+            onClick={handleDelete}
+            disabled={isPending}
+            className={buttonVariants({ variant: "destructive" })}
+          >
             {isPending ? "Deleting..." : "Delete"}
           </AlertDialogAction>
         </AlertDialogFooter>
