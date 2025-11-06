@@ -191,7 +191,6 @@ export default function AccountPage() {
                     disabled
                     className="cursor-not-allowed opacity-50"
                   />
-                  <p className="text-sm text-muted-foreground">Email changes are not currently supported</p>
                 </div>
 
                 <div className="space-y-2">

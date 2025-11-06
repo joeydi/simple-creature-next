@@ -12,9 +12,7 @@ export function UsersClient({ users: initialUsers }: { users: User[] }) {
   const router = useRouter()
 
   const handleEdit = (user: User) => {
-    // TODO: Implement edit functionality (open modal or navigate to edit page)
-    toast.info("Edit user functionality coming soon")
-    console.log("Edit user:", user)
+    router.push(`/admin/users/${user.id}`)
   }
 
   const handleDelete = async (user: User) => {
