@@ -109,7 +109,10 @@ export default async function ProjectsPage({
                   <TableRow key={project.id}>
                     <TableCell>
                       {project.thumbnailUrl ? (
-                        <div className="relative aspect-video w-24 overflow-hidden rounded bg-muted">
+                        <Link
+                          href={`/admin/projects/${project.id}`}
+                          className="relative block aspect-video w-24 overflow-hidden rounded bg-muted"
+                        >
                           <Image
                             src={project.thumbnailUrl}
                             alt={project.title}
@@ -117,7 +120,7 @@ export default async function ProjectsPage({
                             className="object-cover"
                             sizes="96px"
                           />
-                        </div>
+                        </Link>
                       ) : (
                         <div className="flex aspect-video w-24 items-center justify-center rounded bg-muted">
                           <FileImage className="size-6 text-muted-foreground" />
