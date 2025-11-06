@@ -28,7 +28,7 @@ export default async function Work() {
               <Column sm="6" key={`column-${i}`}>
                 <ProjectCard
                   align={i % 2 ? "right" : "left"}
-                  slug={"foo"}
+                  slug={project.slug}
                   image={image}
                   title={project.title}
                   description={project.shortDescription}
