@@ -9,15 +9,20 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { updateProfile, changePassword } from "./actions"
+import { updateProfile, changePassword, uploadAvatar } from "./actions"
 import { getUserAvatarUrl } from "@/lib/gravatar"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardContent } from "@/components/dashboard-content"
+import { Loader2 } from "lucide-react"
 
 export default function AccountPage() {
-  const { data: session } = useSession()
+  const { data: session, refetch } = useSession()
   const router = useRouter()
+
+  const [name, setName] = useState(session?.user?.name)
   const [isEditing, setIsEditing] = useState(false)
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const profileFormRef = useRef<HTMLFormElement>(null)
   const passwordFormRef = useRef<HTMLFormElement>(null)
   const lastProfileStateRef = useRef<typeof profileState>(null)
@@ -25,19 +30,23 @@ export default function AccountPage() {
   // Server Actions state
   const [profileState, profileAction, profilePending] = useActionState(updateProfile, null)
   const [passwordState, passwordAction, passwordPending] = useActionState(changePassword, null)
+  const [avatarState, setAvatarState] = useState<{ success: boolean; message: string } | null>(null)
+
+  // keep user state in sync when session changes
+  useEffect(() => {
+    if (session?.user?.name) setName(session.user.name)
+  }, [session?.user?.name])
 
   // Handle profile update success - refresh and close edit mode
   useEffect(() => {
     if (profileState?.success && profileState !== lastProfileStateRef.current) {
       lastProfileStateRef.current = profileState
-      startTransition(() => {
-        if (isEditing) {
-          setIsEditing(false)
-        }
-        router.refresh() // Refresh to get updated session data
-      })
+      setIsEditing(false)
+
+      refetch()
+      router.refresh()
     }
-  }, [profileState, isEditing, router])
+  }, [profileState, refetch, router])
 
   // Handle password change success - reset form
   useEffect(() => {
@@ -45,6 +54,56 @@ export default function AccountPage() {
       passwordFormRef.current?.reset()
     }
   }, [passwordState])
+
+  // Handle avatar upload
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      setAvatarState({
+        success: false,
+        message: "Please select an image file",
+      })
+      return
+    }
+
+    // Validate file size (2MB)
+    const MAX_SIZE = 2 * 1024 * 1024
+    if (file.size > MAX_SIZE) {
+      setAvatarState({
+        success: false,
+        message: "Image must be less than 2MB",
+      })
+      return
+    }
+
+    setIsUploadingAvatar(true)
+    setAvatarState(null)
+
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+      const result = await uploadAvatar(formData)
+      setAvatarState(result)
+
+      if (result.success) {
+        refetch() // refresh client session store
+      }
+    } catch (error) {
+      setAvatarState({
+        success: false,
+        message: "Failed to upload photo. Please try again.",
+      })
+    } finally {
+      setIsUploadingAvatar(false)
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
+    }
+  }
 
   if (!session?.user) {
     return null
@@ -59,9 +118,9 @@ export default function AccountPage() {
 
   const avatarUrl = getUserAvatarUrl(session.user.image, session.user.email)
 
-  // Combined message from both actions
-  const message = profileState?.message || passwordState?.message
-  const messageType = profileState?.success || passwordState?.success ? "success" : "error"
+  // Combined message from all actions
+  const message = avatarState?.message || profileState?.message || passwordState?.message
+  const messageType = avatarState?.success || profileState?.success || passwordState?.success ? "success" : "error"
 
   return (
     <main>
@@ -92,8 +151,26 @@ export default function AccountPage() {
                   <AvatarFallback className="text-2xl">{initials}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <Button variant="outline" size="sm" disabled>
-                    Change Photo
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarUpload}
+                    className="hidden"
+                    id="avatar-upload"
+                    disabled={isUploadingAvatar}
+                  />
+                  <Button variant="outline" size="sm" asChild disabled={isUploadingAvatar}>
+                    <label htmlFor="avatar-upload" className="cursor-pointer">
+                      {isUploadingAvatar ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        "Change Photo"
+                      )}
+                    </label>
                   </Button>
                   <p className="mt-2 text-sm text-muted-foreground">JPG, GIF or PNG. Max size of 2MB.</p>
                 </div>
@@ -104,7 +181,14 @@ export default function AccountPage() {
               <form ref={profileFormRef} action={profileAction} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" name="name" defaultValue={session.user.name} disabled={!isEditing} required />
+                  <Input
+                    id="name"
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={!isEditing}
+                    required
+                  />
                 </div>
 
                 <div className="space-y-2">

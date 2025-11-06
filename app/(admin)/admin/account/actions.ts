@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth-server"
 import { headers } from "next/headers"
 import { z } from "zod"
 import { revalidatePath } from "next/cache"
+import { uploadToS3, generateS3Key, deleteFromS3 } from "@/lib/s3"
+import sharp from "sharp"
 
 // Validation schemas
 const profileSchema = z.object({
@@ -144,6 +146,92 @@ export async function changePassword(prevState: ActionState, formData: FormData)
       message: errorMessage.includes("password")
         ? "Current password is incorrect"
         : "Failed to change password. Please try again.",
+    }
+  }
+}
+
+// Server Action: Upload avatar
+export async function uploadAvatar(formData: FormData) {
+  try {
+    // Get session
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    })
+
+    if (!session?.user) {
+      throw new Error("Unauthorized")
+    }
+
+    const file = formData.get("file") as File
+
+    if (!file) {
+      throw new Error("No file provided")
+    }
+
+    // Validate file type (only images)
+    if (!file.type.startsWith("image/")) {
+      throw new Error("Only image files are allowed")
+    }
+
+    // Validate file size (max 2MB)
+    const MAX_SIZE = 2 * 1024 * 1024 // 2MB
+    if (file.size > MAX_SIZE) {
+      throw new Error("Image must be less than 2MB")
+    }
+
+    // Convert file to buffer
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    // Process image with sharp - resize and optimize
+    const processedBuffer = await sharp(buffer)
+      .resize(500, 500, {
+        fit: "cover",
+        position: "center",
+      })
+      .jpeg({ quality: 90 })
+      .toBuffer()
+
+    // Delete old avatar from S3 if it exists and is not a gravatar
+    if (session.user.image && session.user.image.includes("s3.amazonaws.com")) {
+      try {
+        // Extract S3 key from URL
+        const urlParts = session.user.image.split("/")
+        const oldKey = urlParts.slice(-2).join("/") // Get users/filename part
+        await deleteFromS3(oldKey)
+      } catch (error) {
+        console.error("Error deleting old avatar:", error)
+        // Continue with upload even if delete fails
+      }
+    }
+
+    // Generate S3 key and upload to /users directory
+    const s3Key = generateS3Key(file.name, "users")
+    const uploadResult = await uploadToS3(processedBuffer, s3Key, "image/jpeg")
+
+    // Update user image URL via better-auth
+    await auth.api.updateUser({
+      body: {
+        image: uploadResult.url,
+      },
+      headers: await headers(),
+    })
+
+    // Revalidate pages where avatar appears
+    revalidatePath("/admin/account")
+    revalidatePath("/admin")
+    revalidatePath("/", "layout") // Revalidate root layout to update avatar in navigation/header
+
+    return {
+      success: true,
+      message: "Profile photo updated successfully!",
+      imageUrl: uploadResult.url,
+    }
+  } catch (error) {
+    console.error("Avatar upload error:", error)
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to upload photo. Please try again.",
     }
   }
 }
