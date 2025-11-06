@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { updateProfile, changePassword } from "./actions"
-// import { getUserAvatarUrl } from "@/lib/gravatar"
+import { getUserAvatarUrl } from "@/lib/gravatar"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardContent } from "@/components/dashboard-content"
 
@@ -57,8 +57,7 @@ export default function AccountPage() {
     .toUpperCase()
     .slice(0, 2)
 
-  // const avatarUrl = getUserAvatarUrl(session.user.image, session.user.email)
-  const avatarUrl = null
+  const avatarUrl = getUserAvatarUrl(session.user.image, session.user.email)
 
   // Combined message from both actions
   const message = profileState?.message || passwordState?.message
