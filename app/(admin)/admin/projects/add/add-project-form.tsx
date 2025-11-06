@@ -13,6 +13,7 @@ import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { AssetSelectorModal } from "../asset-selector-modal"
 import { ThumbnailDropzone } from "../thumbnail-dropzone"
+import { generateSlug, isValidSlugFormat } from "../slug-utils"
 
 interface Category {
   id: string
@@ -33,6 +34,8 @@ interface Asset {
 export function AddProjectForm({ categories }: { categories: Category[] }) {
   const [thumbnailAsset, setThumbnailAsset] = useState<Asset | null>(null)
   const [isSelectorOpen, setIsSelectorOpen] = useState(false)
+  const [slug, setSlug] = useState("")
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false)
 
   const handleAssetSelect = (asset: Asset) => {
     if (asset.id) {
@@ -46,6 +49,23 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
     setThumbnailAsset(null)
   }
 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value
+    // Only auto-generate slug if user hasn't manually edited it
+    if (!isSlugManuallyEdited) {
+      setSlug(generateSlug(newTitle))
+    }
+  }
+
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSlug = e.target.value
+    setSlug(newSlug)
+    // Mark as manually edited if user types something
+    if (newSlug !== "") {
+      setIsSlugManuallyEdited(true)
+    }
+  }
+
   return (
     <>
       <div className="flex gap-6">
@@ -57,7 +77,33 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="title">Title *</Label>
-                  <Input id="title" name="title" type="text" required placeholder="Project title" />
+                  <Input
+                    id="title"
+                    name="title"
+                    type="text"
+                    required
+                    placeholder="Project title"
+                    onChange={handleTitleChange}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="slug">Slug *</Label>
+                  <Input
+                    id="slug"
+                    name="slug"
+                    type="text"
+                    required
+                    placeholder="project-slug"
+                    className="font-mono"
+                    value={slug}
+                    onChange={handleSlugChange}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {isSlugManuallyEdited
+                      ? "Custom slug - must be lowercase, alphanumeric, and hyphens only"
+                      : "Auto-generated from title - you can edit if needed"}
+                  </p>
                 </div>
 
                 <div className="space-y-2">

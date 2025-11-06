@@ -98,6 +98,7 @@ export default async function ProjectsPage({
                 <TableRow>
                   <TableHead className="w-[60px]">Thumbnail</TableHead>
                   <TableHead>Title</TableHead>
+                  <TableHead>Slug</TableHead>
                   <TableHead>Short Description</TableHead>
                   <TableHead>Categories</TableHead>
                   <TableHead className="w-[180px]">Created</TableHead>
@@ -128,6 +129,7 @@ export default async function ProjectsPage({
                       )}
                     </TableCell>
                     <TableCell className="font-medium">{project.title}</TableCell>
+                    <TableCell className="font-mono text-sm text-muted-foreground">{project.slug}</TableCell>
                     <TableCell className="max-w-md truncate">{project.shortDescription}</TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">

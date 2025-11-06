@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, X } from "lucide-react"
+import { Calendar, X, AlertCircle } from "lucide-react"
 import { getImageAssets } from "../actions"
 import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
@@ -34,6 +34,7 @@ interface Asset {
 interface Project {
   id: string
   title: string
+  slug: string
   shortDescription: string
   longDescription: string | null
   thumbnailId: string | null
@@ -53,6 +54,8 @@ interface EditProjectFormProps {
 export function EditProjectForm({ project, categories, updateProjectAction }: EditProjectFormProps) {
   const [thumbnailAsset, setThumbnailAsset] = useState<Asset | null>(null)
   const [isSelectorOpen, setIsSelectorOpen] = useState(false)
+  const [slug, setSlug] = useState(project.slug)
+  const [slugChanged, setSlugChanged] = useState(false)
 
   // Load initial thumbnail if exists
   useEffect(() => {
@@ -85,6 +88,17 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
     setThumbnailAsset(null)
   }
 
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSlug = e.target.value
+    setSlug(newSlug)
+    // Track if slug was changed from original
+    if (newSlug !== project.slug) {
+      setSlugChanged(true)
+    } else {
+      setSlugChanged(false)
+    }
+  }
+
   return (
     <>
       <div className="flex gap-6">
@@ -104,6 +118,34 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
                     defaultValue={project.title}
                     placeholder="Project title"
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="slug">Slug *</Label>
+                  <Input
+                    id="slug"
+                    name="slug"
+                    type="text"
+                    required
+                    value={slug}
+                    onChange={handleSlugChange}
+                    placeholder="project-slug"
+                    className="font-mono"
+                  />
+                  {slugChanged && (
+                    <div className="flex items-start gap-2 rounded-md border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-200">
+                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                      <p>
+                        Warning: Changing the slug will change the project URL. Any existing links to this project will
+                        break.
+                      </p>
+                    </div>
+                  )}
+                  {!slugChanged && (
+                    <p className="text-xs text-muted-foreground">
+                      URL-safe identifier - lowercase, alphanumeric, and hyphens only
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2">

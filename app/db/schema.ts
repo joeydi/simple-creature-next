@@ -70,6 +70,7 @@ export const verification = pgTable("verification", {
 export const project = pgTable("project", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
   shortDescription: text("shortDescription").notNull(),
   longDescription: text("longDescription"),
   thumbnailId: text("thumbnailId").references(() => asset.id, { onDelete: "set null" }),

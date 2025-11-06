@@ -22,6 +22,13 @@
       "when": 1762447712112,
       "tag": "0002_nebulous_namor",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1762464321919,
+      "tag": "0003_silent_kitty_pryde",
+      "breakpoints": true
     }
   ]
 }
