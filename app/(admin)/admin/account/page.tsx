@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useActionState, useRef, startTransition } from "react"
+import { useEffect, useState, useActionState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
@@ -14,12 +14,13 @@ import { getUserAvatarUrl } from "@/lib/gravatar"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardContent } from "@/components/dashboard-content"
 import { Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 export default function AccountPage() {
   const { data: session, refetch } = useSession()
   const router = useRouter()
 
-  const [name, setName] = useState(session?.user?.name)
+  const [name, setName] = useState(session?.user?.name || "")
   const [isEditing, setIsEditing] = useState(false)
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -30,7 +31,7 @@ export default function AccountPage() {
   // Server Actions state
   const [profileState, profileAction, profilePending] = useActionState(updateProfile, null)
   const [passwordState, passwordAction, passwordPending] = useActionState(changePassword, null)
-  const [avatarState, setAvatarState] = useState<{ success: boolean; message: string } | null>(null)
+  const lastPasswordStateRef = useRef<typeof passwordState>(null)
 
   // keep user state in sync when session changes
   useEffect(() => {
@@ -39,19 +40,32 @@ export default function AccountPage() {
 
   // Handle profile update success - refresh and close edit mode
   useEffect(() => {
-    if (profileState?.success && profileState !== lastProfileStateRef.current) {
+    if (profileState && profileState !== lastProfileStateRef.current) {
       lastProfileStateRef.current = profileState
-      setIsEditing(false)
 
-      refetch()
-      router.refresh()
+      if (profileState.success) {
+        toast.success(profileState.message)
+        setIsEditing(false)
+        refetch()
+      } else {
+        toast.error(profileState.message)
+      }
     }
-  }, [profileState, refetch, router])
+  }, [profileState, router])
 
   // Handle password change success - reset form
   useEffect(() => {
-    if (passwordState?.success && passwordState?.resetForm) {
-      passwordFormRef.current?.reset()
+    if (passwordState && passwordState !== lastPasswordStateRef.current) {
+      lastPasswordStateRef.current = passwordState
+
+      if (passwordState.success) {
+        toast.success(passwordState.message)
+        if (passwordState.resetForm) {
+          passwordFormRef.current?.reset()
+        }
+      } else {
+        toast.error(passwordState.message)
+      }
     }
   }, [passwordState])
 
@@ -62,40 +76,32 @@ export default function AccountPage() {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      setAvatarState({
-        success: false,
-        message: "Please select an image file",
-      })
+      toast.error("Please select an image file")
       return
     }
 
     // Validate file size (2MB)
     const MAX_SIZE = 2 * 1024 * 1024
     if (file.size > MAX_SIZE) {
-      setAvatarState({
-        success: false,
-        message: "Image must be less than 2MB",
-      })
+      toast.error("Image must be less than 2MB")
       return
     }
 
     setIsUploadingAvatar(true)
-    setAvatarState(null)
 
     try {
       const formData = new FormData()
       formData.append("file", file)
       const result = await uploadAvatar(formData)
-      setAvatarState(result)
 
       if (result.success) {
-        refetch() // refresh client session store
+        toast.success("Profile photo updated successfully!")
+        refetch()
+      } else {
+        toast.error(result.message)
       }
     } catch (error) {
-      setAvatarState({
-        success: false,
-        message: "Failed to upload photo. Please try again.",
-      })
+      toast.error("Failed to upload photo. Please try again.")
     } finally {
       setIsUploadingAvatar(false)
       // Reset file input
@@ -118,27 +124,11 @@ export default function AccountPage() {
 
   const avatarUrl = getUserAvatarUrl(session.user.image, session.user.email)
 
-  // Combined message from all actions
-  const message = avatarState?.message || profileState?.message || passwordState?.message
-  const messageType = avatarState?.success || profileState?.success || passwordState?.success ? "success" : "error"
-
   return (
     <main>
       <DashboardHeader title="Account" />
       <DashboardContent>
         <div className="flex flex-col gap-4 md:gap-6">
-          {message && (
-            <div
-              className={`rounded-md p-4 ${
-                messageType === "success"
-                  ? "border border-green-200 bg-green-50 text-green-800"
-                  : "bg-destructive/15 text-destructive"
-              }`}
-            >
-              {message}
-            </div>
-          )}
-
           <Card>
             <CardHeader>
               <CardTitle>Profile Information</CardTitle>
