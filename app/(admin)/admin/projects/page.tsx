@@ -120,7 +120,7 @@ export default async function ProjectsPage({
                         </div>
                       ) : (
                         <div className="flex aspect-video w-24 items-center justify-center rounded bg-muted">
-                          <FileImage className="h-6 w-6 text-muted-foreground" />
+                          <FileImage className="size-6 text-muted-foreground" />
                         </div>
                       )}
                     </TableCell>

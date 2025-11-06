@@ -43,7 +43,7 @@ export default async function UsersPage({
 
     return (
       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-        <UserCircle className="h-6 w-6 text-muted-foreground" />
+        <UserCircle className="size-6 text-muted-foreground" />
       </div>
     )
   }

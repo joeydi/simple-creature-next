@@ -279,7 +279,7 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
           <div className="max-h-[300px] space-y-2 overflow-y-auto">
             {files.map((fileWithStatus) => (
               <div key={fileWithStatus.id} className="flex items-center gap-3 rounded-lg border p-3">
-                <div className="text-muted-foreground">{getFileIcon(fileWithStatus.file, "h-6 w-6")}</div>
+                <div className="text-muted-foreground">{getFileIcon(fileWithStatus.file, "size-6")}</div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium" title={fileWithStatus.file.name}>
                     {fileWithStatus.file.name}
