@@ -1,13 +1,17 @@
-import { projects } from "@/data/projects";
-import PageHeader from "@/components/PageHeader";
-import MaskHeading from "@/components/MaskHeading";
-import Container from "@/components/Container";
-import Row from "@/components/Row";
-import Column from "@/components/Column";
-import ProjectCard from "@/components/ProjectCard";
-import { RemoteImage } from "@/components/RemoteImage";
+import { projects } from "@/data/projects"
+import PageHeader from "@/components/PageHeader"
+import MaskHeading from "@/components/MaskHeading"
+import Container from "@/components/Container"
+import Row from "@/components/Row"
+import Column from "@/components/Column"
+import ProjectCard from "@/components/ProjectCard"
+import { RemoteImage } from "@/components/RemoteImage"
+import { getProjects } from "@/(admin)/admin/projects/actions"
+import Image from "next/image"
 
-export default function Work() {
+export default async function Work() {
+  const { projects } = await getProjects(1, 20)
+
   return (
     <>
       <PageHeader>
@@ -18,22 +22,22 @@ export default function Work() {
       <Container className="section-margin-bottom">
         <Row>
           {projects.map((project, i) => {
-            const image = <RemoteImage src={project.featuredImage.src} alt={project.featuredImage.alt} />;
+            const image = <Image fill src={project.thumbnailUrl || ""} alt={project.thumbnailAlt || ""} />
 
             return (
               <Column sm="6" key={`column-${i}`}>
                 <ProjectCard
                   align={i % 2 ? "right" : "left"}
-                  slug={project.slug}
+                  slug={"foo"}
                   image={image}
                   title={project.title}
                   description={project.shortDescription}
                 />
               </Column>
-            );
+            )
           })}
         </Row>
       </Container>
     </>
-  );
+  )
 }
