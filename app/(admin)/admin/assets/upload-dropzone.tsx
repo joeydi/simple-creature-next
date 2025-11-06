@@ -185,7 +185,7 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
     router.refresh()
   }
 
-  const getFileIcon = (file: File, size: string = "h-8 w-8") => {
+  const getFileIcon = (file: File, size: string = "size-8") => {
     if (file.type.startsWith("image/")) return <FileImage className={size} />
     if (file.type.startsWith("video/")) return <FileVideo className={size} />
     if (file.type === "application/pdf") return <FileText className={size} />
@@ -295,7 +295,7 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8"
+                      className="size-8"
                       onClick={() => retryFile(fileWithStatus.id)}
                       title="Retry upload"
                     >
@@ -306,7 +306,7 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8"
+                      className="size-8"
                       onClick={() => removeFile(fileWithStatus.id)}
                       disabled={isUploading}
                     >
