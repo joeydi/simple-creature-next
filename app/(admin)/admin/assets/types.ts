@@ -30,7 +30,7 @@ export interface Asset {
   s3Bucket: string
   s3Url: string
   assetType: string
-  metadata: unknown
+  metadata: ImageMetadata | VideoMetadata | PDFMetadata
   title: string | null
   description: string | null
   altText: string | null
