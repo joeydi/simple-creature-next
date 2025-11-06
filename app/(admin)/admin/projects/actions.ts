@@ -2,7 +2,7 @@
 
 import { db } from "@/db"
 import { project, projectCategory, category } from "@/db/schema"
-import { auth } from "@/lib/auth-server"
+import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { nanoid } from "nanoid"
@@ -78,7 +78,7 @@ export async function createProject(formData: FormData) {
       categoryIds.map((categoryId) => ({
         projectId,
         categoryId,
-      }))
+      })),
     )
   }
 
@@ -99,17 +99,11 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
 
   // Build where clause for search
   const whereClause = search
-    ? or(
-        ilike(project.title, `%${search}%`),
-        ilike(project.shortDescription, `%${search}%`)
-      )
+    ? or(ilike(project.title, `%${search}%`), ilike(project.shortDescription, `%${search}%`))
     : undefined
 
   // Get total count
-  const [{ total }] = await db
-    .select({ total: count() })
-    .from(project)
-    .where(whereClause)
+  const [{ total }] = await db.select({ total: count() }).from(project).where(whereClause)
 
   // Get paginated projects
   const projects = await db
@@ -131,17 +125,18 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
 
   // Get categories for all projects
   const projectIds = projects.map((p) => p.id)
-  const categoriesData = projectIds.length > 0
-    ? await db
-        .select({
-          projectId: projectCategory.projectId,
-          categoryId: category.id,
-          categoryName: category.name,
-        })
-        .from(projectCategory)
-        .innerJoin(category, eq(projectCategory.categoryId, category.id))
-        .where(inArray(projectCategory.projectId, projectIds))
-    : []
+  const categoriesData =
+    projectIds.length > 0
+      ? await db
+          .select({
+            projectId: projectCategory.projectId,
+            categoryId: category.id,
+            categoryName: category.name,
+          })
+          .from(projectCategory)
+          .innerJoin(category, eq(projectCategory.categoryId, category.id))
+          .where(inArray(projectCategory.projectId, projectIds))
+      : []
 
   // Map categories to projects
   const projectsWithCategories = projects.map((p) => ({
@@ -170,10 +165,7 @@ export async function getProject(id: string) {
     throw new Error("Unauthorized")
   }
 
-  const [projectData] = await db
-    .select()
-    .from(project)
-    .where(eq(project.id, id))
+  const [projectData] = await db.select().from(project).where(eq(project.id, id))
 
   // Get project categories
   const projectCategories = await db
@@ -261,7 +253,7 @@ export async function updateProject(id: string, formData: FormData) {
       categoryIds.map((categoryId) => ({
         projectId: id,
         categoryId,
-      }))
+      })),
     )
   }
 

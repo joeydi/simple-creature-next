@@ -1,5 +1,5 @@
 import { config } from "dotenv"
-import { auth } from "@/lib/auth-server"
+import { auth } from "@/lib/auth"
 
 // Load environment variables from .env.local
 config({ path: ".env.local" })

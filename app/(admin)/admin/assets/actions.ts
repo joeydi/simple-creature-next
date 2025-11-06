@@ -2,7 +2,7 @@
 
 import { db } from "@/db"
 import { asset } from "@/db/schema"
-import { auth } from "@/lib/auth-server"
+import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { eq, desc, or, ilike, and } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
@@ -25,7 +25,10 @@ function getAssetType(mimeType: string): AssetType {
 }
 
 // Helper function to extract metadata based on file type
-async function extractMetadata(buffer: Buffer, mimeType: string): Promise<ImageMetadata | VideoMetadata | PDFMetadata | null> {
+async function extractMetadata(
+  buffer: Buffer,
+  mimeType: string,
+): Promise<ImageMetadata | VideoMetadata | PDFMetadata | null> {
   const assetType = getAssetType(mimeType)
 
   if (assetType === "image") {
@@ -87,19 +90,22 @@ export async function uploadAsset(formData: FormData) {
     const uploadResult = await uploadToS3(buffer, s3Key, file.type)
 
     // Insert into database
-    const newAsset = await db.insert(asset).values({
-      id: nanoid(),
-      filename: file.name,
-      originalFilename: file.name,
-      mimeType: file.type,
-      fileSize: file.size,
-      s3Key: uploadResult.key,
-      s3Bucket: uploadResult.bucket,
-      s3Url: uploadResult.url,
-      assetType,
-      metadata: metadata as any,
-      uploadedBy: session.user.id,
-    }).returning()
+    const newAsset = await db
+      .insert(asset)
+      .values({
+        id: nanoid(),
+        filename: file.name,
+        originalFilename: file.name,
+        mimeType: file.type,
+        fileSize: file.size,
+        s3Key: uploadResult.key,
+        s3Bucket: uploadResult.bucket,
+        s3Url: uploadResult.url,
+        assetType,
+        metadata: metadata as any,
+        uploadedBy: session.user.id,
+      })
+      .returning()
 
     revalidatePath("/admin/assets")
     return newAsset[0]
@@ -110,12 +116,7 @@ export async function uploadAsset(formData: FormData) {
 }
 
 // Get assets with pagination and filters
-export async function getAssets(
-  page: number = 1,
-  pageSize: number = 20,
-  search?: string,
-  typeFilter?: AssetType
-) {
+export async function getAssets(page: number = 1, pageSize: number = 20, search?: string, typeFilter?: AssetType) {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -130,12 +131,7 @@ export async function getAssets(
   const conditions = []
 
   if (search) {
-    conditions.push(
-      or(
-        ilike(asset.filename, `%${search}%`),
-        ilike(asset.title, `%${search}%`)
-      )
-    )
+    conditions.push(or(ilike(asset.filename, `%${search}%`), ilike(asset.title, `%${search}%`)))
   }
 
   if (typeFilter) {
@@ -154,10 +150,7 @@ export async function getAssets(
     .offset(offset)
 
   // Get total count
-  const totalResult = await db
-    .select({ count: asset.id })
-    .from(asset)
-    .where(whereClause)
+  const totalResult = await db.select({ count: asset.id }).from(asset).where(whereClause)
 
   const total = totalResult.length
 
