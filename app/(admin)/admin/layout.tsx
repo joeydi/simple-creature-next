@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { Toaster } from "@/components/ui/sonner"
 
 export default function AdminLayout({
   children,
@@ -10,6 +11,7 @@ export default function AdminLayout({
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>{children}</SidebarInset>
+      <Toaster position="top-right" />
     </SidebarProvider>
   )
 }
