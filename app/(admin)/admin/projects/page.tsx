@@ -25,7 +25,7 @@ export default async function ProjectsPage({
     redirect("/login")
   }
 
-  const pageSize = 10
+  const pageSize = 20
   const params = await searchParams
   const currentPage = Number(params.page) || 1
   const search = params.search
