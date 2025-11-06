@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { createUser } from "../actions"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardContent } from "@/components/dashboard-content"
-import { ChevronLeft } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 
@@ -43,10 +43,10 @@ export default function AddUserPage() {
   return (
     <main>
       <DashboardHeader title="Add User">
-        <Button variant="ghost" size="sm" asChild>
+        <Button size={"sm"} variant={"outline"} asChild>
           <Link href="/admin/users">
-            <ChevronLeft />
-            Back
+            <ArrowLeft />
+            Back to Users
           </Link>
         </Button>
       </DashboardHeader>
