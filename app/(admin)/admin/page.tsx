@@ -21,12 +21,13 @@ export default async function AdminPage() {
     redirect("/login")
   }
 
-  const projectCount = getProjectCount()
-  const assetCount = getAssetCount()
-  const userCount = getUserCount()
-
-  const { projects } = await getProjects(1, 10)
-  const { assets } = await getAssets(1, 10)
+  const [projectCount, assetCount, userCount, { projects }, { assets }] = await Promise.all([
+    getProjectCount(),
+    getAssetCount(),
+    getUserCount(),
+    getProjects(1, 10),
+    getAssets(1, 10),
+  ])
 
   return (
     <>
