@@ -4,13 +4,13 @@ import { db } from "@/db"
 import { asset } from "@/db/schema"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
-import { eq, desc, or, ilike, and } from "drizzle-orm"
+import { eq, desc, or, ilike, and, count } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { uploadToS3, deleteFromS3, generateS3Key } from "@/lib/s3"
 import { nanoid } from "nanoid"
 import sharp from "sharp"
-import type { AssetType, ImageMetadata, VideoMetadata, PDFMetadata } from "./types"
+import type { AssetType, ImageMetadata, VideoMetadata, PDFMetadata, Asset } from "./types"
 import OpenAI from "openai"
 
 // Re-export types for convenience
@@ -115,6 +115,21 @@ export async function uploadAsset(formData: FormData) {
   }
 }
 
+// Get asset count
+export async function getAssetCount() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  const [{ total }] = await db.select({ total: count() }).from(asset)
+
+  return total
+}
+
 // Get assets with pagination and filters
 export async function getAssets(page: number = 1, pageSize: number = 20, search?: string, typeFilter?: AssetType) {
   const session = await auth.api.getSession({
@@ -141,13 +156,13 @@ export async function getAssets(page: number = 1, pageSize: number = 20, search?
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 
   // Get assets
-  const assets = await db
+  const assets = (await db
     .select()
     .from(asset)
     .where(whereClause)
     .orderBy(desc(asset.createdAt))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset)) as Asset[]
 
   // Get total count
   const totalResult = await db.select({ count: asset.id }).from(asset).where(whereClause)

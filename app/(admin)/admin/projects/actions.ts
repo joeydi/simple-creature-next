@@ -87,6 +87,21 @@ export async function createProject(formData: FormData) {
   redirect("/admin/projects")
 }
 
+export async function getProjectCount() {
+  // Check authentication
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  const [{ total }] = await db.select({ total: count() }).from(project)
+
+  return total
+}
+
 export async function getProjects(page: number = 1, pageSize: number = 20, search?: string) {
   // Check authentication
   const session = await auth.api.getSession({

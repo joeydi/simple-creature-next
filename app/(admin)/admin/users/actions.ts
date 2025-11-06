@@ -4,11 +4,26 @@ import { db } from "@/db"
 import { user } from "@/db/schema"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
-import { desc, or, ilike, and, eq } from "drizzle-orm"
+import { desc, or, ilike, and, eq, count } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { uploadToS3, generateS3Key, deleteFromS3 } from "@/lib/s3"
 import sharp from "sharp"
+
+// Get user count
+export async function getUserCount() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  const [{ total }] = await db.select({ total: count() }).from(user)
+
+  return total
+}
 
 // Get users with pagination and search
 export async function getUsers(page: number = 1, pageSize: number = 20, search?: string) {
