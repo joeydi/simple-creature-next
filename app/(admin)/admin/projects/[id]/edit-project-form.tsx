@@ -7,12 +7,12 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, Image as ImageIcon, X } from "lucide-react"
-import Image from "next/image"
+import { Calendar, X } from "lucide-react"
 import { getImageAssets } from "../actions"
 import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { AssetSelectorModal } from "../asset-selector-modal"
+import { ThumbnailDropzone } from "../thumbnail-dropzone"
 import { DeleteProjectButton } from "./delete-project-button"
 
 interface Category {
@@ -166,32 +166,12 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
 
               <div className="space-y-2">
                 <Label>Thumbnail</Label>
-                {thumbnailAsset ? (
-                  <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
-                    <Image
-                      src={thumbnailAsset.s3Url}
-                      alt={thumbnailAsset.title || thumbnailAsset.filename}
-                      fill
-                      className="object-cover"
-                    />
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      size="icon"
-                      className="absolute right-2 top-2"
-                      onClick={handleRemoveThumbnail}
-                    >
-                      <X className="size-5" />
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex aspect-video w-full items-center justify-center rounded-lg border border-dashed">
-                    <ImageIcon className="h-12 w-12 text-muted-foreground" />
-                  </div>
-                )}
-                <Button type="button" variant="outline" className="w-full" onClick={() => setIsSelectorOpen(true)}>
-                  {thumbnailAsset ? "Change Thumbnail" : "Select Thumbnail"}
-                </Button>
+                <ThumbnailDropzone
+                  thumbnailAsset={thumbnailAsset}
+                  onAssetUploaded={handleAssetSelect}
+                  onClick={() => setIsSelectorOpen(true)}
+                  onClear={handleRemoveThumbnail}
+                />
               </div>
 
               <Separator />
