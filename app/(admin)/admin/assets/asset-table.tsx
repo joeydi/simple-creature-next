@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { FileImage, FileVideo, FileText, Edit, Trash2 } from "lucide-react"
 import Image from "next/image"
 import type { Asset } from "./types"
+import { Card } from "@/components/ui/card"
 
 export function AssetTable({
   assets,
@@ -62,9 +63,9 @@ export function AssetTable({
   }
 
   return (
-    <div className="rounded-md border">
+    <Card className="overflow-hidden p-0">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-muted/40">
           <TableRow>
             <TableHead className="w-[60px]">Preview</TableHead>
             <TableHead>Filename</TableHead>
@@ -110,6 +111,6 @@ export function AssetTable({
           ))}
         </TableBody>
       </Table>
-    </div>
+    </Card>
   )
 }

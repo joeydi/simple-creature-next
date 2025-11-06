@@ -37,7 +37,7 @@ export default async function ProjectsPage({
         <Button size={"sm"} asChild>
           <Link href="/admin/projects/add">
             <Plus />
-            Add New Project
+            Add Project
           </Link>
         </Button>
       </DashboardHeader>
