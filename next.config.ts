@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
   devIndicators: {
     position: "bottom-right",
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
+  },
 }
 
 export default nextConfig
