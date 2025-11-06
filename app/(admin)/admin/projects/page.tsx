@@ -115,7 +115,7 @@ export default async function ProjectsPage({
                             alt={project.title}
                             fill
                             className="object-cover"
-                            sizes="48px"
+                            sizes="96px"
                           />
                         </div>
                       ) : (
