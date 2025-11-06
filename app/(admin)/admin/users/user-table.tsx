@@ -1,8 +1,7 @@
 "use client"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { UserCircle, Edit } from "lucide-react"
+import { UserCircle } from "lucide-react"
 import Image from "next/image"
 import type { User } from "./types"
 import { Card } from "@/components/ui/card"
@@ -46,12 +45,15 @@ export function UserTable({ users, onEdit }: { users: User[]; onEdit: (user: Use
             <TableHead>Email</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Joined</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map((user) => (
-            <TableRow key={user.id}>
+            <TableRow
+              key={user.id}
+              className="cursor-pointer hover:bg-muted/50"
+              onClick={() => onEdit(user)}
+            >
               <TableCell>{renderAvatar(user)}</TableCell>
               <TableCell className="font-medium">
                 <div className="max-w-xs truncate" title={user.name}>
@@ -76,13 +78,6 @@ export function UserTable({ users, onEdit }: { users: User[]; onEdit: (user: Use
                   day: "numeric",
                   year: "numeric",
                 })}
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" onClick={() => onEdit(user)}>
-                    <Edit className="size-4" />
-                  </Button>
-                </div>
               </TableCell>
             </TableRow>
           ))}
