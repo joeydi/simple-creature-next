@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { FormEvent, useState, useTransition } from "react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,19 +18,16 @@ interface AltTextGeneratorDialogProps {
   onAccept: (altText: string) => void
 }
 
-export function AltTextGeneratorDialog({
-  open,
-  onOpenChange,
-  imageUrl,
-  onAccept,
-}: AltTextGeneratorDialogProps) {
+export function AltTextGeneratorDialog({ open, onOpenChange, imageUrl, onAccept }: AltTextGeneratorDialogProps) {
   const [keywords, setKeywords] = useState("")
   const [generatedText, setGeneratedText] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [currentView, setCurrentView] = useState<View>("input")
   const [isPending, startTransition] = useTransition()
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (e: FormEvent) => {
+    e.preventDefault()
+
     setError(null)
     setCurrentView("loading")
 
@@ -75,12 +72,10 @@ export function AltTextGeneratorDialog({
           <>
             <DialogHeader>
               <DialogTitle>Generate Alt Text</DialogTitle>
-              <DialogDescription>
-                Use AI to generate accessible alt text for this image
-              </DialogDescription>
+              <DialogDescription>Use AI to generate accessible alt text for this image</DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-4">
+            <form className="space-y-4" onSubmit={handleGenerate}>
               {/* Image Preview */}
               <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
                 <Image
@@ -102,21 +97,19 @@ export function AltTextGeneratorDialog({
                   onChange={(e) => setKeywords(e.target.value)}
                   disabled={isPending}
                 />
-                <p className="text-xs text-muted-foreground">
-                  Provide 1-2 keywords to help guide the AI generation
-                </p>
+                <p className="text-xs text-muted-foreground">Provide 1-2 keywords to help guide the AI generation</p>
               </div>
 
               {/* Action Buttons */}
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={handleClose}>
+                <Button type="button" variant="outline" onClick={handleClose}>
                   Cancel
                 </Button>
-                <Button onClick={handleGenerate} disabled={isPending}>
+                <Button type="submit" disabled={isPending}>
                   Generate
                 </Button>
               </div>
-            </div>
+            </form>
           </>
         )}
 
@@ -139,11 +132,7 @@ export function AltTextGeneratorDialog({
           <>
             <DialogHeader>
               <DialogTitle>{error ? "Generation Failed" : "Generated Alt Text"}</DialogTitle>
-              {!error && (
-                <DialogDescription>
-                  Review the generated alt text below
-                </DialogDescription>
-              )}
+              {!error && <DialogDescription>Review the generated alt text below</DialogDescription>}
             </DialogHeader>
 
             <div className="space-y-4">
@@ -167,9 +156,7 @@ export function AltTextGeneratorDialog({
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>Character count: {generatedText.length}/125</span>
                     {generatedText.length > 125 && (
-                      <span className="text-orange-600">
-                        Warning: Exceeds recommended length
-                      </span>
+                      <span className="text-orange-600">Warning: Exceeds recommended length</span>
                     )}
                   </div>
                 </div>
@@ -177,13 +164,17 @@ export function AltTextGeneratorDialog({
 
               {/* Action Buttons */}
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={handleClose}>
+                <Button type="button" variant="outline" onClick={handleClose}>
                   Cancel
                 </Button>
                 {error ? (
-                  <Button onClick={handleRetry}>Retry</Button>
+                  <Button type="button" onClick={handleRetry}>
+                    Retry
+                  </Button>
                 ) : (
-                  <Button onClick={handleAccept}>Accept</Button>
+                  <Button type="button" onClick={handleAccept} autoFocus>
+                    Accept
+                  </Button>
                 )}
               </div>
             </div>
