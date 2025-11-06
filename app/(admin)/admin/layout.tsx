@@ -9,7 +9,7 @@ export default function AdminLayout({
 }>) {
   return (
     <SidebarProvider>
-      <AppSidebar variant="inset" />
+      <AppSidebar />
       <SidebarInset>{children}</SidebarInset>
       <Toaster position="top-right" />
     </SidebarProvider>
