@@ -3,8 +3,17 @@ import { DashboardHeader } from "@/components/dashboard-header"
 import { auth } from "@/lib/auth-server"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
+import { getUsers } from "./actions"
+import { UsersClient } from "./users-client"
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
+import Link from "next/link"
 
-export default async function UsersPage() {
+export default async function UsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; search?: string }>
+}) {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -13,13 +22,24 @@ export default async function UsersPage() {
     redirect("/login")
   }
 
+  const params = await searchParams
+  const page = parseInt(params.page || "1", 10)
+  const search = params.search
+
+  const { users } = await getUsers(page, 20, search)
+
   return (
     <main>
-      <DashboardHeader title="Users" />
+      <DashboardHeader title="Users">
+        <Button size={"sm"} asChild>
+          <Link href="/admin/users/add">
+            <Plus />
+            Add User
+          </Link>
+        </Button>
+      </DashboardHeader>
       <DashboardContent>
-        <div className="rounded-lg bg-white p-6 shadow">
-          <p className="text-gray-600">User management coming soon...</p>
-        </div>
+        <UsersClient users={users} />
       </DashboardContent>
     </main>
   )
