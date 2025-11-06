@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db"
-import { project, projectCategory, category } from "@/db/schema"
+import { project, projectCategory, category, asset } from "@/db/schema"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
@@ -22,6 +22,7 @@ export async function createProject(formData: FormData) {
   const title = formData.get("title") as string
   const shortDescription = formData.get("shortDescription") as string
   const longDescription = formData.get("longDescription") as string
+  const thumbnailId = formData.get("thumbnailId") as string | null
   const tagsInput = formData.get("tags") as string
   const contentInput = formData.get("content") as string
   const categoriesInput = formData.get("categories") as string
@@ -66,6 +67,7 @@ export async function createProject(formData: FormData) {
     title,
     shortDescription,
     longDescription: longDescription || null,
+    thumbnailId: thumbnailId || null,
     tags,
     content,
     createdAt: new Date(),
@@ -105,19 +107,22 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
   // Get total count
   const [{ total }] = await db.select({ total: count() }).from(project).where(whereClause)
 
-  // Get paginated projects
+  // Get paginated projects with thumbnail
   const projects = await db
     .select({
       id: project.id,
       title: project.title,
       shortDescription: project.shortDescription,
       longDescription: project.longDescription,
+      thumbnailId: project.thumbnailId,
+      thumbnailUrl: asset.s3Url,
       tags: project.tags,
       content: project.content,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
     })
     .from(project)
+    .leftJoin(asset, eq(project.thumbnailId, asset.id))
     .where(whereClause)
     .orderBy(desc(project.createdAt))
     .limit(pageSize)
@@ -193,6 +198,7 @@ export async function updateProject(id: string, formData: FormData) {
   const title = formData.get("title") as string
   const shortDescription = formData.get("shortDescription") as string
   const longDescription = formData.get("longDescription") as string
+  const thumbnailId = formData.get("thumbnailId") as string | null
   const tagsInput = formData.get("tags") as string
   const contentInput = formData.get("content") as string
   const categoriesInput = formData.get("categories") as string
@@ -237,6 +243,7 @@ export async function updateProject(id: string, formData: FormData) {
       title,
       shortDescription,
       longDescription: longDescription || null,
+      thumbnailId: thumbnailId || null,
       tags,
       content,
       updatedAt: new Date(),
@@ -274,4 +281,31 @@ export async function deleteProject(id: string) {
   await db.delete(project).where(eq(project.id, id))
 
   redirect("/admin/projects")
+}
+
+export async function getImageAssets() {
+  // Check authentication
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  // Get all image assets ordered by creation date
+  const assets = await db
+    .select({
+      id: asset.id,
+      filename: asset.filename,
+      title: asset.title,
+      s3Url: asset.s3Url,
+      fileSize: asset.fileSize,
+      createdAt: asset.createdAt,
+    })
+    .from(asset)
+    .where(eq(asset.assetType, "image"))
+    .orderBy(desc(asset.createdAt))
+
+  return assets
 }

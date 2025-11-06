@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { auth } from "@/lib/auth"
-import { Plus, ChevronLeft, ChevronRight } from "lucide-react"
+import { Plus, ChevronLeft, ChevronRight, FileImage } from "lucide-react"
 import { headers } from "next/headers"
 import Link from "next/link"
+import Image from "next/image"
 import { redirect } from "next/navigation"
 import { getProjects } from "./actions"
 import { SearchInput } from "./search-input"
@@ -95,6 +96,7 @@ export default async function ProjectsPage({
             <Table>
               <TableHeader className="bg-muted/40">
                 <TableRow>
+                  <TableHead className="w-[60px]">Thumbnail</TableHead>
                   <TableHead>Title</TableHead>
                   <TableHead>Short Description</TableHead>
                   <TableHead>Categories</TableHead>
@@ -105,6 +107,23 @@ export default async function ProjectsPage({
               <TableBody>
                 {projects.map((project) => (
                   <TableRow key={project.id}>
+                    <TableCell>
+                      {project.thumbnailUrl ? (
+                        <div className="relative h-12 w-12 overflow-hidden rounded bg-muted">
+                          <Image
+                            src={project.thumbnailUrl}
+                            alt={project.title}
+                            fill
+                            className="object-cover"
+                            sizes="48px"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex h-12 w-12 items-center justify-center rounded bg-muted">
+                          <FileImage className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                      )}
+                    </TableCell>
                     <TableCell className="font-medium">{project.title}</TableCell>
                     <TableCell className="max-w-md truncate">{project.shortDescription}</TableCell>
                     <TableCell>

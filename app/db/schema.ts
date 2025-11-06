@@ -72,6 +72,7 @@ export const project = pgTable("project", {
   title: text("title").notNull(),
   shortDescription: text("shortDescription").notNull(),
   longDescription: text("longDescription"),
+  thumbnailId: text("thumbnailId").references(() => asset.id, { onDelete: "set null" }),
   tags: jsonb("tags"),
   content: jsonb("content"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),

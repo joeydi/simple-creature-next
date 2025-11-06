@@ -15,6 +15,13 @@
       "when": 1762440949940,
       "tag": "0001_absurd_wolf_cub",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762447712112,
+      "tag": "0002_nebulous_namor",
+      "breakpoints": true
     }
   ]
 }
