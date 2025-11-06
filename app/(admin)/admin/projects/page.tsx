@@ -109,7 +109,7 @@ export default async function ProjectsPage({
                   <TableRow key={project.id}>
                     <TableCell>
                       {project.thumbnailUrl ? (
-                        <div className="relative h-12 w-12 overflow-hidden rounded bg-muted">
+                        <div className="relative aspect-video w-24 overflow-hidden rounded bg-muted">
                           <Image
                             src={project.thumbnailUrl}
                             alt={project.title}
@@ -119,7 +119,7 @@ export default async function ProjectsPage({
                           />
                         </div>
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded bg-muted">
+                        <div className="flex aspect-video w-24 items-center justify-center rounded bg-muted">
                           <FileImage className="h-6 w-6 text-muted-foreground" />
                         </div>
                       )}
