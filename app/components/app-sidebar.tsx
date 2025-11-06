@@ -1,16 +1,7 @@
 "use client"
 
 import * as React from "react"
-import {
-  FolderIcon,
-  HelpCircleIcon,
-  LayoutDashboardIcon,
-  Newspaper,
-  PencilRuler,
-  SearchIcon,
-  SettingsIcon,
-  UsersIcon,
-} from "lucide-react"
+import { HelpCircle, Images, LayoutDashboard, Newspaper, PencilRuler, Search, Settings, Users } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
@@ -30,7 +21,7 @@ const data = {
     {
       title: "Dashboard",
       url: "/",
-      icon: LayoutDashboardIcon,
+      icon: LayoutDashboard,
     },
     {
       title: "Projects",
@@ -45,29 +36,29 @@ const data = {
     {
       title: "Assets",
       url: "/assets",
-      icon: FolderIcon,
+      icon: Images,
     },
     {
       title: "Users",
       url: "/users",
-      icon: UsersIcon,
+      icon: Users,
     },
   ],
   navSecondary: [
     {
       title: "Settings",
       url: "#",
-      icon: SettingsIcon,
+      icon: Settings,
     },
     {
       title: "Get Help",
       url: "#",
-      icon: HelpCircleIcon,
+      icon: HelpCircle,
     },
     {
       title: "Search",
       url: "#",
-      icon: SearchIcon,
+      icon: Search,
     },
   ],
 }
