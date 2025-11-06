@@ -3,7 +3,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardContent } from "@/components/dashboard-content"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileImage, Images, Newspaper, PencilRuler, Users } from "lucide-react"
 import { getProjectCount, getProjects } from "./projects/actions"
 import Image from "next/image"
@@ -33,22 +33,22 @@ export default async function AdminPage() {
     <>
       <DashboardHeader title="Dashboard" />
       <DashboardContent>
-        <div className="mb-6 flex rounded-md border border-muted bg-muted/40">
-          <div className="w-[25%] border-r border-muted p-6">
+        <div className="mb-6 flex rounded-md border bg-muted/40">
+          <div className="w-[25%] border-r p-6">
             <div className="mb-2 flex items-center gap-2">
               <PencilRuler className="size-4 text-slate-400" />
               <span className="font-semibold">Projects</span>
             </div>
             <span className="block text-4xl font-semibold">{projectCount}</span>
           </div>
-          <div className="w-[25%] border-r border-muted p-6">
+          <div className="w-[25%] border-r p-6">
             <div className="mb-2 flex items-center gap-2">
               <Newspaper className="size-4 text-slate-400" />
               <span className="font-semibold">Posts</span>
             </div>
-            <span className="block text-4xl font-semibold">20</span>
+            <span className="block text-4xl font-semibold">0</span>
           </div>
-          <div className="w-[25%] border-r border-muted p-6">
+          <div className="w-[25%] border-r p-6">
             <div className="mb-2 flex items-center gap-2">
               <Images className="size-4 text-slate-400" />
               <span className="font-semibold">Assets</span>
@@ -64,10 +64,9 @@ export default async function AdminPage() {
           </div>
         </div>
         <div className="flex flex-col gap-6 lg:flex-row">
-          <Card className="w-[50%] p-0 pt-6">
-            <CardHeader>
+          <Card className="w-[50%] gap-0 p-0">
+            <CardHeader className="gap-0 bg-muted/30 p-6">
               <CardTitle>Recently Updated Projects</CardTitle>
-              <CardDescription>Lorem ipsum dolor sit amet</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               {projects.map((project) => (
@@ -99,10 +98,9 @@ export default async function AdminPage() {
               ))}
             </CardContent>
           </Card>
-          <Card className="w-[50%] p-0 pt-6">
-            <CardHeader>
+          <Card className="w-[50%] gap-0 p-0">
+            <CardHeader className="gap-0 bg-muted/30 p-6">
               <CardTitle>Recently Uploaded Assets</CardTitle>
-              <CardDescription>Lorem ipsum dolor sit amet</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               {assets.map((asset) => (
