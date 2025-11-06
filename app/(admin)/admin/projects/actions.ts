@@ -131,6 +131,7 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
       longDescription: project.longDescription,
       thumbnailId: project.thumbnailId,
       thumbnailUrl: asset.s3Url,
+      thumbnailAlt: asset.altText,
       tags: project.tags,
       content: project.content,
       createdAt: project.createdAt,
