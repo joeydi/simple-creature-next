@@ -2,20 +2,12 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { UserCircle, Edit, Trash2 } from "lucide-react"
+import { UserCircle, Edit } from "lucide-react"
 import Image from "next/image"
 import type { User } from "./types"
 import { Card } from "@/components/ui/card"
 
-export function UserTable({
-  users,
-  onEdit,
-  onDelete,
-}: {
-  users: User[]
-  onEdit: (user: User) => void
-  onDelete: (user: User) => void
-}) {
+export function UserTable({ users, onEdit }: { users: User[]; onEdit: (user: User) => void }) {
   const renderAvatar = (user: User) => {
     if (user.image) {
       return (
@@ -89,9 +81,6 @@ export function UserTable({
                 <div className="flex gap-1">
                   <Button variant="ghost" size="icon" onClick={() => onEdit(user)}>
                     <Edit className="size-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => onDelete(user)}>
-                    <Trash2 className="size-4" />
                   </Button>
                 </div>
               </TableCell>
