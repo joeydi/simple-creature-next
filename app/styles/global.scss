@@ -1,7 +1,6 @@
 @import "functions";
 @import "mixins";
 @import "variables";
-@import "typography";
 @import "grid";
 
 :root {
@@ -20,6 +19,8 @@
 }
 
 @layer base {
+  @import "typography";
+
   img,
   picture,
   video,
