@@ -18,7 +18,7 @@ export default async function Work() {
         </h1>
       </PageHeader>
       <div className="overflow-hidden">
-        <Container className="section-margin-bottom">
+        <Container className="mb-(--spacing-xxl)">
           <Row>
             {projects.map((project, i) => {
               return (

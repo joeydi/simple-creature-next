@@ -35,7 +35,7 @@ const Hero = () => {
   return (
     <div className="mb-(--spacing-xxl)" ref={heroRef}>
       <Container>
-        <Row className="align-items-end" style={{ margin: "10vw 0 5vw 0" }}>
+        <Row className="items-end" style={{ margin: "10vw 0 5vw 0" }}>
           <Column lg="7">
             <h1>
               <SplitHeading>
