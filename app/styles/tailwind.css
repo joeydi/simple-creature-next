@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -39,6 +39,24 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --text-body: clamp(16px, 12.5714px + 0.595238vw, 24px);
+  --text-body--line-height: 1.4;
+  --text-body--font-weight: 400;
+
+  --text-h1: clamp(60px, 34.2857px + 4.46429vw, 120px);
+  --text-h1--line-height: 1;
+  --text-h1--font-weight: 400;
+  --text-h1--letter-spacing: -0.02em;
+
+  --text-h2: clamp(30px, 17.1429px + 2.23214vw, 60px);
+  --text-h2--line-height: 1.125;
+  --text-h2--font-weight: 400;
+  --text-h2--letter-spacing: -0.01em;
+
+  --text-h3: clamp(18px, 14.1429px + 0.669643vw, 27px);
+  --text-h3--line-height: 1.25;
+  --text-h3--font-weight: 400;
 }
 
 :root {
