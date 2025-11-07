@@ -12,14 +12,15 @@ export interface Project {
   shortDescription: string
   longDescription: string | null
   thumbnailId: string | null
+  thumbnailUrl?: string
+  thumbnailAlt?: string
   tags: unknown
   content: unknown
   createdAt: Date
   updatedAt: Date
   categoryIds: string[]
-}
-
-export interface ProjectWithThumbnail extends Project {
-  thumbnailUrl: string
-  thumbnailAlt: string
+  categories?: {
+    id: string
+    name: string
+  }[]
 }

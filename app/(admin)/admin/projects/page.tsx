@@ -133,7 +133,7 @@ export default async function ProjectsPage({
                     <TableCell className="max-w-md truncate">{project.shortDescription}</TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
-                        {project.categories.length > 0 ? (
+                        {project.categories && project.categories.length > 0 ? (
                           project.categories.map((category) => (
                             <Badge key={category.id} variant="secondary">
                               {category.name}

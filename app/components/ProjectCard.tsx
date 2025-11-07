@@ -8,13 +8,13 @@ import ScrambleText from "@/components/ScrambleText"
 import MaskHeading from "@/components/MaskHeading"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { ProjectWithThumbnail } from "@/(admin)/admin/projects/types"
+import { Project } from "@/(admin)/admin/projects/types"
 import Image from "next/image"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 interface Props {
-  project: ProjectWithThumbnail
+  project: Project
   align?: "left" | "right"
   className?: string
 }
