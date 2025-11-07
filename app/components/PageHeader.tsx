@@ -1,14 +1,13 @@
-import styles from "./PageHeader.module.scss";
-import Container from "./Container";
+import Container from "./Container"
 
 const PageHeader = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className={styles.pageHeader} data-lag="0.25">
+    <div className="flex min-h-[clamp(100px,84px+5vw,180px)] w-full items-center">
       <Container>
-        <hgroup className={styles.hgroup}>{children}</hgroup>
+        <hgroup>{children}</hgroup>
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default PageHeader;
+export default PageHeader
