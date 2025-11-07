@@ -36,13 +36,7 @@ const Hero = () => {
   return (
     <div className={styles.hero} ref={heroRef}>
       <Container>
-        <div className={styles.heroGraphic}>
-          <div ref={logoRef} className={styles.heroLogo}>
-            <LogoDistortion />
-          </div>
-          <HeroVideo />
-        </div>
-        <Row className="align-items-end">
+        <Row className="align-items-end" style={{ margin: "10vw 0 5vw 0" }}>
           <Column lg="7">
             <h1>
               <SplitHeading>
@@ -60,6 +54,12 @@ const Hero = () => {
             </p>
           </Column>
         </Row>
+        <div className={styles.heroGraphic}>
+          <div ref={logoRef} className={styles.heroLogo}>
+            <LogoDistortion />
+          </div>
+          <HeroVideo />
+        </div>
       </Container>
     </div>
   )

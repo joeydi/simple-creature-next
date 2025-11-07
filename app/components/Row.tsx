@@ -1,11 +1,15 @@
-import styles from "./Row.module.scss";
+import styles from "./Row.module.scss"
 
 interface Props {
-  className?: string;
+  className?: string
 }
 
-const Row = ({ className, children }: React.PropsWithChildren<Props>) => {
-  return <div className={[styles.row, className].filter((x) => !!x).join(" ")}>{children}</div>;
-};
+const Row = ({ className, children, ...props }: React.ComponentProps<"div">) => {
+  return (
+    <div className={[styles.row, className].filter((x) => !!x).join(" ")} {...props}>
+      {children}
+    </div>
+  )
+}
 
-export default Row;
+export default Row
