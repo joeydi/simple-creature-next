@@ -15,6 +15,7 @@ import { ThumbnailDropzone } from "../thumbnail-dropzone"
 import { generateSlug } from "../slug-utils"
 import { Asset } from "../../assets/types"
 import { Category } from "../types"
+import { ProjectContentBuilder } from "../project-content-builder"
 
 export function AddProjectForm({ categories }: { categories: Category[] }) {
   const [thumbnailAsset, setThumbnailAsset] = useState<Asset | null>(null)
@@ -115,12 +116,6 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
                 <TagsInput />
 
                 <CategorySelect categories={categories} />
-
-                <div className="space-y-2">
-                  <Label htmlFor="content">Content (JSON)</Label>
-                  <Textarea id="content" name="content" placeholder='{"sections": [], "images": []}' rows={8} />
-                  <p className="text-sm text-muted-foreground">Enter structured content as JSON</p>
-                </div>
               </div>
             </form>
           </Card>
@@ -156,6 +151,7 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
       </div>
 
       <AssetSelectorModal
+        types={["image"]}
         open={isSelectorOpen}
         onOpenChange={setIsSelectorOpen}
         onSelect={handleAssetSelect}

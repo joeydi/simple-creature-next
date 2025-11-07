@@ -1,12 +1,9 @@
+import { cn } from "@/lib/utils"
 import styles from "./Row.module.scss"
-
-interface Props {
-  className?: string
-}
 
 const Row = ({ className, children, ...props }: React.ComponentProps<"div">) => {
   return (
-    <div className={[styles.row, className].filter((x) => !!x).join(" ")} {...props}>
+    <div className={cn(styles.row, className)} {...props}>
       {children}
     </div>
   )

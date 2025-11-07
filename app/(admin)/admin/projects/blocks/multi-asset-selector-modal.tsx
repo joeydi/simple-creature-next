@@ -105,7 +105,7 @@ export function MultiAssetSelectorModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[80vh] max-w-4xl flex-col">
+      <DialogContent className="flex max-h-[80vh] max-w-4xl flex-col overflow-auto">
         <DialogHeader>
           <DialogTitle>Select Media Assets</DialogTitle>
           <DialogDescription>Choose one or more image or video assets for this block</DialogDescription>

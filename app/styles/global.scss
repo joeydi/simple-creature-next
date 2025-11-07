@@ -3,30 +3,29 @@
 @import "variables";
 @import "typography";
 @import "utilities";
-// @import "grid";
+@import "grid";
 
 :root {
   --grid-gutter: 20px;
   --container-padding: #{fluid(20, 60, $sm, $xxl)};
   --container-max-width: 1920px;
+
+  --spacing-xxl: #{fluid(80, 160, $sm, $max)};
+  --spacing-xl: #{fluid(60, 120, $sm, $max)};
+  --spacing-lg: #{fluid(40, 80, $sm, $max)};
+  --spacing-md: #{fluid(32, 64, $sm, $max)};
+  --spacing-sm: #{fluid(24, 48, $sm, $max)};
+  --spacing-xs: #{fluid(16, 32, $sm, $max)};
+
+  --media-radius: #{fluid(16, 32, $sm, $max)};
 }
 
-html,
-body {
-  max-width: 100vw;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-* {
-  margin: 0;
-}
+// html,
+// body {
+//   max-width: 100vw;
+//   min-height: 100vh;
+//   overflow-x: hidden;
+// }
 
 body {
   line-height: 1.5;

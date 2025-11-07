@@ -7,8 +7,16 @@ export function FullWidthMedia({ block }: { block: FullWidthMediaBlockProps }) {
   if (!asset) return
 
   return (
-    <div>
-      <Image src={asset.s3Url} alt={asset.altText || ""} width={asset.metadata.width} height={asset.metadata.height} />
+    <div className="my-(--spacing-xl)">
+      {asset.assetType === "image" && (
+        <Image
+          src={asset.s3Url}
+          alt={asset.altText || ""}
+          width={asset.metadata.width}
+          height={asset.metadata.height}
+        />
+      )}
+      {asset.assetType === "video" && <video src={asset.s3Url} controls className="w-full" />}
     </div>
   )
 }

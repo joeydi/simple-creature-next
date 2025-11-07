@@ -87,6 +87,7 @@ export function FullWidthMediaBlock({ asset, onChange }: FullWidthMediaBlockProp
       )}
 
       <AssetSelectorModal
+        types={["image", "video"]}
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
         onSelect={handleSelectAsset}

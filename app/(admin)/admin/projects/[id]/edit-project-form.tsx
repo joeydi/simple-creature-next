@@ -148,12 +148,7 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
 
                 <CategorySelect categories={categories} defaultSelectedIds={project.categoryIds} />
 
-                <div className="space-y-2">
-                  <Label htmlFor="content">Content (JSON)</Label>
-                  <ProjectContentBuilder project={project} />
-
-                  <p className="text-sm text-muted-foreground">Enter structured content as JSON</p>
-                </div>
+                <ProjectContentBuilder project={project} />
               </div>
             </form>
           </Card>
@@ -239,6 +234,7 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
       </div>
 
       <AssetSelectorModal
+        types={["image"]}
         open={isSelectorOpen}
         onOpenChange={setIsSelectorOpen}
         onSelect={handleAssetSelect}

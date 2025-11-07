@@ -5,10 +5,13 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlignLeft, AlignRight, X, Image as ImageIcon } from "lucide-react"
+import { AlignLeft, AlignRight, X, Image as ImageIcon, GripVertical } from "lucide-react"
 import Image from "next/image"
 import { Asset } from "@/lib/schemas/project-content"
 import { MultiAssetSelectorModal } from "./multi-asset-selector-modal"
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core"
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy, useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 import "@uiw/react-md-editor/markdown-editor.css"
 import "@uiw/react-markdown-preview/markdown.css"
 
@@ -30,8 +33,71 @@ export interface ContentWithMediaBlockProps {
   }) => void
 }
 
+// Sortable asset item component
+function SortableAssetItem({ asset, onRemove }: { asset: Asset; onRemove: () => void }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: asset.id,
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} className="group relative aspect-video overflow-hidden rounded-lg border">
+      {/* Drag Handle */}
+      <button
+        type="button"
+        className="absolute left-2 top-2 z-10 cursor-grab touch-none rounded bg-background/80 p-1 opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="h-4 w-4" />
+      </button>
+
+      {/* Asset Preview */}
+      {asset.assetType === "image" ? (
+        <Image src={asset.s3Url} alt={asset.altText || asset.filename} fill className="object-cover" />
+      ) : asset.assetType === "video" ? (
+        <video src={asset.s3Url} className="h-full w-full object-cover">
+          <track kind="captions" />
+        </video>
+      ) : null}
+
+      {/* Remove Button */}
+      <button
+        onClick={onRemove}
+        className="absolute right-2 top-2 z-10 rounded-full bg-destructive p-1 opacity-0 transition-opacity group-hover:opacity-100"
+        type="button"
+      >
+        <X className="h-3 w-3 text-destructive-foreground" />
+      </button>
+    </div>
+  )
+}
+
 export function ContentWithMediaBlock({ content, assets, align, width, onChange }: ContentWithMediaBlockProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (over && active.id !== over.id) {
+      const oldIndex = assets.findIndex((asset) => asset.id === active.id)
+      const newIndex = assets.findIndex((asset) => asset.id === over.id)
+      const reorderedAssets = arrayMove(assets, oldIndex, newIndex)
+      onChange({ assets: reorderedAssets })
+    }
+  }
 
   const handleRemoveAsset = (assetId: string) => {
     onChange({ assets: assets.filter((a) => a.id !== assetId) })
@@ -72,9 +138,9 @@ export function ContentWithMediaBlock({ content, assets, align, width, onChange 
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="small">Small (33%)</SelectItem>
-              <SelectItem value="medium">Medium (50%)</SelectItem>
-              <SelectItem value="large">Large (66%)</SelectItem>
+              <SelectItem value="small">Small (6 / 12)</SelectItem>
+              <SelectItem value="medium">Medium (7 / 12)</SelectItem>
+              <SelectItem value="large">Large (8 / 12)</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -105,27 +171,19 @@ export function ContentWithMediaBlock({ content, assets, align, width, onChange 
         </div>
 
         {assets.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {assets.map((asset) => (
-              <div key={asset.id} className="group relative aspect-video overflow-hidden rounded-lg border">
-                {asset.assetType === "image" ? (
-                  <Image src={asset.s3Url} alt={asset.altText || asset.filename} fill className="object-cover" />
-                ) : asset.assetType === "video" ? (
-                  <video src={asset.s3Url} className="h-full w-full object-cover">
-                    <track kind="captions" />
-                  </video>
-                ) : null}
-
-                <button
-                  onClick={() => handleRemoveAsset(asset.id)}
-                  className="absolute right-2 top-2 rounded-full bg-destructive p-1 opacity-0 transition-opacity group-hover:opacity-100"
-                  type="button"
-                >
-                  <X className="h-3 w-3 text-destructive-foreground" />
-                </button>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={assets.map((a) => a.id)} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                {assets.map((asset) => (
+                  <SortableAssetItem
+                    key={asset.id}
+                    asset={asset}
+                    onRemove={() => handleRemoveAsset(asset.id)}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
+            </SortableContext>
+          </DndContext>
         ) : (
           <div className="flex h-24 items-center justify-center rounded-lg border border-dashed bg-muted/50">
             <p className="text-sm text-muted-foreground">No assets selected</p>

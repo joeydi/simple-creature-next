@@ -31,27 +31,29 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
           <MaskHeading>{project.title}</MaskHeading>
         </h1>
       </PageHeader>
-      <Container className="section-margin">
+      <Container className="my-(--spacing-xxl)">
         <Row className="justify-between">
-          <Column lg={7}>
+          <Column lg={7} className="px-4">
             <h2>{project.longDescription}</h2>
           </Column>
           <Column lg={4}>
-            {projectTags?.map((tag, index) => (
-              <div key={index}>
-                <h3>{tag[0]}</h3>
-                <h4>{tag[1]}</h4>
-              </div>
-            ))}
+            <div className="flex flex-col gap-4 leading-tight">
+              {projectTags?.map((tag, index) => (
+                <div key={index}>
+                  <p className="text-gray-400">{tag[0]}</p>
+                  <p>{tag[1]}</p>
+                </div>
+              ))}
+            </div>
           </Column>
         </Row>
       </Container>
-      <Container className="section-margin flex flex-col gap-8">
-        {projectContent?.blocks.map((block) => {
-          const Component = blockMap[block.type as keyof typeof blockMap]
-          return <Component key={block.id} block={block as any} />
-        })}
-      </Container>
+      {projectContent?.blocks.map((block) => {
+        const Component = blockMap[block.type as keyof typeof blockMap]
+        return <Component key={block.id} block={block as any} />
+      })}
+      {/* <Container className="my-(--spacing-xxl) gap-(--spacing-lg) flex flex-col">
+      </Container> */}
     </>
   )
 }

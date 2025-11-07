@@ -2,9 +2,8 @@ import type { Metadata } from "next"
 import localFont from "next/font/local"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
-import "@/styles/global.scss"
 import "@/styles/tailwind.css"
-// import SmoothScroller from '@/components/SmoothScroller'
+import "@/styles/global.scss"
 
 const clash = localFont({
   src: "../fonts/ClashGrotesk-Variable.woff2",
@@ -24,12 +23,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${clash.variable}`}>
+      <body className={`${clash.variable} antialiased`}>
         <Header />
-        {/* <SmoothScroller> */}
         <main>{children}</main>
         <Footer />
-        {/* </SmoothScroller> */}
       </body>
     </html>
   )
