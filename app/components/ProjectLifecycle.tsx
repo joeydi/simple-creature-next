@@ -1,108 +1,108 @@
-"use client";
+"use client"
 
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import styles from "./ProjectLifecycle.module.scss";
-import Container from "./Container";
-import Row from "./Row";
-import Column from "./Column";
-import ScrambleText from "./ScrambleText";
-import SplitHeading from "./SplitHeading";
-import MaskHeading from "./MaskHeading";
-import { useEffect, useRef, useState } from "react";
-import { BSpline } from "@/lib/BSpline";
-import { ProjectLifecycleItem } from "./ProjectLifecycleItem";
+import { gsap } from "gsap"
+import { useGSAP } from "@gsap/react"
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import styles from "./ProjectLifecycle.module.scss"
+import Container from "./Container"
+import Row from "./Row"
+import Column from "./Column"
+import ScrambleText from "./ScrambleText"
+import SplitHeading from "./SplitHeading"
+import MaskHeading from "./MaskHeading"
+import { useEffect, useRef, useState } from "react"
+import { BSpline } from "@/lib/BSpline"
+import { ProjectLifecycleItem } from "./ProjectLifecycleItem"
 
-gsap.registerPlugin(useGSAP, DrawSVGPlugin, ScrollTrigger);
+gsap.registerPlugin(useGSAP, DrawSVGPlugin, ScrollTrigger)
 
 export const ProjectLifecycle = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const polylineRef = useRef<SVGPolylineElement>(null);
-  const list1Ref = useRef<HTMLUListElement>(null);
-  const list2Ref = useRef<HTMLUListElement>(null);
+  const sectionRef = useRef<HTMLElement>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
+  const polylineRef = useRef<SVGPolylineElement>(null)
+  const list1Ref = useRef<HTMLUListElement>(null)
+  const list2Ref = useRef<HTMLUListElement>(null)
 
   //   const [referencePoints, setReferencePoints] = useState<number[][]>();
-  const [splinePoints, setSplinePoints] = useState<number[][]>();
-  const [timelineProgress, setTimelineProgress] = useState(0);
+  const [splinePoints, setSplinePoints] = useState<number[][]>()
+  const [timelineProgress, setTimelineProgress] = useState(0)
 
   useEffect(() => {
-    const list1Items = list1Ref.current?.querySelectorAll("li");
-    const list2Items = list2Ref.current?.querySelectorAll("li");
+    const list1Items = list1Ref.current?.querySelectorAll("li")
+    const list2Items = list2Ref.current?.querySelectorAll("li")
 
     const calculatePoints = () => {
       if (!sectionRef.current) {
-        return;
+        return
       }
 
-      const sectionRect = sectionRef.current.getBoundingClientRect();
+      const sectionRect = sectionRef.current.getBoundingClientRect()
 
-      const points: number[][] = [];
+      const points: number[][] = []
 
       list1Items?.forEach((item) => {
-        const itemRect = item.getBoundingClientRect();
-        points.push([itemRect.x - sectionRect.x, itemRect.y - sectionRect.y]);
-      });
+        const itemRect = item.getBoundingClientRect()
+        points.push([itemRect.x - sectionRect.x, itemRect.y - sectionRect.y])
+      })
 
       // Insert one point at the start to the top left of the first item
-      points.unshift([-sectionRect.width / 4, points[0][1] + 200]);
+      points.unshift([-sectionRect.width / 4, points[0][1] + 200])
 
       // Insert two points after the first list to the right
-      points.push([sectionRect.width * 1.25, points[points.length - 1][1] - 100]);
-      points.push([sectionRect.width * 1.25, points[points.length - 1][1] + window.innerHeight / 2]);
+      points.push([sectionRect.width * 1.25, points[points.length - 1][1] - 100])
+      points.push([sectionRect.width * 1.25, points[points.length - 1][1] + window.innerHeight / 2])
 
       list2Items?.forEach((item) => {
-        const itemRect = item.getBoundingClientRect();
-        points.push([itemRect.x + itemRect.width - sectionRect.x, itemRect.y - sectionRect.y]);
-      });
+        const itemRect = item.getBoundingClientRect()
+        points.push([itemRect.x + itemRect.width - sectionRect.x, itemRect.y - sectionRect.y])
+      })
 
       // Insert one point at the end to the bottom left of the last item
-      points.push([-100, sectionRect.height]);
+      points.push([-100, sectionRect.height])
 
-      const spline = new BSpline(points, 3, false);
+      const spline = new BSpline(points, 3, false)
 
-      const tempPoints = [];
+      const tempPoints = []
       for (let t = 0; t <= 1; t += 0.001) {
-        tempPoints.push(spline.calcAt(t));
+        tempPoints.push(spline.calcAt(t))
       }
 
       //   setReferencePoints(points);
-      setSplinePoints(tempPoints);
-    };
+      setSplinePoints(tempPoints)
+    }
 
     const resizeSVG = () => {
       if (sectionRef.current && svgRef.current) {
-        const width = sectionRef.current.clientWidth;
-        const height = sectionRef.current.clientHeight;
+        const width = sectionRef.current.clientWidth
+        const height = sectionRef.current.clientHeight
 
-        svgRef.current.setAttribute("width", width + "");
-        svgRef.current.setAttribute("height", height + "");
-        svgRef.current.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        svgRef.current.setAttribute("width", width + "")
+        svgRef.current.setAttribute("height", height + "")
+        svgRef.current.setAttribute("viewBox", `0 0 ${width} ${height}`)
       }
-    };
+    }
 
-    calculatePoints();
-    resizeSVG();
+    calculatePoints()
+    resizeSVG()
 
-    window.addEventListener("resize", calculatePoints, { passive: true });
-    window.addEventListener("resize", resizeSVG, { passive: true });
+    window.addEventListener("resize", calculatePoints, { passive: true })
+    window.addEventListener("resize", resizeSVG, { passive: true })
 
     return () => {
-      window.removeEventListener("resize", calculatePoints);
-      window.removeEventListener("resize", resizeSVG);
-    };
-  }, []);
+      window.removeEventListener("resize", calculatePoints)
+      window.removeEventListener("resize", resizeSVG)
+    }
+  }, [])
 
   useGSAP(() => {
     if (!splinePoints || !polylineRef.current) {
-      return;
+      return
     }
 
     gsap.set(polylineRef.current, {
       drawSVG: "0% 0%",
-    });
+    })
 
     gsap.to(polylineRef.current, {
       drawSVG: "0 100% live",
@@ -114,11 +114,11 @@ export const ProjectLifecycle = () => {
         end: "bottom top",
         scrub: 1,
         onUpdate: (self) => {
-          setTimelineProgress(self.progress);
+          setTimelineProgress(self.progress)
         },
       },
-    });
-  }, [splinePoints]);
+    })
+  }, [splinePoints])
 
   return (
     <section ref={sectionRef} className={styles.section}>
@@ -130,7 +130,7 @@ export const ProjectLifecycle = () => {
           ref={polylineRef}
           points={splinePoints
             ?.map(([x, y]) => {
-              return `${x},${y}`;
+              return `${x},${y}`
             })
             .join(" ")}
           stroke="#0f6cc6"
@@ -140,7 +140,7 @@ export const ProjectLifecycle = () => {
         />
       </svg>
       <Container>
-        <Row className="align-items-end">
+        <Row className="items-end">
           <Column lg="7">
             <h1 data-lag="0.05">
               <SplitHeading reset={true}>
@@ -151,8 +151,8 @@ export const ProjectLifecycle = () => {
           <Column lg="5">
             <p>
               <ScrambleText reset={true}>
-                Every project begins with its own unique shape and considerations. We offer close partnership from the first
-                flicker of an idea through every phase of its digital evolution.
+                Every project begins with its own unique shape and considerations. We offer close partnership from the
+                first flicker of an idea through every phase of its digital evolution.
               </ScrambleText>
             </p>
           </Column>
@@ -206,5 +206,5 @@ export const ProjectLifecycle = () => {
         </div>
       </Container>
     </section>
-  );
-};
+  )
+}
