@@ -1,20 +1,28 @@
-import { projects } from "@/data/projects";
-import PageHeader from "@/components/PageHeader";
-import MaskHeading from "@/components/MaskHeading";
-import { RemoteImage } from "@/components/RemoteImage";
-import Container from "@/components/Container";
+import PageHeader from "@/components/PageHeader"
+import MaskHeading from "@/components/MaskHeading"
+import Container from "@/components/Container"
+import { getProjectBySlug, getProjects } from "@/(admin)/admin/projects/actions"
+import { ContentWithMedia } from "@/components/content-with-media"
+import { FullWidthMedia } from "@/components/full-width-media"
+import { FullWidthContent } from "@/components/full-width-content"
+import Row from "@/components/Row"
+import Column from "@/components/Column"
+import { ProjectContent } from "@/lib/schemas/project-content"
 
-// Use the built-in PageProps helper with your route literal
-export default async function Project(
-  props: PageProps<"/work/[slug]">
-) {
-  const { slug } = await props.params;        // <-- await params
-  const project = projects.find((p) => p.slug === slug);
+const blockMap = {
+  "full-width-media": FullWidthMedia,
+  "full-width-content": FullWidthContent,
+  "content-with-media": ContentWithMedia,
+}
 
-  // const pageData = await getPageData(653);
-  // console.log({ pageData });
+export default async function Project(props: PageProps<"/work/[slug]">) {
+  const { slug } = await props.params
+  const project = await getProjectBySlug(slug)
 
-  if (!project) return null;
+  if (!project) return null
+
+  const projectContent = project.content as ProjectContent | null
+  const projectTags = project.tags as Array<[string, string]> | null
 
   return (
     <>
@@ -23,21 +31,33 @@ export default async function Project(
           <MaskHeading>{project.title}</MaskHeading>
         </h1>
       </PageHeader>
-      <Container className="section-margin-bottom">
-        {project.media.map((m) => (
-          <RemoteImage key={m.src} src={m.src} alt={m.alt} />
-        ))}
+      <Container className="section-margin">
+        <Row className="justify-between">
+          <Column lg={7}>
+            <h2>{project.longDescription}</h2>
+          </Column>
+          <Column lg={4}>
+            {projectTags?.map((tag, index) => (
+              <div key={index}>
+                <h3>{tag[0]}</h3>
+                <h4>{tag[1]}</h4>
+              </div>
+            ))}
+          </Column>
+        </Row>
+      </Container>
+      <Container className="section-margin flex flex-col gap-8">
+        {projectContent?.blocks.map((block) => {
+          const Component = blockMap[block.type as keyof typeof blockMap]
+          return <Component key={block.id} block={block as any} />
+        })}
       </Container>
     </>
-  );
+  )
 }
-
-// async function getPageData(id: number) {
-//   const res = await fetch(`http://qcdg.localhost/wp-json/wp/v2/pages/${id}`);
-//   return res.json();
-// }
 
 // This stays the same
 export async function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+  const { projects } = await getProjects(1, 100)
+  return projects.map((project) => ({ slug: project.slug }))
 }

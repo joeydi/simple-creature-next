@@ -1,13 +1,14 @@
-import styles from "./Column.module.scss";
+import { cn } from "@/lib/utils"
+import styles from "./Column.module.scss"
 
 interface Props {
-  className?: string;
-  xs?: string | number;
-  sm?: string | number;
-  md?: string | number;
-  lg?: string | number;
-  xl?: string | number;
-  xxl?: string | number;
+  className?: string
+  xs?: string | number
+  sm?: string | number
+  md?: string | number
+  lg?: string | number
+  xl?: string | number
+  xxl?: string | number
 }
 
 const Column = ({ className, xs, sm, md, lg, xl, xxl, children }: React.PropsWithChildren<Props>) => {
@@ -20,9 +21,9 @@ const Column = ({ className, xs, sm, md, lg, xl, xxl, children }: React.PropsWit
     lg ? styles[`collg${lg}`] : null,
     xl ? styles[`colxl${xl}`] : null,
     xxl ? styles[`colxxl${xxl}`] : null,
-  ];
+  ]
 
-  return <div className={classes.filter((x) => !!x).join(" ")}>{children}</div>;
-};
+  return <div className={cn(classes)}>{children}</div>
+}
 
-export default Column;
+export default Column

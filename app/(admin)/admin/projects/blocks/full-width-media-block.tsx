@@ -7,7 +7,7 @@ import Image from "next/image"
 import { Asset } from "@/lib/schemas/project-content"
 import { AssetSelectorModal } from "../asset-selector-modal"
 
-interface FullWidthMediaBlockProps {
+export interface FullWidthMediaBlockProps {
   asset: Asset | null
   onChange: (asset: Asset | null) => void
 }

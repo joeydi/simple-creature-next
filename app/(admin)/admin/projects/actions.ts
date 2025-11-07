@@ -167,13 +167,13 @@ export async function getProjectCount() {
 
 export async function getProjects(page: number = 1, pageSize: number = 20, search?: string) {
   // Check authentication
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  // const session = await auth.api.getSession({
+  //   headers: await headers(),
+  // })
 
-  if (!session) {
-    throw new Error("Unauthorized")
-  }
+  // if (!session) {
+  //   throw new Error("Unauthorized")
+  // }
 
   const offset = (page - 1) * pageSize
 
@@ -257,6 +257,21 @@ export async function getProject(id: string) {
     .select({ categoryId: projectCategory.categoryId })
     .from(projectCategory)
     .where(eq(projectCategory.projectId, id))
+
+  return {
+    ...projectData,
+    categoryIds: projectCategories.map((pc) => pc.categoryId),
+  }
+}
+
+export async function getProjectBySlug(slug: string) {
+  const [projectData] = await db.select().from(project).where(eq(project.slug, slug))
+
+  // Get project categories
+  const projectCategories = await db
+    .select({ categoryId: projectCategory.categoryId })
+    .from(projectCategory)
+    .where(eq(projectCategory.projectId, projectData.id))
 
   return {
     ...projectData,

@@ -17,7 +17,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor").then((mod) => mod.
   ssr: false,
 })
 
-interface ContentWithMediaBlockProps {
+export interface ContentWithMediaBlockProps {
   content: string
   assets: Asset[]
   align: "left" | "right"

@@ -3,10 +3,12 @@
 @import "variables";
 @import "typography";
 @import "utilities";
+// @import "grid";
 
 :root {
   --grid-gutter: 20px;
   --container-padding: #{fluid(20, 60, $sm, $xxl)};
+  --container-max-width: 1920px;
 }
 
 html,

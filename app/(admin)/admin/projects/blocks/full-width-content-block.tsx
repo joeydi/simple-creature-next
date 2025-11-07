@@ -10,7 +10,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor").then((mod) => mod.
   ssr: false,
 })
 
-interface FullWidthContentBlockProps {
+export interface FullWidthContentBlockProps {
   content: string
   onChange: (content: string) => void
 }
