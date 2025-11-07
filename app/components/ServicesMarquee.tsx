@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import styles from "./ServicesMarquee.module.scss";
-import Container from "@/components/Container";
-import MaskHeading from "@/components/MaskHeading";
+import { useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import styles from "./ServicesMarquee.module.scss"
+import Container from "@/components/Container"
+import MaskHeading from "@/components/MaskHeading"
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const ServicesMarquee = () => {
-  const spacerRef = useRef<HTMLDivElement>(null);
-  const marqueeRef = useRef<HTMLDivElement>(null);
+  const spacerRef = useRef<HTMLDivElement>(null)
+  const marqueeRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    const oddChildren = marqueeRef.current?.querySelectorAll("span:nth-child(odd)");
-    const evenChildren = marqueeRef.current?.querySelectorAll("span:nth-child(even)");
+    const oddChildren = marqueeRef.current?.querySelectorAll("span:nth-child(odd)")
+    const evenChildren = marqueeRef.current?.querySelectorAll("span:nth-child(even)")
 
     const timeline = gsap.timeline({
       scrollTrigger: {
@@ -26,21 +26,21 @@ const ServicesMarquee = () => {
         end: "bottom top",
         scrub: true,
       },
-    });
+    })
 
     if (oddChildren) {
       timeline.to(
         oddChildren,
         {
           x: (_, el) => {
-            const width = el.getBoundingClientRect().width;
-            return window.innerWidth - width;
+            const width = el.getBoundingClientRect().width
+            return (window.innerWidth - width) / 4
           },
           duration: 1,
           ease: "power1.inOut",
         },
-        0
-      );
+        0,
+      )
     }
 
     if (evenChildren) {
@@ -48,14 +48,14 @@ const ServicesMarquee = () => {
         evenChildren,
         {
           x: (_, el) => {
-            const width = el.getBoundingClientRect().width;
-            return width - window.innerWidth;
+            const width = el.getBoundingClientRect().width
+            return (width - window.innerWidth) / 4
           },
           duration: 1,
           ease: "power1.inOut",
         },
-        0
-      );
+        0,
+      )
     }
 
     timeline.fromTo(
@@ -64,9 +64,9 @@ const ServicesMarquee = () => {
         y: -window.innerHeight / 4,
       },
       { y: window.innerHeight / 4, duration: 1, ease: "none" },
-      0
-    );
-  });
+      0,
+    )
+  })
 
   return (
     <section>
@@ -91,7 +91,7 @@ const ServicesMarquee = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default ServicesMarquee;
+export default ServicesMarquee
