@@ -384,8 +384,6 @@ export async function updateProject(id: string, formData: FormData) {
       })),
     )
   }
-
-  redirect("/admin/projects")
 }
 
 export async function deleteProject(id: string) {
