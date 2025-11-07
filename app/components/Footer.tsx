@@ -1,60 +1,61 @@
-"use client";
+"use client"
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import styles from "@/components/Footer.module.scss";
-import Container from "@/components/Container";
-import Logo from "@/components/Logo";
-import Row from "@/components/Row";
-import Column from "@/components/Column";
-import { FluidSim } from "@/lib/FluidSim";
+import { useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import Container from "@/components/Container"
+import Logo from "@/components/Logo"
+import Row from "@/components/Row"
+import Column from "@/components/Column"
+import { FluidSim } from "@/lib/FluidSim"
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const Footer = () => {
-  const footerRef = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const FluidSimAPI = useRef<{ multipleSplats: (amount: number) => void } | null>(null);
+  const footerRef = useRef<HTMLElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const FluidSimAPI = useRef<{ multipleSplats: (amount: number) => void } | null>(null)
 
   useGSAP(() => {
     if (!footerRef.current || !canvasRef.current) {
-      return;
+      return
     }
 
-    FluidSimAPI.current = FluidSim(canvasRef.current, footerRef.current);
+    FluidSimAPI.current = FluidSim(canvasRef.current, footerRef.current)
 
     ScrollTrigger.create({
       trigger: canvasRef.current,
       start: "top bottom",
       onEnter: () => {
-        FluidSimAPI.current && FluidSimAPI.current.multipleSplats(10);
+        FluidSimAPI.current && FluidSimAPI.current.multipleSplats(10)
       },
-    });
-  });
+    })
+  })
 
   return (
-    <footer ref={footerRef} className={styles.footer}>
-      <canvas ref={canvasRef} className={styles.background}></canvas>
-      <Container className={styles.content}>
-        <p className={styles.cta} data-lag="0.2">
+    <footer ref={footerRef} className="py-(--spacing-lg) relative">
+      <canvas ref={canvasRef} className="absolute inset-0 size-full"></canvas>
+      <Container className="relative">
+        <p className="text-h2" data-lag="0.2">
           Have a project in mind? <br />
-          <a href="mailto:hello@simplecreature.us">hello@simplecreature.us</a>
+          <a className="font-medium" href="mailto:hello@simplecreature.us">
+            hello@simplecreature.us
+          </a>
         </p>
         <div data-lag="0.4">
-          <Logo className={styles.logo} />
+          <Logo className="my-(--spacing-lg) w-full text-white" />
         </div>
-        <Row className="align-items-end">
+        <Row className="items-end">
           <Column sm="6">
-            <p className={styles.address} data-lag="0.2">
+            <p data-lag="0.2">
               47 Maple Street, Suite 220
               <br />
               Burlington, Vermont 05401
             </p>
           </Column>
           <Column sm="6">
-            <ul className={styles.social} data-lag="0.2">
+            <ul className="flex gap-8 sm:justify-end" data-lag="0.2">
               <li>
                 <a href="https://x.com/_simplecreature" target="_blank" rel="noopener noreferrer">
                   Twitter
@@ -75,7 +76,7 @@ const Footer = () => {
         </Row>
       </Container>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
