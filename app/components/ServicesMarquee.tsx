@@ -4,11 +4,14 @@ import { useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import styles from "./ServicesMarquee.module.scss"
 import Container from "@/components/Container"
 import MaskHeading from "@/components/MaskHeading"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
+
+const MarqueeSpan = ({ children }: React.ComponentProps<"span">) => {
+  return <span className="block whitespace-nowrap odd:self-start even:self-end">{children}</span>
+}
 
 const ServicesMarquee = () => {
   const spacerRef = useRef<HTMLDivElement>(null)
@@ -37,7 +40,7 @@ const ServicesMarquee = () => {
             return (window.innerWidth - width) / 4
           },
           duration: 1,
-          ease: "power1.inOut",
+          ease: "none",
         },
         0,
       )
@@ -52,7 +55,7 @@ const ServicesMarquee = () => {
             return (width - window.innerWidth) / 4
           },
           duration: 1,
-          ease: "power1.inOut",
+          ease: "none",
         },
         0,
       )
@@ -61,9 +64,9 @@ const ServicesMarquee = () => {
     timeline.fromTo(
       marqueeRef.current,
       {
-        y: -window.innerHeight / 4,
+        y: -100,
       },
-      { y: window.innerHeight / 4, duration: 1, ease: "none" },
+      { y: 100, duration: 1, ease: "none" },
       0,
     )
   })
@@ -71,23 +74,27 @@ const ServicesMarquee = () => {
   return (
     <section>
       <Container>
-        <h2 className={styles.heading}>
+        <h2 className="mb-(--spacing-sm)">
           <MaskHeading reset={true}>Our Services</MaskHeading>
         </h2>
       </Container>
-      <div ref={spacerRef} className={styles.spacer}>
-        <div ref={marqueeRef} className={`h1 ${styles.marquee}`}>
-          <span className={styles.span}>
+      <div ref={spacerRef} className="overflow-hidden bg-black">
+        <div ref={marqueeRef} className="text-h1 perspective-[100vw] -my-[100px] flex flex-col bg-black text-white">
+          <MarqueeSpan>
             Strategy &bull; Design &bull; Motion &bull; Consulting &bull; Interactive &bull; Production
-          </span>
-          <span className={styles.span}>Direction &bull; User Experience &bull; Branding &bull; Installations</span>
-          <span className={styles.span}>
+          </MarqueeSpan>
+          <MarqueeSpan>Direction &bull; User Experience &bull; Branding &bull; Installations</MarqueeSpan>
+          <MarqueeSpan>
             3D Modeling &bull; Creative Direction &bull; Interface Design &bull; Creative Development
-          </span>
-          <span className={styles.span}>
+          </MarqueeSpan>
+          <MarqueeSpan>
             Strategy &bull; Design &bull; Motion &bull; Consulting &bull; Interactive &bull; Production
-          </span>
-          <span className={styles.span}>Direction &bull; User Experience &bull; Branding &bull; Installations</span>
+          </MarqueeSpan>
+          <MarqueeSpan>Direction &bull; User Experience &bull; Branding &bull; Installations</MarqueeSpan>
+          <MarqueeSpan>
+            Strategy &bull; Design &bull; Motion &bull; Consulting &bull; Interactive &bull; Production
+          </MarqueeSpan>
+          <MarqueeSpan>Direction &bull; User Experience &bull; Branding &bull; Installations</MarqueeSpan>
         </div>
       </div>
     </section>
