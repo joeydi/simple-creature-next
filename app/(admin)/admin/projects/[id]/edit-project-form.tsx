@@ -14,36 +14,9 @@ import { CategorySelect } from "../category-select"
 import { AssetSelectorModal } from "../asset-selector-modal"
 import { ThumbnailDropzone } from "../thumbnail-dropzone"
 import { DeleteProjectButton } from "./delete-project-button"
-
-interface Category {
-  id: string
-  name: string
-  slug: string
-  description: string | null
-}
-
-interface Asset {
-  id: string
-  filename: string
-  title: string | null
-  s3Url: string
-  fileSize: number
-  createdAt: Date
-}
-
-interface Project {
-  id: string
-  title: string
-  slug: string
-  shortDescription: string
-  longDescription: string | null
-  thumbnailId: string | null
-  tags: unknown
-  content: unknown
-  createdAt: Date
-  updatedAt: Date
-  categoryIds: string[]
-}
+import { ProjectContentBuilder } from "../project-content-builder"
+import { Category, Project } from "../types"
+import { Asset } from "../../assets/types"
 
 interface EditProjectFormProps {
   project: Project
@@ -177,13 +150,8 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
 
                 <div className="space-y-2">
                   <Label htmlFor="content">Content (JSON)</Label>
-                  <Textarea
-                    id="content"
-                    name="content"
-                    defaultValue={project.content ? JSON.stringify(project.content, null, 2) : ""}
-                    placeholder='{"sections": [], "images": []}'
-                    rows={8}
-                  />
+                  <ProjectContentBuilder project={project} />
+
                   <p className="text-sm text-muted-foreground">Enter structured content as JSON</p>
                 </div>
               </div>

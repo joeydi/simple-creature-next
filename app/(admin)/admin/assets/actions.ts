@@ -90,7 +90,7 @@ export async function uploadAsset(formData: FormData) {
     const uploadResult = await uploadToS3(buffer, s3Key, file.type)
 
     // Insert into database
-    const newAsset = await db
+    const newAsset = (await db
       .insert(asset)
       .values({
         id: nanoid(),
@@ -105,7 +105,7 @@ export async function uploadAsset(formData: FormData) {
         metadata: metadata as any,
         uploadedBy: session.user.id,
       })
-      .returning()
+      .returning()) as Asset[]
 
     revalidatePath("/admin/assets")
     return newAsset[0]

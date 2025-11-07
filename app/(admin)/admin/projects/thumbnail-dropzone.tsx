@@ -7,15 +7,7 @@ import Image from "next/image"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-
-interface Asset {
-  id: string
-  filename: string
-  title: string | null
-  s3Url: string
-  fileSize: number
-  createdAt: Date
-}
+import { Asset } from "../assets/types"
 
 interface ThumbnailDropzoneProps {
   thumbnailAsset: Asset | null
@@ -62,14 +54,14 @@ export function ThumbnailDropzone({ thumbnailAsset, onAssetUploaded, onClick, on
       const uploadedAsset = await uploadAsset(formData)
 
       // Convert to Asset format
-      const asset: Asset = {
+      const asset = {
         id: uploadedAsset.id,
         filename: uploadedAsset.filename,
         title: uploadedAsset.title,
         s3Url: uploadedAsset.s3Url,
         fileSize: uploadedAsset.fileSize,
         createdAt: uploadedAsset.createdAt,
-      }
+      } as Asset
 
       onAssetUploaded(asset)
       toast.success("Thumbnail uploaded successfully")

@@ -7,6 +7,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { nanoid } from "nanoid"
 import { desc, count, eq, inArray, or, ilike } from "drizzle-orm"
+import { Asset } from "../assets/types"
 
 // Helper function to generate a slug from a title
 function generateSlug(title: string): string {
@@ -31,11 +32,7 @@ async function ensureUniqueSlug(baseSlug: string, excludeId?: string): Promise<s
   let counter = 1
 
   while (true) {
-    const existing = await db
-      .select({ id: project.id })
-      .from(project)
-      .where(eq(project.slug, slug))
-      .limit(1)
+    const existing = await db.select({ id: project.id }).from(project).where(eq(project.slug, slug)).limit(1)
 
     // If no existing project or the existing one is the one we're updating, slug is unique
     if (existing.length === 0 || (excludeId && existing[0].id === excludeId)) {
@@ -387,7 +384,7 @@ export async function getImageAssets() {
   }
 
   // Get all image assets ordered by creation date
-  const assets = await db
+  const assets = (await db
     .select({
       id: asset.id,
       filename: asset.filename,
@@ -398,7 +395,7 @@ export async function getImageAssets() {
     })
     .from(asset)
     .where(eq(asset.assetType, "image"))
-    .orderBy(desc(asset.createdAt))
+    .orderBy(desc(asset.createdAt))) as Asset[]
 
   return assets
 }

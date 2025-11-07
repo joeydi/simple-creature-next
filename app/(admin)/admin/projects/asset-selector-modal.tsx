@@ -8,15 +8,7 @@ import { Search, X } from "lucide-react"
 import Image from "next/image"
 import { getImageAssets } from "./actions"
 import { UploadDropzone } from "../assets/upload-dropzone"
-
-interface Asset {
-  id: string
-  filename: string
-  title: string | null
-  s3Url: string
-  fileSize: number
-  createdAt: Date
-}
+import { Asset } from "../assets/types"
 
 interface AssetSelectorModalProps {
   open: boolean
@@ -74,7 +66,7 @@ export function AssetSelectorModal({ open, onOpenChange, onSelect, selectedAsset
   }
 
   const handleClear = () => {
-    onSelect({ id: "", filename: "", title: null, s3Url: "", fileSize: 0, createdAt: new Date() })
+    onSelect({ id: "", filename: "", title: null, s3Url: "", fileSize: 0, createdAt: new Date() } as Asset)
     onOpenChange(false)
     setSearch("")
   }
