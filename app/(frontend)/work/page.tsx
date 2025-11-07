@@ -5,7 +5,6 @@ import Row from "@/components/Row"
 import Column from "@/components/Column"
 import ProjectCard from "@/components/ProjectCard"
 import { getProjects } from "@/(admin)/admin/projects/actions"
-import Image from "next/image"
 
 export default async function Work() {
   const { projects } = await getProjects(1, 20)
