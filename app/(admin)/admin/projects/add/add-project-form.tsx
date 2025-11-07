@@ -7,29 +7,14 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { X } from "lucide-react"
 import { createProject } from "../actions"
 import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { AssetSelectorModal } from "../asset-selector-modal"
 import { ThumbnailDropzone } from "../thumbnail-dropzone"
-import { generateSlug, isValidSlugFormat } from "../slug-utils"
-
-interface Category {
-  id: string
-  name: string
-  slug: string
-  description: string | null
-}
-
-interface Asset {
-  id: string
-  filename: string
-  title: string | null
-  s3Url: string
-  fileSize: number
-  createdAt: Date
-}
+import { generateSlug } from "../slug-utils"
+import { Asset } from "../../assets/types"
+import { Category } from "../types"
 
 export function AddProjectForm({ categories }: { categories: Category[] }) {
   const [thumbnailAsset, setThumbnailAsset] = useState<Asset | null>(null)
