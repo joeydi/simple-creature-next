@@ -54,7 +54,7 @@
   --text-h2--font-weight: 400;
   --text-h2--letter-spacing: -0.01em;
 
-  --text-h3: clamp(18px, 14.1429px + 0.669643vw, 27px);
+  --text-h3: clamp(18px, 12.8571px + 0.892857vw, 30px);
   --text-h3--line-height: 1.25;
   --text-h3--font-weight: 400;
 }
