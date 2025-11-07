@@ -3,5 +3,5 @@
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: $grid-gutter-width;
+  gap: $grid-gutter-width * 3 $grid-gutter-width;
 }

@@ -7,6 +7,7 @@
   perspective: 100vw;
   text-decoration: none;
   color: inherit;
+  // outline: 2px solid red;
 
   img {
     aspect-ratio: 16 / 9;
@@ -19,7 +20,7 @@
   z-index: 1;
   border-radius: fluid(16, 32, $sm, $max);
   overflow: hidden;
-  opacity: 0;
+  // opacity: 0;
 }
 
 .image {
