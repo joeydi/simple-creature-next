@@ -1,15 +1,15 @@
-import { projects } from "@/data/projects";
-import styles from "./FeaturedProjects.module.scss";
-import Container from "@/components/Container";
-import SplitHeading from "@/components/SplitHeading";
-import ProjectCard from "@/components/ProjectCard";
-import Row from "./Row";
-import Column from "./Column";
-import { RemoteImage } from "./RemoteImage";
+import styles from "./FeaturedProjects.module.scss"
+import Container from "@/components/Container"
+import SplitHeading from "@/components/SplitHeading"
+import ProjectCard from "@/components/ProjectCard"
+import Row from "./Row"
+import Column from "./Column"
+import { getProjects } from "@/(admin)/admin/projects/actions"
+import Image from "next/image"
 
-const featuredProjects = projects.filter((project) => project.featured).slice(0, 4);
+const FeaturedProjects = async () => {
+  const { projects } = await getProjects(1, 4)
 
-const FeaturedProjects = () => {
   return (
     <section className={styles.section}>
       <Container>
@@ -19,8 +19,8 @@ const FeaturedProjects = () => {
           </SplitHeading>
         </h1>
         <Row>
-          {featuredProjects.map((project, i) => {
-            const image = <RemoteImage src={project.featuredImage.src} alt={project.featuredImage.alt} />;
+          {projects.map((project, i) => {
+            const image = <Image fill src={project.thumbnailUrl || ""} alt={project.thumbnailAlt || ""} />
 
             return (
               <Column sm="6" key={`column-${i}`}>
@@ -32,12 +32,12 @@ const FeaturedProjects = () => {
                   description={project.shortDescription}
                 />
               </Column>
-            );
+            )
           })}
         </Row>
       </Container>
     </section>
-  );
-};
+  )
+}
 
-export default FeaturedProjects;
+export default FeaturedProjects
