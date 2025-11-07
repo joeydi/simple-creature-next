@@ -1,40 +1,39 @@
-"use client";
+"use client"
 
-import { useRef, useState, useEffect } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Container from "./Container";
-import MaskHeading from "./MaskHeading";
-import styles from "./LogoGrid.module.scss";
-import { getRandom, getRandomInt } from "@/lib/utils";
+import { useRef, useState, useEffect } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import Container from "./Container"
+import MaskHeading from "./MaskHeading"
+import { getRandom, getRandomInt } from "@/lib/utils"
 
-import astonMartin from "@/images/logos/aston-martin.svg";
-import arizonaStateUninversity from "@/images/logos/arizona-state-uninversity.svg";
-import capitalOne from "@/images/logos/capital-one.svg";
-import dell from "@/images/logos/dell.svg";
-import fantasy from "@/images/logos/fantasy.svg";
-import ford from "@/images/logos/ford.svg";
-import generalMills from "@/images/logos/general-mills.svg";
-import huge from "@/images/logos/huge.svg";
-import keurig from "@/images/logos/keurig.svg";
-import lincoln from "@/images/logos/lincoln.svg";
-import mamava from "@/images/logos/mamava.svg";
-import meta from "@/images/logos/meta.svg";
-import nickelodeon from "@/images/logos/nickelodeon.svg";
-import nissan from "@/images/logos/nissan.svg";
-import nokianTyres from "@/images/logos/nokian-tyres.svg";
-import olg from "@/images/logos/olg.svg";
-import onePercent from "@/images/logos/one-percent.svg";
-import popularScience from "@/images/logos/popular-science.svg";
-import principal from "@/images/logos/principal.svg";
-import ramble from "@/images/logos/ramble.svg";
-import razorfish from "@/images/logos/razorfish.svg";
-import sandwich from "@/images/logos/sandwich.svg";
-import zeiss from "@/images/logos/zeiss.svg";
-import Image from "next/image";
+import astonMartin from "@/images/logos/aston-martin.svg"
+import arizonaStateUninversity from "@/images/logos/arizona-state-uninversity.svg"
+import capitalOne from "@/images/logos/capital-one.svg"
+import dell from "@/images/logos/dell.svg"
+import fantasy from "@/images/logos/fantasy.svg"
+import ford from "@/images/logos/ford.svg"
+import generalMills from "@/images/logos/general-mills.svg"
+import huge from "@/images/logos/huge.svg"
+import keurig from "@/images/logos/keurig.svg"
+import lincoln from "@/images/logos/lincoln.svg"
+import mamava from "@/images/logos/mamava.svg"
+import meta from "@/images/logos/meta.svg"
+import nickelodeon from "@/images/logos/nickelodeon.svg"
+import nissan from "@/images/logos/nissan.svg"
+import nokianTyres from "@/images/logos/nokian-tyres.svg"
+import olg from "@/images/logos/olg.svg"
+import onePercent from "@/images/logos/one-percent.svg"
+import popularScience from "@/images/logos/popular-science.svg"
+import principal from "@/images/logos/principal.svg"
+import ramble from "@/images/logos/ramble.svg"
+import razorfish from "@/images/logos/razorfish.svg"
+import sandwich from "@/images/logos/sandwich.svg"
+import zeiss from "@/images/logos/zeiss.svg"
+import Image from "next/image"
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const logos = [
   astonMartin,
@@ -60,52 +59,52 @@ const logos = [
   razorfish,
   sandwich,
   zeiss,
-];
+]
 
 export const LogoGrid = () => {
-  const [randomLogos, setRandomLogos] = useState(logos);
+  const [randomLogos, setRandomLogos] = useState(logos)
 
-  const columns = 6;
-  const rows = 12;
+  const columns = 6
+  const rows = 12
 
-  const maskRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const maskRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
 
   // Shuffle logos only on the client to avoid hydration mismatch
   useEffect(() => {
-    setRandomLogos([...logos].sort(() => 0.5 - Math.random()));
-  }, []);
+    setRandomLogos([...logos].sort(() => 0.5 - Math.random()))
+  }, [])
 
   useGSAP(() => {
-    const grid = gridRef.current;
-    const logos = maskRef?.current?.querySelectorAll(".logo");
-    const stars = maskRef?.current?.querySelectorAll(".star");
+    const grid = gridRef.current
+    const logos = maskRef?.current?.querySelectorAll(".logo")
+    const stars = maskRef?.current?.querySelectorAll(".star")
 
     if (!grid || !logos || !stars) {
-      return;
+      return
     }
 
-    const gridWidth = grid?.clientWidth;
-    const gridHeight = grid?.clientWidth;
+    const gridWidth = grid?.clientWidth
+    const gridHeight = grid?.clientWidth
 
     logos.forEach((logo, i) => {
-      const column = i % columns;
-      const row = Math.floor(i / columns);
+      const column = i % columns
+      const row = Math.floor(i / columns)
 
-      const x = column * (gridWidth / columns) + (row % 2) * (gridWidth / columns / 2);
-      const y = row * (gridHeight / rows);
-      const z = getRandom(-window.innerWidth / 2, window.innerWidth / 4);
+      const x = column * (gridWidth / columns) + (row % 2) * (gridWidth / columns / 2)
+      const y = row * (gridHeight / rows)
+      const z = getRandom(-window.innerWidth / 2, window.innerWidth / 4)
 
       gsap.set(logo, {
         x,
         y,
         z,
-      });
-    });
+      })
+    })
 
     const sizeValues = Array.from(stars).map(() => {
-      return getRandomInt(5, 20);
-    });
+      return getRandomInt(5, 20)
+    })
 
     gsap.set(stars, {
       x: () => getRandomInt(window.innerWidth * -1, window.innerWidth * 3),
@@ -113,7 +112,7 @@ export const LogoGrid = () => {
       z: () => getRandom(-window.innerWidth * 10, -window.innerWidth),
       width: (i) => sizeValues[i],
       height: (i) => sizeValues[i],
-    });
+    })
 
     const timeline = gsap.timeline({
       scrollTrigger: {
@@ -122,7 +121,7 @@ export const LogoGrid = () => {
         end: "bottom top",
         scrub: 1,
       },
-    });
+    })
 
     timeline.fromTo(
       gridRef.current,
@@ -135,37 +134,41 @@ export const LogoGrid = () => {
         yPercent: -50,
         duration: 1,
         ease: "none",
-      }
-    );
-  });
+      },
+    )
+  })
 
   return (
-    <section className={styles.section}>
+    <section className="relative">
       <Container>
-        <h2 className={styles.heading}>
+        <h2 className="mb-(--spacing-sm)">
           <MaskHeading reset={true}>Clients We&rsquo;ve Worked With</MaskHeading>
         </h2>
       </Container>
-      <div ref={maskRef} className={styles.mask}>
-        <div ref={gridRef} className={styles.grid}>
+      <div ref={maskRef} className="perspective-[100vw] relative aspect-video w-full overflow-hidden bg-black">
+        <div className="bg-linear-[to_bottom,rgba(0,0,0,0.5),transparent_100px,transparent_calc(100%-100px),rgba(0,0,0,0.5)] z-1 absolute inset-0"></div>
+        <div ref={gridRef} className="transform-3d relative size-[200%]">
           {Array(columns * rows)
             .fill(0)
             .map((_, i) => {
-              const logo = randomLogos[i % randomLogos.length];
+              const logo = randomLogos[i % randomLogos.length]
 
               return (
-                <div key={`div-${i}`} className={`${styles.logo} logo`}>
-                  <Image src={logo} alt="" />
+                <div
+                  key={`div-${i}`}
+                  className="logo translate-[-50%,-50%] before:filter-[blur(20px)] absolute rounded-xl p-4 before:absolute before:inset-0 before:bg-black"
+                >
+                  <Image className="aspect-2 relative w-[10vw]" src={logo} alt="" />
                 </div>
-              );
+              )
             })}
           {Array(100)
             .fill(0)
             .map((_, i) => {
-              return <div key={`star-${i}`} className={`${styles.star} star`}></div>;
+              return <div key={`star-${i}`} className="star absolute left-0 top-0 rounded-full bg-white"></div>
             })}
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
