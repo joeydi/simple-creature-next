@@ -1,8 +1,7 @@
-import gsap from "gsap";
-import styles from "./LogoDistortion.module.scss";
-import { Renderer, Program, Texture, Mesh, Vec2, Vec4, Geometry, Flowmap } from "ogl";
-import { useEffect, useRef } from "react";
-import Logo from "@/images/logo.svg";
+import gsap from "gsap"
+import { Renderer, Program, Texture, Mesh, Vec2, Vec4, Geometry, Flowmap } from "ogl"
+import { useEffect, useRef } from "react"
+import Logo from "@/images/logo.svg"
 
 const vertex = `
     attribute vec2 uv;
@@ -12,7 +11,7 @@ const vertex = `
         vUv = uv;
         gl_Position = vec4(position, 0, 1);
     }
-`;
+`
 
 const fragment = `
     precision highp float;
@@ -38,28 +37,28 @@ const fragment = `
 
         gl_FragColor = vec4(tex.r, tex.g, tex.b, 1.0);
     }
-`;
+`
 
 interface MyVec2 extends Vec2 {
-  needsUpdate?: boolean;
+  needsUpdate?: boolean
 }
 
 const LogoDistortion = () => {
-  const divRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const divRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   // Set up OGL canvas
   useEffect(() => {
-    const falloff = 0.5;
-    const dissipation = 0.9;
-    const deformationSize = 0.2;
-    const imgSize = [1218, 424];
-    const imageAspect = imgSize[1] / imgSize[0];
+    const falloff = 0.5
+    const dissipation = 0.9
+    const deformationSize = 0.2
+    const imgSize = [1218, 424]
+    const imageAspect = imgSize[1] / imgSize[0]
 
-    const div = divRef.current;
-    const canvas = canvasRef.current;
+    const div = divRef.current
+    const canvas = canvasRef.current
     if (!div || !canvas) {
-      return;
+      return
     }
 
     const renderer = new Renderer({
@@ -67,31 +66,31 @@ const LogoDistortion = () => {
       dpr: 2,
       alpha: true,
       premultipliedAlpha: false,
-    });
-    const gl = renderer.gl;
+    })
+    const gl = renderer.gl
 
     // Variable inputs to control flowmap
-    let aspect = 1;
-    const mouse = new Vec2(-1);
-    const velocity = new Vec2() as MyVec2;
+    let aspect = 1
+    const mouse = new Vec2(-1)
+    const velocity = new Vec2() as MyVec2
 
     const resize = () => {
-      let a1, a2;
+      let a1, a2
 
       if (div.clientHeight / div.clientWidth < imageAspect) {
-        a1 = 1;
-        a2 = div.clientHeight / div.clientWidth / imageAspect;
+        a1 = 1
+        a2 = div.clientHeight / div.clientWidth / imageAspect
       } else {
-        a1 = (div.clientWidth / div.clientHeight) * imageAspect;
-        a2 = 1;
+        a1 = (div.clientWidth / div.clientHeight) * imageAspect
+        a2 = 1
       }
 
-      mesh.program.uniforms.res.value = new Vec4(div.clientWidth, div.clientHeight, a1, a2);
-      renderer.setSize(div.clientWidth, div.clientHeight);
-      aspect = div.clientWidth / div.clientHeight;
-    };
+      mesh.program.uniforms.res.value = new Vec4(div.clientWidth, div.clientHeight, a1, a2)
+      renderer.setSize(div.clientWidth, div.clientHeight)
+      aspect = div.clientWidth / div.clientHeight
+    }
 
-    const flowmap = new Flowmap(gl, { falloff, dissipation });
+    const flowmap = new Flowmap(gl, { falloff, dissipation })
 
     // Triangle that includes -1 to 1 range for 'position', and 0 to 1 range for 'uv'.
     const geometry = new Geometry(gl, {
@@ -100,31 +99,31 @@ const LogoDistortion = () => {
         data: new Float32Array([-1, -1, 3, -1, -1, 3]),
       },
       uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) },
-    });
+    })
 
     const texture = new Texture(gl, {
       minFilter: gl.LINEAR,
       magFilter: gl.LINEAR,
-    });
+    })
 
-    const img = new Image();
+    const img = new Image()
     img.onload = () => {
       gsap.to(divRef.current, {
         opacity: 1,
         duration: 1,
-      });
-      texture.image = img;
-    };
-    img.crossOrigin = "Anonymous";
-    img.src = Logo.src;
+      })
+      texture.image = img
+    }
+    img.crossOrigin = "Anonymous"
+    img.src = Logo.src
 
-    let a1, a2;
+    let a1, a2
     if (div.clientHeight / div.clientWidth < imageAspect) {
-      a1 = 1;
-      a2 = div.clientHeight / div.clientWidth / imageAspect;
+      a1 = 1
+      a2 = div.clientHeight / div.clientWidth / imageAspect
     } else {
-      a1 = (div.clientWidth / div.clientHeight) * imageAspect;
-      a2 = 1;
+      a1 = (div.clientWidth / div.clientHeight) * imageAspect
+      a2 = 1
     }
 
     const program = new Program(gl, {
@@ -143,83 +142,83 @@ const LogoDistortion = () => {
         tFlow: flowmap.uniform,
         uDeformationSize: { value: deformationSize },
       },
-    });
-    const mesh = new Mesh(gl, { geometry, program });
+    })
+    const mesh = new Mesh(gl, { geometry, program })
 
-    window.addEventListener("resize", resize, false);
-    resize();
+    window.addEventListener("resize", resize, false)
+    resize()
 
-    let lastTime: number;
-    const lastMouse = new Vec2();
+    let lastTime: number
+    const lastMouse = new Vec2()
 
     const updateMouse = (x: number, y: number) => {
       // Get mouse value in 0 to 1 range, with y flipped
-      mouse.set(x / gl.renderer.width, 1.0 - y / gl.renderer.height);
+      mouse.set(x / gl.renderer.width, 1.0 - y / gl.renderer.height)
 
       // Calculate velocity
       if (!lastTime) {
         // First frame
-        lastTime = performance.now();
-        lastMouse.set(x, y);
+        lastTime = performance.now()
+        lastMouse.set(x, y)
       }
 
-      const deltaX = x - lastMouse.x;
-      const deltaY = y - lastMouse.y;
+      const deltaX = x - lastMouse.x
+      const deltaY = y - lastMouse.y
 
-      lastMouse.set(x, y);
+      lastMouse.set(x, y)
 
-      const time = performance.now();
+      const time = performance.now()
 
       // Avoid dividing by 0
-      const delta = Math.max(10.4, time - lastTime);
-      lastTime = time;
-      velocity.x = deltaX / delta;
-      velocity.y = deltaY / delta;
+      const delta = Math.max(10.4, time - lastTime)
+      lastTime = time
+      velocity.x = deltaX / delta
+      velocity.y = deltaY / delta
 
       // Flag update to prevent hanging velocity values when not moving
-      velocity.needsUpdate = true;
-    };
+      velocity.needsUpdate = true
+    }
 
     const update = (t: number) => {
-      requestAnimationFrame(update);
+      requestAnimationFrame(update)
 
       // Reset velocity when mouse not moving
       if (!velocity.needsUpdate) {
-        mouse.set(-1);
-        velocity.set(0);
+        mouse.set(-1)
+        velocity.set(0)
       }
-      velocity.needsUpdate = false;
+      velocity.needsUpdate = false
 
       // Update flowmap inputs
-      flowmap.aspect = aspect;
-      flowmap.mouse.copy(mouse);
+      flowmap.aspect = aspect
+      flowmap.mouse.copy(mouse)
 
       // Ease velocity input, slower when fading out
-      flowmap.velocity.lerp(velocity, velocity.len() ? 0.2 : 0.1);
-      flowmap.update();
-      program.uniforms.uTime.value = t * 0.01;
-      renderer.render({ scene: mesh });
-    };
+      flowmap.velocity.lerp(velocity, velocity.len() ? 0.2 : 0.1)
+      flowmap.update()
+      program.uniforms.uTime.value = t * 0.01
+      renderer.render({ scene: mesh })
+    }
 
-    requestAnimationFrame(update);
+    requestAnimationFrame(update)
 
     const mouseMoveHandler = (e: MouseEvent) => {
-      updateMouse(e.offsetX, e.offsetY);
-    };
+      updateMouse(e.offsetX, e.offsetY)
+    }
 
-    div.addEventListener("mousemove", mouseMoveHandler, { passive: true });
+    div.addEventListener("mousemove", mouseMoveHandler, { passive: true })
 
     return () => {
-      window.removeEventListener("resize", resize);
-      div.removeEventListener("mousemove", mouseMoveHandler);
-    };
-  }, []);
+      window.removeEventListener("resize", resize)
+      div.removeEventListener("mousemove", mouseMoveHandler)
+    }
+  }, [])
 
   return (
-    <div ref={divRef} className={styles.div}>
-      <canvas ref={canvasRef} className={styles.canvas} />
+    <div ref={divRef} className="absolute left-0 top-0 size-full opacity-0">
+      <canvas ref={canvasRef} className="absolute left-0 top-0 size-full" />
     </div>
-  );
-};
+  )
+}
 
-export default LogoDistortion;
+export default LogoDistortion
