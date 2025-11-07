@@ -2,9 +2,11 @@
 
 import Link from "next/link"
 import styles from "./Header.module.scss"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 import Container from "./Container"
+import { useMenu } from "@/contexts/MenuContext"
+import { usePathname } from "next/navigation"
 
 const links = [
   {
@@ -32,7 +34,12 @@ const links = [
 const Header = () => {
   const lastScrollRef = useRef(0)
   const headerRef = useRef<HTMLElement>(null)
-  const [isActive, setIsActive] = useState(false)
+  const { isActive, setIsActive } = useMenu()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    setIsActive(false)
+  }, [pathname])
 
   useEffect(() => {
     const scrollHandler = () => {
@@ -66,10 +73,7 @@ const Header = () => {
   }
 
   return (
-    <header
-      className={cn(styles.header, "fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center")}
-      ref={headerRef}
-    >
+    <header className="fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center" ref={headerRef}>
       <Container className="flex justify-end">
         <div className="relative">
           <ul
@@ -85,7 +89,7 @@ const Header = () => {
                     className="hover:bg-black/8 block rounded-sm px-4 py-1 text-right font-medium transition hover:transition-none"
                     href={link.url}
                     onClick={() => {
-                      setIsActive(false)
+                      // setIsActive(false)
                     }}
                   >
                     {link.title}
