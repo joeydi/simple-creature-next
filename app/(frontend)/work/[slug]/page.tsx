@@ -40,7 +40,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
             <div className="flex flex-col gap-4 leading-tight">
               {projectTags?.map((tag, index) => (
                 <div key={index}>
-                  <p className="text-gray-400">{tag[0]}</p>
+                  <p className="font-[450] text-gray-400">{tag[0]}</p>
                   <p>{tag[1]}</p>
                 </div>
               ))}
@@ -52,8 +52,6 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
         const Component = blockMap[block.type as keyof typeof blockMap]
         return <Component key={block.id} block={block as any} />
       })}
-      {/* <Container className="my-(--spacing-xxl) gap-(--spacing-lg) flex flex-col">
-      </Container> */}
     </>
   )
 }
