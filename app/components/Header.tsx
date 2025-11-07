@@ -1,6 +1,5 @@
 "use client"
 
-import gsap from "gsap"
 import Link from "next/link"
 import styles from "./Header.module.scss"
 import { useEffect, useRef, useState } from "react"
