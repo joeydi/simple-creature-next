@@ -9,7 +9,7 @@ const FeaturedProjects = async () => {
   const { projects } = await getProjects(1, 4)
 
   return (
-    <section className="my-(--spacing-xl) perspective-[100vw]">
+    <section className="my-(--spacing-xl) perspective-[100vw] overflow-hidden">
       <Container>
         <h1 className="my-(--spacing-lg) w-[60%] min-w-fit">
           <SplitHeading>
