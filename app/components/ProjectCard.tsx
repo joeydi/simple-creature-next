@@ -4,23 +4,22 @@ import { ReactNode, useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import styles from "./ProjectCard.module.scss"
 import ScrambleText from "@/components/ScrambleText"
 import MaskHeading from "@/components/MaskHeading"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
+import { ProjectWithThumbnail } from "@/(admin)/admin/projects/types"
+import Image from "next/image"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 interface Props {
+  project: ProjectWithThumbnail
+  align?: "left" | "right"
   className?: string
-  align?: string
-  slug: string
-  image: ReactNode
-  title: string
-  description: string
 }
 
-const ProjectCard = ({ className = "", align = "left", slug, image, title, description }: Props) => {
+const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
   const cardRef = useRef<HTMLAnchorElement>(null)
   const layerRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
@@ -103,22 +102,30 @@ const ProjectCard = ({ className = "", align = "left", slug, image, title, descr
   })
 
   return (
-    <Link ref={cardRef} href={`/work/${slug}`} className={`${styles.card} ${styles[align]} ${className}`}>
+    <Link
+      ref={cardRef}
+      href={`/work/${project.slug}`}
+      className={cn(
+        "perspective-[100vw] text-decoration-none block text-inherit",
+        align === "left" ? "md:perspective-origin-right" : "md:perspective-origin-left",
+        className,
+      )}
+    >
       <div ref={layerRef} className="layer">
-        <div className={styles.mask}>
-          <div ref={imageRef} className={styles.image}>
-            {image}
+        <div className="z-1 rounded-(--media-radius) relative overflow-hidden">
+          <div ref={imageRef} className="aspect-video">
+            <Image fill src={project.thumbnailUrl || ""} alt={project.thumbnailAlt || ""} />
           </div>
         </div>
-        <div className={styles.content}>
+        <div className="m-4">
           <h2>
             <MaskHeading delay={0.125} reset={true}>
-              {title}
+              {project.title}
             </MaskHeading>
           </h2>
           <p>
             <ScrambleText duration={0.5} delay={0.5} reset={true}>
-              {description}
+              {project.shortDescription}
             </ScrambleText>
           </p>
         </div>

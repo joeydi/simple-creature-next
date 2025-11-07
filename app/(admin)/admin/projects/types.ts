@@ -18,3 +18,8 @@ export interface Project {
   updatedAt: Date
   categoryIds: string[]
 }
+
+export interface ProjectWithThumbnail extends Project {
+  thumbnailUrl: string
+  thumbnailAlt: string
+}

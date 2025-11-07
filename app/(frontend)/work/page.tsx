@@ -21,17 +21,9 @@ export default async function Work() {
         <Container className="section-margin-bottom">
           <Row>
             {projects.map((project, i) => {
-              const image = <Image fill src={project.thumbnailUrl || ""} alt={project.thumbnailAlt || ""} />
-
               return (
                 <Column sm="6" key={`column-${i}`}>
-                  <ProjectCard
-                    align={i % 2 ? "right" : "left"}
-                    slug={project.slug}
-                    image={image}
-                    title={project.title}
-                    description={project.shortDescription}
-                  />
+                  <ProjectCard align={i % 2 ? "right" : "left"} project={project} />
                 </Column>
               )
             })}

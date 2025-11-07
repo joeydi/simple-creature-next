@@ -10,6 +10,7 @@ import { desc, count, eq, inArray, or, ilike } from "drizzle-orm"
 import { Asset } from "../assets/types"
 import { projectContentSchema } from "@/lib/schemas/project-content"
 import { ZodError } from "zod"
+import { ProjectWithThumbnail } from "./types"
 
 // Helper function to generate a slug from a title
 function generateSlug(title: string): string {
@@ -186,7 +187,7 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
   const [{ total }] = await db.select({ total: count() }).from(project).where(whereClause)
 
   // Get paginated projects with thumbnail
-  const projects = await db
+  const projects = (await db
     .select({
       id: project.id,
       title: project.title,
@@ -206,33 +207,33 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
     .where(whereClause)
     .orderBy(desc(project.createdAt))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset)) as ProjectWithThumbnail[]
 
   // Get categories for all projects
-  const projectIds = projects.map((p) => p.id)
-  const categoriesData =
-    projectIds.length > 0
-      ? await db
-          .select({
-            projectId: projectCategory.projectId,
-            categoryId: category.id,
-            categoryName: category.name,
-          })
-          .from(projectCategory)
-          .innerJoin(category, eq(projectCategory.categoryId, category.id))
-          .where(inArray(projectCategory.projectId, projectIds))
-      : []
+  // const projectIds = projects.map((p) => p.id)
+  // const categoriesData =
+  //   projectIds.length > 0
+  //     ? await db
+  //         .select({
+  //           projectId: projectCategory.projectId,
+  //           categoryId: category.id,
+  //           categoryName: category.name,
+  //         })
+  //         .from(projectCategory)
+  //         .innerJoin(category, eq(projectCategory.categoryId, category.id))
+  //         .where(inArray(projectCategory.projectId, projectIds))
+  //     : []
 
-  // Map categories to projects
-  const projectsWithCategories = projects.map((p) => ({
-    ...p,
-    categories: categoriesData
-      .filter((c) => c.projectId === p.id)
-      .map((c) => ({ id: c.categoryId, name: c.categoryName })),
-  }))
+  // // Map categories to projects
+  // const projectsWithCategories = projects.map((p) => ({
+  //   ...p,
+  //   categories: categoriesData
+  //     .filter((c) => c.projectId === p.id)
+  //     .map((c) => ({ id: c.categoryId, name: c.categoryName })),
+  // }))
 
   return {
-    projects: projectsWithCategories,
+    projects: projects,
     total,
     page,
     pageSize,
