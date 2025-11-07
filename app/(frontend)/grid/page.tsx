@@ -1,13 +1,13 @@
-import Row from "@/components/Row";
-import Container from "@/components/Container";
-import PageHeader from "@/components/PageHeader";
-import Column from "@/components/Column";
+import Row from "@/components/Row"
+import Container from "@/components/Container"
+import PageHeader from "@/components/PageHeader"
+import Column from "@/components/Column"
 
 export default function Home() {
   return (
     <>
       <PageHeader>
-        <h1 className="h2">intelligence, not artificial</h1>
+        <h1 className="text-h2">intelligence, not artificial</h1>
       </PageHeader>
       <div className="hero">
         <Container>
@@ -102,5 +102,5 @@ export default function Home() {
         </Container>
       </div>
     </>
-  );
+  )
 }
