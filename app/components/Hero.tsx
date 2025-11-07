@@ -4,7 +4,6 @@ import { useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import styles from "./Hero.module.scss"
 import Container from "@/components/Container"
 import Row from "@/components/Row"
 import Column from "@/components/Column"
@@ -21,7 +20,7 @@ const Hero = () => {
 
   useGSAP(() => {
     gsap.to(logoRef.current, {
-      yPercent: 80,
+      yPercent: 50,
       ease: "none",
       scrollTrigger: {
         trigger: "main",
@@ -34,7 +33,7 @@ const Hero = () => {
   })
 
   return (
-    <div className={styles.hero} ref={heroRef}>
+    <div className="mb-(--spacing-xxl)" ref={heroRef}>
       <Container>
         <Row className="align-items-end" style={{ margin: "10vw 0 5vw 0" }}>
           <Column lg="7">
@@ -54,8 +53,8 @@ const Hero = () => {
             </p>
           </Column>
         </Row>
-        <div className={styles.heroGraphic}>
-          <div ref={logoRef} className={styles.heroLogo}>
+        <div className="mb-(--spacing-xl) rounded-(--media-radius) relative aspect-video overflow-hidden bg-black">
+          <div ref={logoRef} className="aspect-1218/424 absolute left-[2%] top-[4%] w-[96%] text-gray-800">
             <LogoDistortion />
           </div>
           <HeroVideo />
