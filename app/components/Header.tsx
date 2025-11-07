@@ -32,7 +32,6 @@ const links = [
 const Header = () => {
   const lastScrollRef = useRef(0)
   const headerRef = useRef<HTMLElement>(null)
-  const [isScrolled, setIsScrolled] = useState(false)
   const [isActive, setIsActive] = useState(false)
 
   useEffect(() => {
@@ -41,8 +40,6 @@ const Header = () => {
       if (Math.abs(lastScrollRef.current - window.scrollY) > 100) {
         setIsActive(false)
       }
-
-      setIsScrolled(window.scrollY >= 100)
     }
 
     window.addEventListener("scroll", scrollHandler, { passive: true })
@@ -62,7 +59,7 @@ const Header = () => {
     if (isActive) {
       lastScrollRef.current = window.scrollY
     }
-  }, [isActive, isScrolled])
+  }, [isActive])
 
   const clickHandler = () => {
     setIsActive(!isActive)
