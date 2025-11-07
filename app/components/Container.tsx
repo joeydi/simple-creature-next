@@ -1,11 +1,12 @@
-import styles from "./Container.module.scss";
+import { cn } from "@/lib/utils"
+import styles from "./Container.module.scss"
 
 interface Props {
-  className?: string;
+  className?: string
 }
 
 const Container = ({ className, children }: React.PropsWithChildren<Props>) => {
-  return <div className={`${styles.container} ${className}`}>{children}</div>;
-};
+  return <div className={cn(styles.container, className)}>{children}</div>
+}
 
-export default Container;
+export default Container
