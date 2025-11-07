@@ -6,18 +6,19 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
-import { getImageAssets } from "./actions"
 import { UploadDropzone } from "../assets/upload-dropzone"
-import { Asset } from "../assets/types"
+import { Asset, AssetType } from "../assets/types"
+import { getAssets } from "../assets/actions"
 
 interface AssetSelectorModalProps {
+  types?: AssetType[]
   open: boolean
   onOpenChange: (open: boolean) => void
   onSelect: (asset: Asset) => void
   selectedAssetId?: string | null
 }
 
-export function AssetSelectorModal({ open, onOpenChange, onSelect, selectedAssetId }: AssetSelectorModalProps) {
+export function AssetSelectorModal({ types, open, onOpenChange, onSelect, selectedAssetId }: AssetSelectorModalProps) {
   const [assets, setAssets] = useState<Asset[]>([])
   const [filteredAssets, setFilteredAssets] = useState<Asset[]>([])
   const [search, setSearch] = useState("")
@@ -49,7 +50,7 @@ export function AssetSelectorModal({ open, onOpenChange, onSelect, selectedAsset
   const loadAssets = async () => {
     setIsLoading(true)
     try {
-      const data = await getImageAssets()
+      const { assets: data } = await getAssets(1, 100, undefined, types)
       setAssets(data)
       setFilteredAssets(data)
     } catch (error) {
@@ -81,7 +82,7 @@ export function AssetSelectorModal({ open, onOpenChange, onSelect, selectedAsset
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[80vh] max-w-4xl flex-col">
+      <DialogContent className="flex max-h-[80vh] max-w-4xl flex-col overflow-auto">
         <DialogHeader>
           <DialogTitle>Select Thumbnail</DialogTitle>
           <DialogDescription>Choose an image asset to use as the project thumbnail</DialogDescription>

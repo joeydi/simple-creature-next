@@ -29,7 +29,7 @@ export interface Asset {
   s3Key: string
   s3Bucket: string
   s3Url: string
-  assetType: string
+  assetType: AssetType
   metadata: ImageMetadata | VideoMetadata | PDFMetadata
   title: string | null
   description: string | null

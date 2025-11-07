@@ -25,7 +25,7 @@ export default async function AssetsPage({
   const search = params.search
   const typeFilter = params.type as AssetType | undefined
 
-  const { assets, total, totalPages } = await getAssets(page, 20, search, typeFilter)
+  const { assets, total, totalPages } = await getAssets(page, 20, search, typeFilter ? [typeFilter] : undefined)
 
   return (
     <main>

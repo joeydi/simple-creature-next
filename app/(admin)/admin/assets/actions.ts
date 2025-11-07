@@ -131,7 +131,7 @@ export async function getAssetCount() {
 }
 
 // Get assets with pagination and filters
-export async function getAssets(page: number = 1, pageSize: number = 20, search?: string, typeFilter?: AssetType) {
+export async function getAssets(page: number = 1, pageSize: number = 20, search?: string, typeFilter?: AssetType[]) {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -150,7 +150,7 @@ export async function getAssets(page: number = 1, pageSize: number = 20, search?
   }
 
   if (typeFilter) {
-    conditions.push(eq(asset.assetType, typeFilter))
+    conditions.push(or(...typeFilter.map((type) => eq(asset.assetType, type))))
   }
 
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined
