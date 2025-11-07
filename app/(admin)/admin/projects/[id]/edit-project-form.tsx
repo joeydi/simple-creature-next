@@ -107,7 +107,7 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
                   />
                   {slugChanged && (
                     <div className="flex items-start gap-2 rounded-md border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-200">
-                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                      <AlertCircle className="mt-0.5 size-4 shrink-0" />
                       <p>
                         Warning: Changing the slug will change the project URL. Any existing links to this project will
                         break.

@@ -92,7 +92,7 @@ export function AssetSelectorModal({ open, onOpenChange, onSelect, selectedAsset
         <div className="flex flex-1 flex-col space-y-4">
           {/* Search Input */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search assets..."
               value={search}
@@ -146,7 +146,7 @@ export function AssetSelectorModal({ open, onOpenChange, onSelect, selectedAsset
                     {selectedAssetId === asset.id && (
                       <div className="absolute right-2 top-2 rounded-full bg-primary p-1">
                         <svg
-                          className="h-4 w-4 text-primary-foreground"
+                          className="size-4 text-primary-foreground"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -164,7 +164,7 @@ export function AssetSelectorModal({ open, onOpenChange, onSelect, selectedAsset
           {/* Actions */}
           <div className="flex justify-between gap-2 border-t pt-4">
             <Button variant="outline" onClick={handleClear}>
-              <X className="mr-2 h-4 w-4" />
+              <X className="mr-2 size-4" />
               Clear Selection
             </Button>
             <Button variant="outline" onClick={() => onOpenChange(false)}>

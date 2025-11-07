@@ -8,6 +8,8 @@ import { redirect } from "next/navigation"
 import { nanoid } from "nanoid"
 import { desc, count, eq, inArray, or, ilike } from "drizzle-orm"
 import { Asset } from "../assets/types"
+import { projectContentSchema } from "@/lib/schemas/project-content"
+import { ZodError } from "zod"
 
 // Helper function to generate a slug from a title
 function generateSlug(title: string): string {
@@ -83,8 +85,15 @@ export async function createProject(formData: FormData) {
   let content = null
   if (contentInput) {
     try {
-      content = JSON.parse(contentInput)
+      const parsedContent = JSON.parse(contentInput)
+      // Validate with Zod schema
+      const validatedContent = projectContentSchema.parse(parsedContent)
+      content = validatedContent
     } catch (e) {
+      if (e instanceof ZodError) {
+        const errorMessages = e.issues.map((err) => `${err.path.join(".")}: ${err.message}`).join(", ")
+        throw new Error(`Invalid content structure: ${errorMessages}`)
+      }
       throw new Error("Content must be valid JSON")
     }
   }
@@ -293,8 +302,15 @@ export async function updateProject(id: string, formData: FormData) {
   let content = null
   if (contentInput) {
     try {
-      content = JSON.parse(contentInput)
+      const parsedContent = JSON.parse(contentInput)
+      // Validate with Zod schema
+      const validatedContent = projectContentSchema.parse(parsedContent)
+      content = validatedContent
     } catch (e) {
+      if (e instanceof ZodError) {
+        const errorMessages = e.issues.map((err) => `${err.path.join(".")}: ${err.message}`).join(", ")
+        throw new Error(`Invalid content structure: ${errorMessages}`)
+      }
       throw new Error("Content must be valid JSON")
     }
   }
@@ -383,18 +399,31 @@ export async function getImageAssets() {
     throw new Error("Unauthorized")
   }
 
-  // Get all image assets ordered by creation date
+  // Get all image assets (full asset data) ordered by creation date
   const assets = (await db
-    .select({
-      id: asset.id,
-      filename: asset.filename,
-      title: asset.title,
-      s3Url: asset.s3Url,
-      fileSize: asset.fileSize,
-      createdAt: asset.createdAt,
-    })
+    .select()
     .from(asset)
     .where(eq(asset.assetType, "image"))
+    .orderBy(desc(asset.createdAt))) as Asset[]
+
+  return assets
+}
+
+export async function getMediaAssets() {
+  // Check authentication
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  // Get all image and video assets (full asset data) ordered by creation date
+  const assets = (await db
+    .select()
+    .from(asset)
+    .where(or(eq(asset.assetType, "image"), eq(asset.assetType, "video")))
     .orderBy(desc(asset.createdAt))) as Asset[]
 
   return assets
