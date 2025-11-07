@@ -4,6 +4,8 @@ import gsap from "gsap"
 import Link from "next/link"
 import styles from "./Header.module.scss"
 import { useEffect, useRef, useState } from "react"
+import { cn } from "@/lib/utils"
+import Container from "./Container"
 
 const links = [
   {
@@ -61,15 +63,6 @@ const Header = () => {
     if (isActive) {
       lastScrollRef.current = window.scrollY
     }
-
-    const width = isActive ? header.getBoundingClientRect().width : 100
-
-    gsap.to(header, {
-      "--width": `${width}px`,
-      duration: 0.5,
-      ease: "expo.out",
-      delay: !isScrolled && isActive ? 0.2 : 0,
-    })
   }, [isActive, isScrolled])
 
   const clickHandler = () => {
@@ -78,37 +71,38 @@ const Header = () => {
 
   return (
     <header
-      className={`${styles.header} ${isScrolled ? styles.headerScrolled : ""} ${isActive ? styles.headerActive : ""}`}
+      className={cn(styles.header, "fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center")}
       ref={headerRef}
     >
-      <ul
-        className={`${styles.headerMenu} ${isScrolled ? styles.headerMenuScrolled : ""} ${
-          isActive ? styles.headerMenuActive : ""
-        }`}
-      >
-        {links.map((link) => {
-          return (
-            <li key={link.title}>
-              <Link
-                href={link.url}
-                onClick={() => {
-                  setIsActive(false)
-                }}
-              >
-                {link.title}
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
-      <button
-        className={`${styles.menuButton} ${isScrolled ? styles.menuButtonScrolled : ""} ${
-          isActive ? styles.menuButtonActive : ""
-        }`}
-        onClick={clickHandler}
-      >
-        <span>Menu</span>
-      </button>
+      <Container className="flex justify-end">
+        <div className="relative">
+          <ul
+            className={cn(
+              "absolute right-0 top-[calc(100%+16px)] flex min-w-48 origin-top list-none flex-col gap-px rounded-2xl bg-white/50 p-4 backdrop-blur-[20px] transition-all",
+              isActive ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0",
+            )}
+          >
+            {links.map((link) => {
+              return (
+                <li key={link.title}>
+                  <Link
+                    className="hover:bg-black/8 block rounded-sm px-4 py-1 text-right font-medium transition hover:transition-none"
+                    href={link.url}
+                    onClick={() => {
+                      setIsActive(false)
+                    }}
+                  >
+                    {link.title}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+          <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
+            <span>Menu</span>
+          </button>
+        </div>
+      </Container>
     </header>
   )
 }
