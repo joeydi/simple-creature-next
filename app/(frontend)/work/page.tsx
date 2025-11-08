@@ -21,7 +21,7 @@ export default async function Work() {
           <Row>
             {projects.map((project, i) => {
               return (
-                <Column sm="6" key={`column-${i}`}>
+                <Column sm="6" key={project.id}>
                   <ProjectCard align={i % 2 ? "right" : "left"} project={project} />
                 </Column>
               )
