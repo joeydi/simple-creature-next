@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <body className={cn("h-full bg-indigo-500 antialiased", clash.variable)}>
+    <html lang="en" className="h-full overflow-hidden overscroll-none">
+      <body className={cn("h-full overflow-hidden bg-indigo-500 antialiased", clash.variable)}>
         <MenuProvider>
           <Header />
           <Scroller>
