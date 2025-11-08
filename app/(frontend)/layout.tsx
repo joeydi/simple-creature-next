@@ -7,7 +7,6 @@ import "@/styles/tailwind.css"
 import "@/styles/global.scss"
 import { cn } from "@/lib/utils"
 import SmoothScroller from "@/components/SmoothScroller"
-import { ViewTransition } from "react"
 
 const clash = localFont({
   src: "../fonts/ClashGrotesk-Variable.woff2",
@@ -31,9 +30,7 @@ export default function RootLayout({
         <MenuProvider>
           <Header />
           <SmoothScroller>
-            <ViewTransition>
-              <main>{children}</main>
-            </ViewTransition>
+            <main>{children}</main>
             <Footer />
           </SmoothScroller>
         </MenuProvider>

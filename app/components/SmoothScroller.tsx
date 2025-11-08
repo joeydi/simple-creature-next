@@ -26,20 +26,19 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
     })
   })
 
-  // useEffect(() => {
-  //   const id = window.setTimeout(() => {
-  //     smoother.current?.refresh()
-  //     ScrollTrigger.refresh()
-  //   }, 500)
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      smoother.current?.refresh()
+      ScrollTrigger.refresh()
+    }, 500)
 
-  //   return () => window.clearTimeout(id)
-  // }, [pathname])
+    return () => window.clearTimeout(id)
+  }, [pathname])
 
   useEffect(() => {
     smoother.current?.scrollTo(0, false)
 
     const id = requestAnimationFrame(() => {
-      // console.log(pathname, smoother.current)
       smoother.current?.refresh()
       ScrollTrigger.refresh()
     })
@@ -52,7 +51,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
       id="smooth-wrapper"
       className={cn(
         "ease-[cubic-bezier(0.08,0.94,0.26,0.95)] over h-full bg-white transition duration-500",
-        // isActive ? "-translate-x-[6.125%] scale-75 rounded-xl" : "scale-100 rounded-none",
+        isActive ? "-translate-x-[6.125%] scale-75 rounded-xl" : "scale-100 rounded-none",
       )}
     >
       <div id="smooth-content">{children}</div>
