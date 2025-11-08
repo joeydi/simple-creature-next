@@ -25,12 +25,6 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
   const imageRef = useRef<HTMLImageElement>(null)
 
   useGSAP(() => {
-    gsap.set(layerRef.current, {
-      opacity: 1,
-      z: "15vw",
-      rotationX: 36,
-    })
-
     gsap.set(imageRef.current, {
       scale: 1.5,
       filter: "blur(8px)",
@@ -40,7 +34,6 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
       scrollTrigger: {
         scrub: true,
         trigger: cardRef.current,
-        // toggleActions: "play resume resume reset",
         start: "top bottom",
         end: "bottom top",
         onEnter: () => {
@@ -78,8 +71,12 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
       },
     })
 
-    timeline.to(
+    timeline.fromTo(
       layerRef.current,
+      {
+        z: "10vw",
+        rotationX: 20,
+      },
       {
         z: "0vw",
         rotationX: 0,
@@ -89,11 +86,15 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
       0,
     )
 
-    timeline.to(
+    timeline.fromTo(
       layerRef.current,
       {
-        z: "15vw",
-        rotationX: -36,
+        z: "0vw",
+        rotationX: 0,
+      },
+      {
+        z: "10vw",
+        rotationX: -20,
         duration: 1,
         ease: "circ.in",
       },
@@ -111,7 +112,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
         className,
       )}
     >
-      <div ref={layerRef} className="layer">
+      <div ref={layerRef}>
         <div className="z-1 rounded-(--media-radius) relative overflow-hidden">
           <div ref={imageRef} className="aspect-video">
             <Image fill src={project.thumbnailUrl || ""} alt={project.thumbnailAlt || ""} />
