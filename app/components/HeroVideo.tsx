@@ -11,15 +11,21 @@ export const HeroVideo = () => {
     }
 
     const ctx = setupGLContext(canvasRef.current)
+    let animationFrameId: number
 
     const update = () => {
-      requestAnimationFrame(update)
+      animationFrameId = requestAnimationFrame(update)
       if (videoRef.current) {
         drawVideo(ctx, videoRef.current)
       }
     }
 
-    requestAnimationFrame(update)
+    animationFrameId = requestAnimationFrame(update)
+
+    // Cleanup function
+    return () => {
+      cancelAnimationFrame(animationFrameId)
+    }
   }, [])
 
   return (
