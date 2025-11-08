@@ -5,8 +5,9 @@ import Footer from "@/components/Footer"
 import { MenuProvider } from "@/contexts/MenuContext"
 import "@/styles/tailwind.css"
 import "@/styles/global.scss"
-import Scroller from "@/components/scroller"
 import { cn } from "@/lib/utils"
+import SmoothScroller from "@/components/SmoothScroller"
+import { ViewTransition } from "react"
 
 const clash = localFont({
   src: "../fonts/ClashGrotesk-Variable.woff2",
@@ -25,14 +26,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full overflow-hidden overscroll-none">
-      <body className={cn("h-full overflow-hidden bg-indigo-500 antialiased", clash.variable)}>
+    <html lang="en" className="h-full">
+      <body className={cn("h-full bg-indigo-500 antialiased", clash.variable)}>
         <MenuProvider>
           <Header />
-          <Scroller>
-            <main>{children}</main>
+          <SmoothScroller>
+            <ViewTransition>
+              <main>{children}</main>
+            </ViewTransition>
             <Footer />
-          </Scroller>
+          </SmoothScroller>
         </MenuProvider>
       </body>
     </html>
