@@ -9,8 +9,8 @@ const Scroller = ({ children }: React.ComponentProps<"div">) => {
   return (
     <div
       className={cn(
-        "ease-[cubic-bezier(0.87,0.01,0.15,0.99)] h-full overflow-auto bg-white transition duration-1000",
-        isActive ? "scale-75" : "scale-100",
+        "ease-[cubic-bezier(0.08,0.94,0.26,0.95)] h-full overflow-auto bg-white transition duration-500",
+        isActive ? "scale-75 rounded-xl" : "scale-100 rounded-none",
       )}
     >
       {children}
