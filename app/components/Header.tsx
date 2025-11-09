@@ -3,7 +3,7 @@
 import Link from "next/link"
 import styles from "./Header.module.scss"
 import { useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
+import { cn, fluid } from "@/lib/utils"
 import Container from "./Container"
 import { useMenu } from "@/contexts/MenuContext"
 import { usePathname } from "next/navigation"
@@ -72,25 +72,30 @@ const Header = () => {
     setIsActive(!isActive)
   }
 
+  const timings = ["delay-0", "delay-40", "delay-60", "delay-80", "delay-100"]
+
   return (
     <header className="fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center" ref={headerRef}>
       <Container className="flex justify-end">
         <div className="relative">
           <ul
             className={cn(
-              "absolute right-0 top-[calc(100%+16px)] flex min-w-48 origin-top list-none flex-col gap-px rounded-2xl bg-white/50 p-4 backdrop-blur-[20px] transition-all",
-              isActive ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0",
+              "absolute -right-3 top-[calc(100%+16px)] flex min-w-80 origin-top list-none flex-col gap-px rounded-2xl transition-all",
+              // isActive ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0",
             )}
           >
-            {links.map((link) => {
+            {links.map((link, i) => {
               return (
                 <li key={link.title}>
                   <Link
-                    className="hover:bg-black/8 block rounded-sm px-4 py-1 text-right font-medium transition hover:transition-none"
+                    style={{ fontSize: fluid(24, 72) }}
+                    className={cn(
+                      "duration-250 block rounded-lg px-8 py-4 text-right text-7xl backdrop-blur-[20px] hover:duration-0",
+                      "text-white backdrop-blur-[0px] hover:bg-white/10 hover:text-black hover:backdrop-blur-[20px]",
+                      isActive ? "translate-y-0 opacity-100" : "-translate-y-12 opacity-0 delay-0",
+                      timings[i],
+                    )}
                     href={link.url}
-                    onClick={() => {
-                      // setIsActive(false)
-                    }}
                   >
                     {link.title}
                   </Link>
