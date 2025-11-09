@@ -126,7 +126,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
           </h2>
           <p>
             <ScrambleText duration={0.5} delay={0.5} reset={true}>
-              {project.shortDescription}
+              <span className="text-gray-500">{project.shortDescription}</span>
             </ScrambleText>
           </p>
         </div>
