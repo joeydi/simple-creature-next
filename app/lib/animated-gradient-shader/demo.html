@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Mesh Gradient Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
+            max-width: 300px;
+            z-index: 100;
+        }
+
+        .controls h2 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+        }
+
+        .control-group button {
+            width: 100%;
+            padding: 8px;
+            background: #4361ee;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .control-group button:hover {
+            background: #3a86ff;
+        }
+
+        .info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .value-display {
+            font-weight: bold;
+            color: #4cc9f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h2>Gradient Controls</h2>
+        
+        <div class="control-group">
+            <label>Wave Amount: <span class="value-display" id="amount-value">0.20</span></label>
+            <input type="range" id="amount" min="0" max="0.6" step="0.01" value="0.2">
+        </div>
+
+        <div class="control-group">
+            <label>Speed: <span class="value-display" id="speed-value">0.02</span></label>
+            <input type="range" id="speed" min="0" max="0.3" step="0.01" value="0.02">
+        </div>
+
+        <div class="control-group">
+            <label>Frequency: <span class="value-display" id="freq-value">3.0</span></label>
+            <input type="range" id="frequency" min="0" max="10" step="0.1" value="3">
+        </div>
+
+        <div class="control-group">
+            <button id="randomize">Randomize Colors</button>
+        </div>
+
+        <div class="control-group">
+            <button id="wireframe">Toggle Wireframe</button>
+        </div>
+    </div>
+
+    <div class="info">
+        Press SPACE to toggle wireframe
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // Vertex Shader
+        const vertexShader = `
+            uniform vec2 uFrequency;
+            uniform float uTime;
+            uniform float uAmount;
+            uniform float uSpeed;
+            uniform vec3 uColor[5];
+
+            varying vec2 vUv;
+            varying vec3 vColor;
+
+            vec4 permute(vec4 x) {
+                return mod(((x*34.0)+1.0)*x, 289.0);
+            }
+
+            vec4 taylorInvSqrt(vec4 r) {
+                return 1.79284291400159 - 0.85373472095314 * r;
+            }
+
+            float snoise(vec3 v) {
+                const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+                const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+
+                vec3 i  = floor(v + dot(v, C.yyy));
+                vec3 x0 = v - i + dot(i, C.xxx);
+
+                vec3 g = step(x0.yzx, x0.xyz);
+                vec3 l = 1.0 - g;
+                vec3 i1 = min(g.xyz, l.zxy);
+                vec3 i2 = max(g.xyz, l.zxy);
+
+                vec3 x1 = x0 - i1 + 1.0 * C.xxx;
+                vec3 x2 = x0 - i2 + 2.0 * C.xxx;
+                vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+
+                i = mod(i, 289.0);
+                vec4 p = permute(permute(permute(
+                    i.z + vec4(0.0, i1.z, i2.z, 1.0))
+                    + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+                    + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+
+                float n_ = 1.0/7.0;
+                vec3 ns = n_ * D.wyz - D.xzx;
+
+                vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+
+                vec4 x_ = floor(j * ns.z);
+                vec4 y_ = floor(j - 7.0 * x_);
+
+                vec4 x = x_ *ns.x + ns.yyyy;
+                vec4 y = y_ *ns.x + ns.yyyy;
+                vec4 h = 1.0 - abs(x) - abs(y);
+
+                vec4 b0 = vec4(x.xy, y.xy);
+                vec4 b1 = vec4(x.zw, y.zw);
+
+                vec4 s0 = floor(b0)*2.0 + 1.0;
+                vec4 s1 = floor(b1)*2.0 + 1.0;
+                vec4 sh = -step(h, vec4(0.0));
+
+                vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+
+                vec3 p0 = vec3(a0.xy, h.x);
+                vec3 p1 = vec3(a0.zw, h.y);
+                vec3 p2 = vec3(a1.xy, h.z);
+                vec3 p3 = vec3(a1.zw, h.w);
+
+                vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
+                p0 *= norm.x;
+                p1 *= norm.y;
+                p2 *= norm.z;
+                p3 *= norm.w;
+
+                vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                m = m * m;
+                return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+            }
+
+            void main() {
+                vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+
+                vec2 noiseCoord = uv * vec2(uFrequency.x, uFrequency.y);
+
+                float noise = snoise(vec3(noiseCoord.x + uTime*0.02, noiseCoord.y, uTime * uSpeed));
+                modelPosition.y += noise * uAmount;
+
+                vColor = uColor[4];
+
+                for(int i = 0; i < 4; i++) {
+                    float noiseFlow = 0.0002 + float(i) * 0.05;
+                    float noiseSpeed = 0.0001 + float(i) * 0.03;
+                    float noiseSeed = 1.0 + float(i) * 10.0;
+                    vec2 noiseFreq = vec2(0.3, 0.6);
+                    float noiseFloor = 0.1;
+                    float noiseCeiling = 0.6 + float(i) * 0.08;
+
+                    float noise = smoothstep(
+                        noiseFloor, 
+                        noiseCeiling, 
+                        snoise(vec3(
+                            noiseCoord.x * noiseFreq.x + uTime * noiseFlow, 
+                            noiseCoord.y * noiseFreq.y, 
+                            uTime * noiseSpeed + noiseSeed
+                        ))
+                    );
+
+                    vColor = mix(vColor, uColor[i], noise);
+                }
+
+                vec4 viewPosition = viewMatrix * modelPosition;
+                vec4 projectedPosition = projectionMatrix * viewPosition;
+
+                gl_Position = projectedPosition;
+                vUv = uv;
+            }
+        `;
+
+        // Fragment Shader
+        const fragmentShader = `
+            precision mediump float;
+
+            varying vec2 vUv;
+            varying vec3 vColor;
+
+            uniform float uTime;
+
+            void main() {
+                gl_FragColor = vec4(vColor, 1.0);
+            }
+        `;
+
+        // Color palettes
+        const palettes = [
+            ['#8ecae6', '#219ebc', '#023047', '#ffb703', '#fb8500'], // Ocean
+            ['#ff006e', '#fb5607', '#ffbe0b', '#8338ec', '#3a86ff'], // Sunset
+            ['#d8f3dc', '#95d5b2', '#52b788', '#2d6a4f', '#1b4332'], // Forest
+            ['#7209b7', '#560bad', '#3a0ca3', '#4361ee', '#4cc9f0'], // Neon
+            ['#ffcdb2', '#ffb4a2', '#e5989b', '#b5838d', '#6d6875'], // Earth
+        ];
+
+        // Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        // Camera position
+        camera.position.set(0, 0.5, 0.4);
+        camera.lookAt(0, 0, 0);
+
+        // Create gradient material
+        const colors = palettes[0].map(c => new THREE.Color(c));
+        const material = new THREE.ShaderMaterial({
+            uniforms: {
+                uFrequency: { value: new THREE.Vector2(3, 6) },
+                uTime: { value: 0 },
+                uColor: { value: colors },
+                uAmount: { value: 0.2 },
+                uSpeed: { value: 0.02 }
+            },
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            wireframe: false
+        });
+
+        // Create mesh
+        const geometry = new THREE.PlaneGeometry(1.5, 1.5, 200, 200);
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.rotation.x = -Math.PI / 2;
+        scene.add(mesh);
+
+        // Animation
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const elapsedTime = clock.getElapsedTime();
+            material.uniforms.uTime.value = elapsedTime;
+            
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Controls
+        const amountSlider = document.getElementById('amount');
+        const speedSlider = document.getElementById('speed');
+        const frequencySlider = document.getElementById('frequency');
+        const randomizeBtn = document.getElementById('randomize');
+        const wireframeBtn = document.getElementById('wireframe');
+
+        amountSlider.addEventListener('input', (e) => {
+            material.uniforms.uAmount.value = parseFloat(e.target.value);
+            document.getElementById('amount-value').textContent = e.target.value;
+        });
+
+        speedSlider.addEventListener('input', (e) => {
+            material.uniforms.uSpeed.value = parseFloat(e.target.value);
+            document.getElementById('speed-value').textContent = e.target.value;
+        });
+
+        frequencySlider.addEventListener('input', (e) => {
+            const freq = parseFloat(e.target.value);
+            material.uniforms.uFrequency.value.x = freq;
+            document.getElementById('freq-value').textContent = e.target.value;
+        });
+
+        randomizeBtn.addEventListener('click', () => {
+            const palette = palettes[Math.floor(Math.random() * palettes.length)];
+            const newColors = palette.map(c => new THREE.Color(c));
+            material.uniforms.uColor.value = newColors;
+        });
+
+        wireframeBtn.addEventListener('click', () => {
+            material.wireframe = !material.wireframe;
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                material.wireframe = !material.wireframe;
+            }
+        });
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
