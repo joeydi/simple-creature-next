@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useRef } from "react"
 import { setupGLContext, drawVideo } from "stacked-alpha-video/gl-helpers"
 
@@ -37,7 +39,7 @@ export const HeroVideo = () => {
         playsInline
         muted
         loop
-        src="/clothRock2_alpha.mp4"
+        src="/clothLoop_alpha.mp4"
       ></video>
       <canvas
         ref={canvasRef}
