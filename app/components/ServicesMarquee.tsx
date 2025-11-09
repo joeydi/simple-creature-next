@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Container from "@/components/Container"
 import MaskHeading from "@/components/MaskHeading"
+import { fluid } from "@/lib/utils"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -79,7 +80,11 @@ const ServicesMarquee = () => {
         </h2>
       </Container>
       <div ref={spacerRef} className="overflow-hidden bg-black">
-        <div ref={marqueeRef} className="text-h1 perspective-[100vw] -my-[100px] flex flex-col bg-black text-white">
+        <div
+          ref={marqueeRef}
+          style={{ fontSize: fluid(90, 180) }}
+          className="text-h1 perspective-[100vw] -my-[100px] flex flex-col bg-black text-white"
+        >
           <MarqueeSpan>
             Strategy &bull; Design &bull; Motion &bull; Consulting &bull; Interactive &bull; Production
           </MarqueeSpan>
@@ -94,7 +99,6 @@ const ServicesMarquee = () => {
           <MarqueeSpan>
             Strategy &bull; Design &bull; Motion &bull; Consulting &bull; Interactive &bull; Production
           </MarqueeSpan>
-          <MarqueeSpan>Direction &bull; User Experience &bull; Branding &bull; Installations</MarqueeSpan>
         </div>
       </div>
     </section>
