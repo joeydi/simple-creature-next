@@ -11,6 +11,7 @@ import LogoDistortion from "./LogoDistortion"
 import ScrambleText from "@/components/ScrambleText"
 import SplitHeading from "./SplitHeading"
 import { HeroVideo } from "./HeroVideo"
+import AnimatedGradient from "./animated-gradient"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -20,7 +21,7 @@ const Hero = () => {
 
   useGSAP(() => {
     gsap.to(logoRef.current, {
-      yPercent: 50,
+      yPercent: -25,
       ease: "none",
       scrollTrigger: {
         trigger: "main",
@@ -54,7 +55,14 @@ const Hero = () => {
           </Column>
         </Row>
         <div className="mb-(--spacing-xl) rounded-(--media-radius) relative aspect-video overflow-hidden bg-black">
-          <div ref={logoRef} className="aspect-1218/424 absolute left-[2%] top-[4%] w-[96%] text-gray-800">
+          <AnimatedGradient
+            colors={["#B6FD6E", "#4A79A6", "#1A3EBF", "#000000", "#4A79A6"]}
+            amount={0.15}
+            frequencyX={2}
+            frequencyY={2}
+            speed={0.2}
+          />
+          <div ref={logoRef} className="aspect-1217/1401 absolute left-[2%] top-[4%] w-[96%] text-gray-800">
             <LogoDistortion />
           </div>
           <HeroVideo />

@@ -3,8 +3,6 @@
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
 import { AnimatedGradient as AnimatedGradientShader } from "@/lib/animated-gradient-shader/animated-gradient-shader"
-import { useMenu } from "@/contexts/MenuContext"
-import { cn } from "@/lib/utils"
 
 interface AnimatedGradientProps {
   colors?: string[]
@@ -12,6 +10,7 @@ interface AnimatedGradientProps {
   amount?: number
   frequencyX?: number
   frequencyY?: number
+  isAnimating?: boolean
 }
 
 export default function AnimatedGradient({
@@ -20,15 +19,15 @@ export default function AnimatedGradient({
   amount = 0.2,
   frequencyX = 3,
   frequencyY = 6,
+  isAnimating = true,
 }: AnimatedGradientProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const sceneRef = useRef<THREE.Scene | null>(null)
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const gradientRef = useRef<AnimatedGradientShader | null>(null)
-  const clockRef = useRef<THREE.Clock | null>(null)
+  const clockRef = useRef<THREE.Clock>(new THREE.Clock())
   const animationFrameIdRef = useRef<number | null>(null)
-  const { isActive } = useMenu()
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -85,10 +84,6 @@ export default function AnimatedGradient({
       )
     }
 
-    // Create clock
-    const clock = new THREE.Clock()
-    clockRef.current = clock
-
     // Handle resize
     const handleResize = () => {
       if (!cameraRef.current || !rendererRef.current || !gradientRef.current) return
@@ -138,39 +133,29 @@ export default function AnimatedGradient({
     }
   }, [colors, speed, amount, frequencyX, frequencyY])
 
-  // Control animation based on isActive state
+  // Control animation based on isAnimating state
   useEffect(() => {
     if (!rendererRef.current || !gradientRef.current || !clockRef.current || !cameraRef.current) return
 
     const animate = () => {
-      if (isActive && rendererRef.current && gradientRef.current && clockRef.current && cameraRef.current) {
+      if (isAnimating && rendererRef.current && gradientRef.current && clockRef.current && cameraRef.current) {
         const elapsedTime = clockRef.current.getElapsedTime()
         gradientRef.current.update(elapsedTime)
         rendererRef.current.render(sceneRef.current!, cameraRef.current)
-
         animationFrameIdRef.current = requestAnimationFrame(animate)
       }
     }
 
-    if (isActive) {
+    if (isAnimating) {
       animate()
     } else {
-      // Cancel animation when menu closes
+      // Cancel animation
       if (animationFrameIdRef.current) {
         cancelAnimationFrame(animationFrameIdRef.current)
         animationFrameIdRef.current = null
       }
     }
-  }, [isActive])
+  }, [isAnimating])
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className={cn(
-        "fixed left-0 top-0 -z-10 h-screen w-screen transition-transform duration-500",
-        "ease-[cubic-bezier(0.62,0.21,0,1)]",
-        isActive ? "scale-100" : "scale-200",
-      )}
-    />
-  )
+  return <canvas ref={canvasRef} className="absolute h-full w-full" />
 }

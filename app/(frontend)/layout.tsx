@@ -7,7 +7,7 @@ import "@/styles/tailwind.css"
 import "@/styles/global.scss"
 import { cn } from "@/lib/utils"
 import SmoothScroller from "@/components/SmoothScroller"
-import AnimatedGradient from "@/components/animated-gradient"
+import BackgroundGradient from "@/components/background-gradient"
 
 const clash = localFont({
   src: "../fonts/ClashGrotesk-Variable.woff2",
@@ -34,13 +34,7 @@ export default function RootLayout({
             <main>{children}</main>
             <Footer />
           </SmoothScroller>
-          <AnimatedGradient
-            colors={["#B6FD6E", "#4A79A6", "#1A3EBF", "#000000", "#F43791"]}
-            amount={0.1}
-            frequencyX={2}
-            frequencyY={3}
-            speed={0.1}
-          />
+          <BackgroundGradient />
         </MenuProvider>
       </body>
     </html>

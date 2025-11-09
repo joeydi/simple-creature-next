@@ -1,7 +1,7 @@
 import gsap from "gsap"
 import { Renderer, Program, Texture, Mesh, Vec2, Vec4, Geometry, Flowmap } from "ogl"
 import { useEffect, useRef } from "react"
-import Logo from "@/images/logo.svg"
+import Logo from "@/images/logo-background.svg"
 
 const vertex = `
     attribute vec2 uv;
@@ -33,9 +33,9 @@ const fragment = `
         // myUV -= flow.xy * (0.15 * 0.7);
         myUV -= flow.xy * uDeformationSize;
 
-        vec3 tex = texture2D(tWater, myUV).rgb;
+        vec4 tex = texture2D(tWater, myUV);
 
-        gl_FragColor = vec4(tex.r, tex.g, tex.b, 1.0);
+        gl_FragColor = vec4(tex.rgb, tex.a);
     }
 `
 
@@ -50,9 +50,9 @@ const LogoDistortion = () => {
   // Set up OGL canvas
   useEffect(() => {
     const falloff = 0.5
-    const dissipation = 0.9
-    const deformationSize = 0.2
-    const imgSize = [1218, 424]
+    const dissipation = 0.95
+    const deformationSize = 0.0125
+    const imgSize = [1217, 1401]
     const imageAspect = imgSize[1] / imgSize[0]
 
     const div = divRef.current
