@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Container from "@/components/Container"
 import MaskHeading from "@/components/MaskHeading"
 import { fluid } from "@/lib/utils"
+import { CustomEase } from "gsap/all"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -41,7 +42,7 @@ const ServicesMarquee = () => {
             return (window.innerWidth - width) / 4
           },
           duration: 1,
-          ease: "none",
+          ease: CustomEase.create("custom", "M0,0 C0,0 0.007,0.403 0.495,0.497 1.012,0.596 1,1.007 1,1.007 "),
         },
         0,
       )
@@ -56,7 +57,7 @@ const ServicesMarquee = () => {
             return (width - window.innerWidth) / 4
           },
           duration: 1,
-          ease: "none",
+          ease: CustomEase.create("custom", "M0,0 C0,0 0.007,0.403 0.495,0.497 1.012,0.596 1,1.007 1,1.007 "),
         },
         0,
       )
