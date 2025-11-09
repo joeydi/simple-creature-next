@@ -27,6 +27,7 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
               if (asset.assetType === "image") {
                 return (
                   <Image
+                    key={asset.id}
                     src={asset.s3Url}
                     alt={asset.altText || ""}
                     width={asset.metadata.width}
@@ -36,7 +37,17 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
                 )
               }
               if (asset.assetType === "video") {
-                return <video src={asset.s3Url} autoPlay loop muted playsInline className="rounded-(--media-radius)" />
+                return (
+                  <video
+                    key={asset.id}
+                    src={asset.s3Url}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="rounded-(--media-radius)"
+                  />
+                )
               }
             })}
           </div>
