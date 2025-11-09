@@ -50,7 +50,8 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
     <div
       id="smooth-wrapper"
       className={cn(
-        "ease-[cubic-bezier(0.08,0.94,0.26,0.95)] over h-full bg-white transition-all duration-500",
+        "over h-full bg-white transition-all duration-500",
+        "ease-[cubic-bezier(0.62,0.21,0,1)]",
         isActive ? "rounded-4xl -translate-x-[6.125%] scale-75" : "scale-100 rounded-none",
       )}
     >
