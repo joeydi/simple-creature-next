@@ -5,6 +5,7 @@ import Row from "@/components/Row"
 import Column from "@/components/Column"
 import ProjectCard from "@/components/ProjectCard"
 import { getProjects } from "@/(admin)/admin/projects/actions"
+import ScrambleText from "@/components/ScrambleText"
 
 export default async function Work() {
   const { projects } = await getProjects(1, 20)
@@ -12,8 +13,8 @@ export default async function Work() {
   return (
     <>
       <PageHeader>
-        <h1>
-          <MaskHeading>Our Work</MaskHeading>
+        <h1 className="text-h2">
+          <ScrambleText duration={0.5}>Design + Technology</ScrambleText>
         </h1>
       </PageHeader>
       <div className="overflow-hidden">
