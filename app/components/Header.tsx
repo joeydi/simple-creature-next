@@ -72,16 +72,21 @@ const Header = () => {
     setIsActive(!isActive)
   }
 
-  const timings = ["delay-0", "delay-40", "delay-60", "delay-80", "delay-100"]
+  const timings = ["delay-100", "delay-80", "delay-60", "delay-40", "delay-20"]
+  const timingsReverse = ["delay-20", "delay-40", "delay-60", "delay-80", "delay-100"]
+  const translations = ["-translate-y-12", "-translate-y-24", "-translate-y-36", "-translate-y-48", "-translate-y-60"]
 
   return (
     <header className="fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center" ref={headerRef}>
       <Container className="flex justify-end">
         <div className="relative">
+          <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
+            <span>Menu</span>
+          </button>
           <ul
             className={cn(
               "absolute -right-3 top-[calc(100%+16px)] flex min-w-80 origin-top list-none flex-col gap-px rounded-2xl transition-all",
-              // isActive ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0",
+              isActive ? "pointer-events-auto" : "pointer-events-none",
             )}
           >
             {links.map((link, i) => {
@@ -90,10 +95,11 @@ const Header = () => {
                   <Link
                     style={{ fontSize: fluid(24, 72) }}
                     className={cn(
-                      "duration-250 block rounded-lg px-8 py-4 text-right text-7xl backdrop-blur-[20px] hover:duration-0",
-                      "text-white backdrop-blur-[0px] hover:bg-white/10 hover:text-black hover:backdrop-blur-[20px]",
-                      isActive ? "translate-y-0 opacity-100" : "-translate-y-12 opacity-0 delay-0",
-                      timings[i],
+                      "xduration-250 block rounded-lg px-8 py-4 text-right text-7xl backdrop-blur-[20px] hover:duration-0",
+                      "text-white backdrop-blur-[0px] hover:bg-white/15 hover:text-black hover:backdrop-blur-[20px]",
+                      isActive
+                        ? `${timings[i]} translate-y-0 scale-y-100 opacity-100 blur-none`
+                        : `${timingsReverse[i]} ${translations[i]} scale-y-150 opacity-0 blur-md delay-0`,
                     )}
                     href={link.url}
                   >
@@ -103,9 +109,6 @@ const Header = () => {
               )
             })}
           </ul>
-          <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
-            <span>Menu</span>
-          </button>
         </div>
       </Container>
     </header>
