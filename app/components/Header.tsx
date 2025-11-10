@@ -87,17 +87,18 @@ const Header = () => {
             id="menu"
             className={cn(
               "absolute -right-3 top-[calc(100%+16px)] flex min-w-80 origin-top list-none flex-col gap-px rounded-2xl transition-all",
-              isActive ? "pointer-events-auto" : "pointer-events-none",
+              "bg-white/25 p-2 shadow-xl backdrop-blur-[20px] md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none",
+              isActive ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
             )}
           >
             {links.map((link, i) => {
               return (
                 <li key={link.title}>
                   <Link
-                    style={{ fontSize: fluid(24, 72) }}
+                    style={{ fontSize: fluid(36, 72) }}
                     className={cn(
-                      "duration-250 block rounded-lg px-8 py-4 text-right text-7xl backdrop-blur-[20px] hover:duration-0",
-                      "text-white backdrop-blur-[0px] hover:bg-white/15 hover:text-black hover:backdrop-blur-[20px]",
+                      "duration-250 block rounded-lg px-8 py-4 text-right text-7xl font-[450] hover:duration-0 md:font-normal",
+                      "text-black backdrop-blur-none hover:bg-white/15 hover:backdrop-blur-[20px] md:text-white",
                       isActive
                         ? `${timings[i]} translate-y-0 scale-y-100 opacity-100 blur-none`
                         : `${timingsReverse[i]} ${translations[i]} scale-y-150 opacity-0 blur-md delay-0`,
