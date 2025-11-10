@@ -10,7 +10,7 @@ import Column from "@/components/Column"
 import LogoDistortion from "./LogoDistortion"
 import ScrambleText from "@/components/ScrambleText"
 import SplitHeading from "./SplitHeading"
-import { HeroVideo } from "./HeroVideo"
+import { AlphaVideo } from "./alpha-video"
 import AnimatedGradient from "./animated-gradient"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
@@ -65,7 +65,7 @@ const Hero = () => {
           <div ref={logoRef} className="aspect-1217/1401 absolute left-[2%] top-[4%] w-[96%] text-gray-800">
             <LogoDistortion />
           </div>
-          <HeroVideo />
+          <AlphaVideo src="/clothLoop_alpha.mp4" />
         </div>
       </Container>
     </div>

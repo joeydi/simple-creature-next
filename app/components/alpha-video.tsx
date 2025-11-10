@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import { setupGLContext, drawVideo } from "stacked-alpha-video/gl-helpers"
 
-export const HeroVideo = () => {
+export const AlphaVideo = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -39,7 +39,7 @@ export const HeroVideo = () => {
         playsInline
         muted
         loop
-        src="/clothLoop_alpha.mp4"
+        src={src}
       ></video>
       <canvas
         ref={canvasRef}

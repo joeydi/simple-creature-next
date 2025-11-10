@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { PropsWithChildren } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { Environment } from '@react-three/drei'
-import { Bloom, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
+import { PropsWithChildren } from "react"
+import { Canvas } from "@react-three/fiber"
+import { Environment } from "@react-three/drei"
+import { Bloom, EffectComposer, Noise, Vignette } from "@react-three/postprocessing"
 
 type FullscreenSceneProps = PropsWithChildren<{
   /** Optional: camera position */
@@ -16,15 +16,11 @@ export default function Scene({
   children,
   camera = [0, 1, -5],
   // bg = '#6e16a0',
-  bg = '#B944FC',
+  bg = "#B944FC",
 }: FullscreenSceneProps) {
   return (
-    <div style={{ width: '100vw', height: '100vh', backgroundColor: '#6e16a0' }}>
-      <Canvas
-        shadows
-        dpr={[1, 2]}
-        camera={{ position: camera, fov: 50 }}
-      >
+    <div className="rounded-(--media-radius) aspect-video w-full overflow-hidden bg-[#6e16a0]">
+      <Canvas shadows dpr={[1, 2]} camera={{ position: camera, fov: 50 }}>
         {/* Background */}
         <color attach="background" args={[bg]} />
 
@@ -39,10 +35,10 @@ export default function Scene({
         {children}
 
         {/* Nice IBL so models look good out of the box */}
-        <Environment preset="studio" backgroundIntensity={.1} environmentIntensity={.1} />
+        <Environment preset="studio" backgroundIntensity={0.1} environmentIntensity={0.1} />
 
         <EffectComposer>
-            <Bloom luminanceThreshold={0.5} intensity={1.5} levels={9} mipmapBlur />
+          <Bloom luminanceThreshold={0.5} intensity={1.5} levels={9} mipmapBlur />
           <Noise opacity={0.025} />
           <Vignette eskil={false} offset={0.1} darkness={1} />
         </EffectComposer>
