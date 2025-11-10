@@ -5,7 +5,7 @@
 
 :root {
   --grid-gutter: 20px;
-  --container-padding: #{fluid(20, 60, $sm, $xxl)};
+  --container-padding: #{fluid(20, 80, $sm, $max)};
   --container-max-width: 1920px;
 
   --spacing-xxl: #{fluid(80, 160, $sm, $max)};
