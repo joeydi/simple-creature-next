@@ -78,12 +78,13 @@ const Header = () => {
 
   return (
     <header className="fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center" ref={headerRef}>
-      <Container className="flex justify-end">
+      <Container className="flex max-w-none justify-end">
         <div className="relative">
           <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
             <span>Menu</span>
           </button>
           <ul
+            id="menu"
             className={cn(
               "absolute -right-3 top-[calc(100%+16px)] flex min-w-80 origin-top list-none flex-col gap-px rounded-2xl transition-all",
               isActive ? "pointer-events-auto" : "pointer-events-none",
@@ -95,7 +96,7 @@ const Header = () => {
                   <Link
                     style={{ fontSize: fluid(24, 72) }}
                     className={cn(
-                      "xduration-250 block rounded-lg px-8 py-4 text-right text-7xl backdrop-blur-[20px] hover:duration-0",
+                      "duration-250 block rounded-lg px-8 py-4 text-right text-7xl backdrop-blur-[20px] hover:duration-0",
                       "text-white backdrop-blur-[0px] hover:bg-white/15 hover:text-black hover:backdrop-blur-[20px]",
                       isActive
                         ? `${timings[i]} translate-y-0 scale-y-100 opacity-100 blur-none`

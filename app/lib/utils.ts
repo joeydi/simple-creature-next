@@ -40,12 +40,7 @@ export const randomHexColor = () => {
  * fluid(16, 32) // "clamp(16px, calc(14.59px + 0.85vw), 32px)"
  * fluid(20, 80, 768, 1440) // Custom viewport range
  */
-export function fluid(
-  minValue: number,
-  maxValue: number,
-  minWidth: number = 375,
-  maxWidth: number = 1920
-): string {
+export function fluid(minValue: number, maxValue: number, minWidth: number = 375, maxWidth: number = 1920): string {
   const slope = (maxValue - minValue) / (maxWidth - minWidth)
   const yAxisIntersection = -minWidth * slope + minValue
 
@@ -64,10 +59,37 @@ export function fluidReverse(
   minValue: number,
   maxValue: number,
   minWidth: number = 375,
-  maxWidth: number = 1920
+  maxWidth: number = 1920,
 ): string {
   const slope = (maxValue - minValue) / (maxWidth - minWidth)
   const yAxisIntersection = -minWidth * slope + minValue
 
   return `clamp(${maxValue}px, ${yAxisIntersection}px + ${slope * 100}vw, ${minValue}px)`
+}
+
+/**
+ * Calculates the fluid value at a specific viewport width
+ * @param minValue - Minimum value
+ * @param maxValue - Maximum value
+ * @param currentWidth - Current viewport width in pixels
+ * @param minWidth - Minimum viewport width in pixels (default: 375)
+ * @param maxWidth - Maximum viewport width in pixels (default: 1920)
+ * @returns Calculated value (clamped between min and max)
+ * @example
+ * fluidValue(16, 32, 768) // Returns 24.07 (interpolated value at 768px viewport)
+ * fluidValue(100, 300, 1920, 375, 1920) // Returns 300 (at max viewport)
+ */
+export function fluidValue(
+  minValue: number,
+  maxValue: number,
+  minWidth: number = 375,
+  maxWidth: number = 1920,
+  currentWidth: number,
+): number {
+  // Calculate the interpolated value
+  const slope = (maxValue - minValue) / (maxWidth - minWidth)
+  const value = slope * currentWidth + (-minWidth * slope + minValue)
+
+  // Clamp the value between min and max
+  return Math.max(minValue, Math.min(maxValue, value))
 }
