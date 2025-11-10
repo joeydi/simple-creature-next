@@ -24,6 +24,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
       smooth: 0.5,
+      smoothTouch: 0.1,
       effects: true,
       normalizeScroll: true,
     })
@@ -38,7 +39,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
       const windowWidth = window.innerWidth
       const padding = fluidValue(20, 80, undefined, undefined, windowWidth)
       const menuRect = menu.getBoundingClientRect()
-      const availableWidth = menuRect.x - padding * 2
+      const availableWidth = windowWidth > 768 ? menuRect.x - padding * 2 : windowWidth - padding * 2
 
       setScale(availableWidth / windowWidth)
       setTranslate(padding)
@@ -80,7 +81,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
     <div
       id="smooth-wrapper"
       className={cn(
-        "over h-full origin-left bg-white transition-all duration-500",
+        "origin-left bg-white transition-all duration-500",
         "ease-[cubic-bezier(0.62,0.21,0,1)] translate-x-(--translate) scale-(--scale)",
         isActive ? "rounded-4xl" : "rounded-none",
       )}
