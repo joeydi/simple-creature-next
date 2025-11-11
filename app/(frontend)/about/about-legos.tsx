@@ -6,7 +6,11 @@ import James from "@/../public/about-jk.png"
 import PurpleBackground from "@/../public/about-bg-purple.jpg"
 import GreenBackground from "@/../public/about-bg-green.jpg"
 import { useEffect, useRef } from "react"
-import WhiteNoiseGL from "@/components/white-noise"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 export default function AboutLegos() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -14,11 +18,33 @@ export default function AboutLegos() {
   const rightRef = useRef<HTMLDivElement>(null)
   const leftBioRef = useRef<HTMLDivElement>(null)
   const rightBioRef = useRef<HTMLDivElement>(null)
+  const lastX = useRef(40) // Start in the middle
+  const lerpXFactor = useRef(0.05) // Start in the middle
+
+  useGSAP(() => {
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top bottom",
+      onEnter: () => {
+        lastX.current = 90
+      },
+      onEnterBack: () => {
+        lastX.current = 90
+      },
+      onLeave: () => {
+        lastX.current = 40
+        lerpXFactor.current = 0.05
+      },
+      onLeaveBack: () => {
+        lastX.current = 40
+        lerpXFactor.current = 0.05
+      },
+    })
+  })
 
   useEffect(() => {
     if (!containerRef.current) return
 
-    let lastX = 50 // Start in the middle
     let lastTime = performance.now()
     let velocity = 0
     let lerpedVelocity = 0
@@ -29,9 +55,10 @@ export default function AboutLegos() {
     const handleMousemove = (e: MouseEvent) => {
       if (!containerRef.current) return
 
+      lerpXFactor.current = 0.1
+
       const rect = containerRef.current.getBoundingClientRect()
       const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
       const percentage = (x / rect.width) * 100
 
       // Calculate velocity
@@ -39,38 +66,36 @@ export default function AboutLegos() {
       const deltaTime = currentTime - lastTime
 
       if (deltaTime > 0) {
-        const deltaX = percentage - lastX
+        const deltaX = percentage - lastX.current
         velocity = deltaX / deltaTime // pixels per millisecond
 
         // clamp velocity
         velocity = Math.max(-1, Math.min(1, velocity))
       }
 
-      console.log(velocity)
-
-      lastX = percentage
+      lastX.current = percentage
       lastTime = currentTime
     }
 
     const animate = () => {
       // Lerp velocity back to 0 (damping factor)
-      velocity *= 0.75
+      velocity *= 0.9
       lerpedVelocity = lerp(lerpedVelocity, velocity, 0.1)
 
       // Update position based on velocity
-      lerpedX = lerp(lerpedX, lastX, 0.1)
+      lerpedX = lerp(lerpedX, lastX.current, lerpXFactor.current)
 
       // Apply clip-path to left image
       if (leftRef.current) {
-        const curveX = lastX + 40 * lerpedVelocity
-        const clipPath = `shape(from 0 0, line to ${(lerpedX - 0.4).toFixed(3)}% 0, curve to ${(lerpedX - 0.4).toFixed(3)}% 100% with ${curveX.toFixed(3)}% ${lerpedY.toFixed(3)}%, line to 0 100%, line to 0 0`
+        const curveX = lastX.current + 40 * lerpedVelocity
+        const clipPath = `shape(from 0 0, line to ${(lerpedX - 0.4).toFixed(3)}% 0, curve to ${(lerpedX - 0.4).toFixed(3)}% 100% with ${curveX.toFixed(3)}% 50%, line to 0 100%, line to 0 0`
         leftRef.current.style.clipPath = clipPath
       }
 
       // Apply clip-path to right image
       if (rightRef.current) {
-        const curveX = lastX + 40 * lerpedVelocity
-        const clipPath = `shape(from ${lerpedX.toFixed(3)}% 0, line to 100% 0, line to 100% 100%, line to ${lerpedX.toFixed(3)}% 100%, curve to ${lerpedX.toFixed(3)}% 0 with ${curveX.toFixed(3)}% ${lerpedY.toFixed(3)}%)`
+        const curveX = lastX.current + 40 * lerpedVelocity
+        const clipPath = `shape(from ${lerpedX.toFixed(3)}% 0, line to 100% 0, line to 100% 100%, line to ${lerpedX.toFixed(3)}% 100%, curve to ${lerpedX.toFixed(3)}% 0 with ${curveX.toFixed(3)}% 50%)`
         rightRef.current.style.clipPath = clipPath
       }
 
@@ -118,9 +143,15 @@ export default function AboutLegos() {
       </div>
       <div
         ref={leftBioRef}
-        className="absolute left-[10%] top-[20%] w-[40%] max-w-lg rounded-lg bg-black/15 p-12 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms]"
+        className="absolute left-[10%] top-[25%] w-[40%] max-w-lg rounded-lg bg-black/15 p-12 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms]"
       >
-        <h3>Joe di Stefano</h3>
+        <div className="mb-3 flex items-center gap-4">
+          <Image width="800" height="800" className="size-16 rounded-full" src={"/jd.jpg"} alt="Joe di Stefano" />
+          <div>
+            <h3 className="mb-0">Joe di Stefano</h3>
+            <p className="font-sm text-white/70">Technical Director</p>
+          </div>
+        </div>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo.
@@ -128,7 +159,7 @@ export default function AboutLegos() {
       </div>
       <div
         ref={rightBioRef}
-        className="absolute right-[10%] top-[20%] w-[40%] max-w-lg rounded-lg bg-black/15 p-12 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms]"
+        className="absolute right-[10%] top-[25%] w-[40%] max-w-lg rounded-lg bg-black/15 p-12 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms]"
       >
         <h3>James di Stefano</h3>
         <p>
