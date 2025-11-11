@@ -53,7 +53,7 @@ const LogoDistortion = () => {
   useEffect(() => {
     const falloff = 0.5
     const dissipation = 0.95
-    const deformationSize = 0.0125
+    const deformationSize = 0.02
     const imgSize = [1217, 1401]
     const imageAspect = imgSize[1] / imgSize[0]
 

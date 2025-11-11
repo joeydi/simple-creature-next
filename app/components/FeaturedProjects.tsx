@@ -1,5 +1,4 @@
 import Container from "@/components/Container"
-import SplitHeading from "@/components/SplitHeading"
 import ProjectCard from "@/components/ProjectCard"
 import Row from "./Row"
 import Column from "./Column"
@@ -11,11 +10,6 @@ const FeaturedProjects = async () => {
   return (
     <section className="my-(--spacing-xl) perspective-[100vw] overflow-hidden">
       <Container>
-        <h1 className="my-(--spacing-lg) w-[60%] min-w-fit">
-          <SplitHeading>
-            Featured <br /> Projects
-          </SplitHeading>
-        </h1>
         <Row>
           {projects.map((project, i) => {
             return (

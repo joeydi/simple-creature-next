@@ -17,10 +17,12 @@ export default function AboutLegos() {
   useEffect(() => {
     if (!containerRef.current) return
 
+    let lastY = 50 // Start in the middle
     let lastX = 50 // Start in the middle
     let lastTime = performance.now()
     let velocity = 0
     let lerpedVelocity = 0
+    let lerpedY = 50 // Current clip position (0-100%)
     let lerpedX = 50 // Current clip position (0-100%)
     let animationFrameId: number
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t
@@ -30,7 +32,9 @@ export default function AboutLegos() {
 
       const rect = containerRef.current.getBoundingClientRect()
       const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
       const percentage = (x / rect.width) * 100
+      const yPercentage = (y / rect.height) * 100
 
       // Calculate velocity
       const currentTime = performance.now()
@@ -61,10 +65,17 @@ export default function AboutLegos() {
       // Clamp position between 0 and 100
       // lerpedX = Math.max(0, Math.min(100, lerpedX))
 
+      // Apply clip-path to left image
+      if (leftRef.current) {
+        const curveX = lastX + 40 * lerpedVelocity
+        const clipPath = `shape(from 0 0, line to ${(lerpedX - 0.4).toFixed(3)}% 0, curve to ${(lerpedX - 0.4).toFixed(3)}% 100% with ${curveX.toFixed(3)}% ${lerpedY.toFixed(3)}%, line to 0 100%, line to 0 0`
+        leftRef.current.style.clipPath = clipPath
+      }
+
       // Apply clip-path to right image
       if (rightRef.current) {
         const curveX = lastX + 40 * lerpedVelocity
-        const clipPath = `shape(from ${lerpedX.toFixed(3)}% 0, line to 100% 0, line to 100% 100%, line to ${lerpedX.toFixed(3)}% 100%, curve to ${lerpedX.toFixed(3)}% 0 with ${curveX.toFixed(3)}% 50%)`
+        const clipPath = `shape(from ${lerpedX.toFixed(3)}% 0, line to 100% 0, line to 100% 100%, line to ${lerpedX.toFixed(3)}% 100%, curve to ${lerpedX.toFixed(3)}% 0 with ${curveX.toFixed(3)}% ${lerpedY.toFixed(3)}%)`
         rightRef.current.style.clipPath = clipPath
       }
 
