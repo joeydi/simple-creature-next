@@ -72,7 +72,7 @@ const Header = () => {
     setIsActive(!isActive)
   }
 
-  const timings = ["delay-100", "delay-80", "delay-60", "delay-40", "delay-20"]
+  const timings = ["delay-300", "delay-280", "delay-260", "delay-240", "delay-220"]
   const timingsReverse = ["delay-20", "delay-40", "delay-60", "delay-80", "delay-100"]
   const translations = ["-translate-y-12", "-translate-y-24", "-translate-y-36", "-translate-y-48", "-translate-y-60"]
 
@@ -97,7 +97,7 @@ const Header = () => {
                   <Link
                     style={{ fontSize: fluid(36, 72) }}
                     className={cn(
-                      "duration-250 block rounded-lg px-8 py-4 text-right text-7xl font-[450] hover:duration-0 md:font-normal",
+                      "duration-400 block rounded-lg px-8 py-4 text-right text-7xl font-[450] hover:duration-0 md:font-normal",
                       "text-black backdrop-blur-none hover:bg-white/15 hover:backdrop-blur-[20px] md:text-white",
                       isActive
                         ? `${timings[i]} translate-y-0 scale-y-100 opacity-100 blur-none`
