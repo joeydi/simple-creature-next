@@ -140,11 +140,6 @@ export const LogoGrid = () => {
 
   return (
     <section className="relative">
-      <Container>
-        <h2 className="mb-(--spacing-sm)">
-          <MaskHeading reset={true}>Clients We&rsquo;ve Worked With</MaskHeading>
-        </h2>
-      </Container>
       <div ref={maskRef} className="perspective-[100vw] relative aspect-video w-full overflow-hidden bg-black">
         <div className="bg-linear-[to_bottom,rgba(0,0,0,0.5),transparent_100px,transparent_calc(100%-100px),rgba(0,0,0,0.5)] z-1 absolute inset-0"></div>
         <div ref={gridRef} className="transform-3d relative size-[200%]">
