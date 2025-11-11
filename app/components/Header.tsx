@@ -93,15 +93,20 @@ const Header = () => {
           >
             {links.map((link, i) => {
               return (
-                <li key={link.title}>
+                <li
+                  key={link.title}
+                  className={cn(
+                    "duration-400",
+                    isActive
+                      ? `${timings[i]} translate-y-0 scale-y-100 opacity-100 blur-none`
+                      : `${timingsReverse[i]} ${translations[i]} scale-y-150 opacity-0 blur-md delay-0`,
+                  )}
+                >
                   <Link
                     style={{ fontSize: fluid(36, 72) }}
                     className={cn(
-                      "duration-400 block rounded-lg px-8 py-4 text-right text-7xl font-[450] hover:duration-0 md:font-normal",
-                      "text-black backdrop-blur-none hover:bg-white/15 hover:backdrop-blur-[20px] md:text-white",
-                      isActive
-                        ? `${timings[i]} translate-y-0 scale-y-100 opacity-100 blur-none`
-                        : `${timingsReverse[i]} ${translations[i]} scale-y-150 opacity-0 blur-md delay-0`,
+                      "block rounded-lg px-8 py-4 text-right text-7xl font-[450] md:font-normal",
+                      "text-black backdrop-blur-none duration-100 hover:bg-white/15 hover:duration-0 md:text-white",
                     )}
                     href={link.url}
                   >
