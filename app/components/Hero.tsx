@@ -36,16 +36,19 @@ const Hero = () => {
   return (
     <div className="mb-(--spacing-lg)" ref={heroRef}>
       <Container>
-        <div className="mb-(--spacing-sm) rounded-(--media-radius) relative aspect-[2.9] overflow-hidden bg-black">
+        <div className="mb-(--spacing-xs) rounded-(--media-radius) relative aspect-[2.55] overflow-hidden bg-black">
           <AnimatedGradient
-            // colors={["#B6FD6E", "#4A79A6", "#1A3EBF", "#000000", "#4A79A6"]}
+            // colors={["#4A79A6", "#1A3EBF", "#B6FD6E", "#000000", "#4A79A6"]}
             colors={["#1A3EBF", "#4A79A6", "#1A3EBF", "#000000", "#F43791"]}
             amount={0.15}
             frequencyX={2}
             frequencyY={2}
             speed={0.2}
           />
-          <div ref={logoRef} className="aspect-1217/1401 absolute left-0 top-0 w-full">
+          <div
+            ref={logoRef}
+            className="aspect-1217/1401 rounded-(--media-radius) absolute left-0 top-0 w-full overflow-hidden"
+          >
             <LogoDistortion />
           </div>
           <AlphaVideo src="/clothLoop_alpha.mp4" />
@@ -54,22 +57,21 @@ const Hero = () => {
           <Column lg="6">
             <h1 className="ml-4">
               <SplitHeading>
-                Technically <br />
-                Creative
+                Artfully <br />
+                Engineered
               </SplitHeading>
             </h1>
           </Column>
           <Column lg="4" className="lg:mt-4">
             <p data-lag="0.05">
               <ScrambleText>
-                Since 2014, we&rsquo;ve been quietly threading technical craft into the fabric of our work—never loud,
-                always present, and always in service of the story at the center.
+                We believe the best digital work feels effortless &mdash; precisely because it&rsquo;s built with care.
               </ScrambleText>
             </p>
             <p data-lag="0.05">
               <ScrambleText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua.
+                Since 2014, we&rsquo;ve been shaping creative ideas through a lens of technical excellence, bringing
+                clarity, motion, and meaning to the digital world.
               </ScrambleText>
             </p>
           </Column>
