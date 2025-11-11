@@ -13,7 +13,8 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother)
 
 const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   const pathname = usePathname()
-  const { isActive } = useMenu()
+  const { isActive: isMenuActive } = useMenu()
+  const [isActive, setIsActive] = useState(isMenuActive)
   const smoother = useRef<ReturnType<typeof ScrollSmoother.create> | null>(null)
 
   const [scale, setScale] = useState(0.75)
@@ -28,6 +29,22 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
       effects: true,
     })
   })
+
+  useEffect(() => {
+    let timeout: number | undefined = undefined
+
+    if (timeout) window.clearTimeout(timeout)
+
+    if (isMenuActive) {
+      setIsActive(true)
+    } else {
+      timeout = window.setTimeout(() => setIsActive(false), 200)
+    }
+
+    return () => {
+      window.clearTimeout(timeout)
+    }
+  }, [isMenuActive])
 
   useEffect(() => {
     const calc = () => {
