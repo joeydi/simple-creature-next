@@ -6,6 +6,7 @@ import James from "@/../public/about-jk.png"
 import PurpleBackground from "@/../public/about-bg-purple.jpg"
 import GreenBackground from "@/../public/about-bg-green.jpg"
 import { useEffect, useRef } from "react"
+import WhiteNoiseGL from "@/components/white-noise"
 
 export default function AboutLegos() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -101,10 +102,18 @@ export default function AboutLegos() {
     <div ref={containerRef} className="relative aspect-video overflow-hidden">
       <div ref={leftRef} className="absolute inset-0">
         <Image className="absolute inset-0 w-full" src={PurpleBackground} quality={90} alt="" />
+        <div
+          className="absolute inset-0 w-full opacity-20 mix-blend-darken"
+          style={{ backgroundImage: "url(/noise.gif)" }}
+        ></div>
         <Image className="absolute inset-0 w-full" src={Joe} alt="" />
       </div>
       <div ref={rightRef} className="absolute inset-0">
         <Image className="absolute inset-0 w-full" src={GreenBackground} quality={90} alt="" />
+        <div
+          className="absolute inset-0 w-full opacity-20 mix-blend-darken"
+          style={{ backgroundImage: "url(/noise.gif)" }}
+        ></div>
         <Image className="absolute inset-0 w-full" src={James} alt="" />
       </div>
       <div
