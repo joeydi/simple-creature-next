@@ -54,7 +54,7 @@ const LogoDistortion = () => {
     const falloff = 0.5
     const dissipation = 0.95
     const deformationSize = 0.02
-    const imgSize = [1217, 1401]
+    const imgSize = [2560, 2922]
     const imageAspect = imgSize[1] / imgSize[0]
 
     const div = divRef.current
