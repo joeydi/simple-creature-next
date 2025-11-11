@@ -62,7 +62,7 @@ const Hero = () => {
             frequencyY={2}
             speed={0.2}
           />
-          <div ref={logoRef} className="aspect-1217/1401 absolute left-[2%] top-[4%] w-[96%] text-gray-800">
+          <div ref={logoRef} className="aspect-1217/1401 absolute -left-0.5 -top-0.5 w-[calc(100%+4px)]">
             <LogoDistortion />
           </div>
           <AlphaVideo src="/clothLoop_alpha.mp4" />
