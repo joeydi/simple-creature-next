@@ -33,7 +33,7 @@ export default function RootLayout({
           <BackgroundGradient />
           <FooterContent />
           <SmoothScroller>
-            <main className="py-24">{children}</main>
+            <main className="pb-24">{children}</main>
           </SmoothScroller>
         </MenuProvider>
       </body>
