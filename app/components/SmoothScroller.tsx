@@ -30,6 +30,27 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   })
 
   useEffect(() => {
+    let lastScrollY = 0
+
+    const scrollHandler = () => {
+      const scrollY = window.scrollY
+      const scrollRemainder = document.documentElement.scrollHeight - window.innerHeight - scrollY
+
+      if (scrollY > lastScrollY && scrollRemainder < 100) {
+        setIsActive(true)
+      }
+
+      lastScrollY = scrollY
+    }
+
+    window.addEventListener("scroll", scrollHandler)
+
+    return () => {
+      window.removeEventListener("scroll", scrollHandler)
+    }
+  }, [])
+
+  useEffect(() => {
     const calc = () => {
       const menu = document.querySelector("#menu")
 
