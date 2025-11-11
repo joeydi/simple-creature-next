@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <PageHeader>
-        <h1 className="text-h2">
+        <h1 className="text-header">
           <ScrambleText duration={0.5}>intelligence, not artificial</ScrambleText>
         </h1>
       </PageHeader>

@@ -13,7 +13,7 @@ export default async function Work() {
   return (
     <>
       <PageHeader>
-        <h1 className="text-h2">
+        <h1 className="text-header">
           <ScrambleText duration={0.5}>Design + Technology</ScrambleText>
         </h1>
       </PageHeader>

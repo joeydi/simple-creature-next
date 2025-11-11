@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <PageHeader>
-        <h1 className="text-h2">intelligence, not artificial</h1>
+        <h1 className="text-header">intelligence, not artificial</h1>
       </PageHeader>
       <div className="hero">
         <Container>

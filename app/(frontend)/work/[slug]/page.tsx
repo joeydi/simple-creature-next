@@ -27,7 +27,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
   return (
     <>
       <PageHeader>
-        <h1 className="text-h2">
+        <h1 className="text-header">
           <MaskHeading>{project.title}</MaskHeading>
         </h1>
       </PageHeader>

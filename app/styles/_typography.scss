@@ -1,12 +1,14 @@
 body {
   font-family: var(--font-clash), sans-serif;
-  font-size: clamp(16px, 12.5714px + 0.595238vw, 24px);
+  // font-size: clamp(16px, 12.5714px + 0.595238vw, 24px);
+  font-size: #{fluid(18, 24, $sm, $max)};
   line-height: 1.4;
   font-weight: 400;
 }
 
 h1 {
   font-size: clamp(60px, 34.2857px + 4.46429vw, 120px);
+  font-size: #{fluid(60, 120, $sm, $max)};
   line-height: 1;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -14,6 +16,7 @@ h1 {
 
 h2 {
   font-size: clamp(30px, 17.1429px + 2.23214vw, 60px);
+  font-size: #{fluid(30, 60, $sm, $max)};
   line-height: 1.125;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -21,6 +24,7 @@ h2 {
 
 h3 {
   font-size: clamp(18px, 12.8571px + 0.892857vw, 30px);
+  font-size: #{fluid(20, 30, $sm, $max)};
   line-height: 1.25;
   font-weight: 450;
   margin-bottom: 0.75rem;
@@ -28,6 +32,10 @@ h3 {
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+.text-header {
+  font-size: fluid(24, 48, $sm, $max);
 }
 
 p {

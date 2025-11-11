@@ -13,7 +13,7 @@ export default function About() {
   return (
     <>
       <PageHeader>
-        <h1 className="text-h2">
+        <h1 className="text-header">
           <ScrambleText duration={0.5}>a veritable force</ScrambleText>
         </h1>
       </PageHeader>
