@@ -6,6 +6,7 @@ import FeaturedProjects from "@/components/FeaturedProjects"
 import ServicesMarquee from "@/components/ServicesMarquee"
 import { ProjectLifecycle } from "@/components/ProjectLifecycle"
 import { LogoGrid } from "@/components/LogoGrid"
+import Reel from "@/components/Reel"
 
 export default function Home() {
   return (
@@ -19,7 +20,7 @@ export default function Home() {
       {/* <Reel /> */}
       <FeaturedProjects />
       <ServicesMarquee />
-      <ProjectLifecycle />
+      {/* <ProjectLifecycle /> */}
       <LogoGrid />
     </>
   )
