@@ -1,3 +1,5 @@
+"use client"
+
 import gsap from "gsap"
 import { Renderer, Program, Texture, Mesh, Vec2, Vec4, Geometry, Flowmap } from "ogl"
 import { useEffect, useRef } from "react"
