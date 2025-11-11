@@ -3,8 +3,9 @@
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
 import { AnimatedGradient as AnimatedGradientShader } from "@/lib/animated-gradient-shader/animated-gradient-shader"
+import { cn } from "@/lib/utils"
 
-interface AnimatedGradientProps {
+type Props = React.ComponentProps<"canvas"> & {
   colors?: string[]
   speed?: number
   amount?: number
@@ -20,7 +21,8 @@ export default function AnimatedGradient({
   frequencyX = 3,
   frequencyY = 6,
   isAnimating = true,
-}: AnimatedGradientProps) {
+  className,
+}: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const sceneRef = useRef<THREE.Scene | null>(null)
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
@@ -157,5 +159,5 @@ export default function AnimatedGradient({
     }
   }, [isAnimating])
 
-  return <canvas ref={canvasRef} className="absolute h-full w-full" />
+  return <canvas ref={canvasRef} className={cn("absolute h-full w-full", className)} />
 }
