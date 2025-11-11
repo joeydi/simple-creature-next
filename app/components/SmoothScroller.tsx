@@ -13,8 +13,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother)
 
 const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   const pathname = usePathname()
-  const { isActive: isMenuActive } = useMenu()
-  const [isActive, setIsActive] = useState(isMenuActive)
+  const { isActive, setIsActive } = useMenu()
   const smoother = useRef<ReturnType<typeof ScrollSmoother.create> | null>(null)
 
   const [scale, setScale] = useState(0.75)
@@ -29,22 +28,6 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
       effects: true,
     })
   })
-
-  useEffect(() => {
-    let timeout: number | undefined = undefined
-
-    if (timeout) window.clearTimeout(timeout)
-
-    if (isMenuActive) {
-      setIsActive(true)
-    } else {
-      timeout = window.setTimeout(() => setIsActive(false), 200)
-    }
-
-    return () => {
-      window.clearTimeout(timeout)
-    }
-  }, [isMenuActive])
 
   useEffect(() => {
     const calc = () => {
@@ -74,16 +57,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   }, [])
 
   useEffect(() => {
-    const id = window.setTimeout(() => {
-      smoother.current?.refresh()
-      ScrollTrigger.refresh()
-    }, 500)
-
-    return () => window.clearTimeout(id)
-  }, [pathname])
-
-  useEffect(() => {
-    smoother.current?.scrollTo(0, false)
+    // smoother.current?.scrollTo(0, false)
 
     const id = requestAnimationFrame(() => {
       smoother.current?.refresh()
@@ -91,6 +65,15 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
     })
 
     return () => window.cancelAnimationFrame(id)
+  }, [pathname])
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      smoother.current?.refresh()
+      ScrollTrigger.refresh()
+    }, 500)
+
+    return () => window.clearTimeout(id)
   }, [pathname])
 
   return (
