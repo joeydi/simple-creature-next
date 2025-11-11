@@ -78,8 +78,6 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   }, [])
 
   useEffect(() => {
-    // smoother.current?.scrollTo(0, false)
-
     const id = requestAnimationFrame(() => {
       smoother.current?.refresh()
       ScrollTrigger.refresh()
@@ -92,7 +90,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
     const id = window.setTimeout(() => {
       smoother.current?.refresh()
       ScrollTrigger.refresh()
-    }, 500)
+    }, 1001)
 
     return () => window.clearTimeout(id)
   }, [pathname])
