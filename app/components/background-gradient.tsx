@@ -10,7 +10,7 @@ export default function BackgroundGradient() {
   return (
     <div
       className={cn(
-        "fixed left-0 top-0 -z-10 h-screen w-screen transition-transform duration-500",
+        "fixed left-0 top-0 -z-10 h-screen w-screen transition-transform duration-1000",
         "ease-[cubic-bezier(0.62,0.21,0,1)]",
         isActive ? "scale-100" : "scale-150",
       )}

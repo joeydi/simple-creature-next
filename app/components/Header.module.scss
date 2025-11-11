@@ -8,10 +8,11 @@
   display: block;
   width: 72px;
   height: 72px;
-  background: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.25);
   border-radius: 50%;
   border: none;
   backdrop-filter: blur(20px);
+  transition: background-color 200ms;
 
   &::before,
   &::after {
@@ -46,6 +47,12 @@
 }
 
 .menuButtonActive {
+  background-color: rgba(255, 255, 255, 0.5);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.75);
+  }
+
   &::before {
     width: 40px;
     transform: translate(-50%, -50%) scale(0.875) rotate(45deg);

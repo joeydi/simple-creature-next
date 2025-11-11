@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import Header from "@/components/Header"
-import Footer from "@/components/Footer"
 import { MenuProvider } from "@/contexts/MenuContext"
 import "@/styles/tailwind.css"
 import "@/styles/global.scss"
 import { cn } from "@/lib/utils"
 import SmoothScroller from "@/components/SmoothScroller"
 import BackgroundGradient from "@/components/background-gradient"
+import FooterContent from "@/components/footer-content"
 
 const clash = localFont({
   src: "../fonts/ClashGrotesk-Variable.woff2",
@@ -30,11 +30,11 @@ export default function RootLayout({
       <body className={cn("h-full bg-indigo-500 antialiased", clash.variable)}>
         <MenuProvider>
           <Header />
-          <SmoothScroller>
-            <main>{children}</main>
-            <Footer />
-          </SmoothScroller>
           <BackgroundGradient />
+          <FooterContent />
+          <SmoothScroller>
+            <main className="py-24">{children}</main>
+          </SmoothScroller>
         </MenuProvider>
       </body>
     </html>
