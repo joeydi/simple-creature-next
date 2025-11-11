@@ -78,7 +78,7 @@ const Header = () => {
 
   return (
     <header className="fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center" ref={headerRef}>
-      <Container className="flex max-w-none justify-end">
+      <Container className="flex justify-end">
         <div className="relative">
           <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
             <span>Menu</span>
