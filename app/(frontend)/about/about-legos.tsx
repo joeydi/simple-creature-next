@@ -161,7 +161,13 @@ export default function AboutLegos() {
         ref={rightBioRef}
         className="absolute right-[10%] top-[25%] w-[40%] max-w-lg rounded-lg bg-black/15 p-12 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms]"
       >
-        <h3>James di Stefano</h3>
+        <div className="mb-3 flex items-center gap-4">
+          <Image width="800" height="800" className="size-16 rounded-full" src={"/jk.jpg"} alt="James Kowalskiadd" />
+          <div>
+            <h3 className="mb-0">James Kowalski</h3>
+            <p className="font-sm text-white/70">Creative Director</p>
+          </div>
+        </div>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo.
