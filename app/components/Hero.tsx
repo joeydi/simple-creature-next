@@ -15,6 +15,8 @@ import AnimatedGradient from "./animated-gradient"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
+const GRADIENT_COLORS = ["#1A3EBF", "#4A79A6", "#1A3EBF", "#000000", "#F43791"]
+
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null)
   const gradientRef = useRef<HTMLDivElement>(null)
@@ -86,14 +88,7 @@ const Hero = () => {
       <Container>
         <div className="mb-(--spacing-xs) rounded-(--media-radius) relative aspect-[2.55] overflow-hidden bg-black">
           <div ref={gradientRef} className="opacity-0">
-            <AnimatedGradient
-              // colors={["#4A79A6", "#1A3EBF", "#B6FD6E", "#000000", "#4A79A6"]}
-              colors={["#1A3EBF", "#4A79A6", "#1A3EBF", "#000000", "#F43791"]}
-              amount={0.15}
-              frequencyX={2}
-              frequencyY={2}
-              speed={0.2}
-            />
+            <AnimatedGradient colors={GRADIENT_COLORS} amount={0.15} frequencyX={2} frequencyY={2} speed={0.2} />
           </div>
           <div ref={logoRef} className="aspect-1217/1401 absolute left-0 top-0 w-full opacity-0">
             <LogoDistortion />

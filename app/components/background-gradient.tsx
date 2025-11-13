@@ -4,7 +4,7 @@ import { useMenu } from "@/contexts/MenuContext"
 import AnimatedGradient from "./animated-gradient"
 import { cn } from "@/lib/utils"
 
-const COLORS = ["#1A3EBF", "#4A79A6", "#1A3EBF", "#000000", "#F43791"]
+const GRADIENT_COLORS = ["#1A3EBF", "#4A79A6", "#1A3EBF", "#000000", "#F43791"]
 
 export default function BackgroundGradient() {
   const { isActive } = useMenu()
@@ -17,7 +17,14 @@ export default function BackgroundGradient() {
         isActive ? "scale-100" : "scale-150",
       )}
     >
-      <AnimatedGradient colors={COLORS} amount={0.1} frequencyX={2} frequencyY={3} speed={0.1} isAnimating={true} />
+      <AnimatedGradient
+        colors={GRADIENT_COLORS}
+        amount={0.1}
+        frequencyX={2}
+        frequencyY={3}
+        speed={0.1}
+        isAnimating={true}
+      />
     </div>
   )
 }
