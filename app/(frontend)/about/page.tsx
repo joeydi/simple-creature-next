@@ -11,7 +11,7 @@ import AboutLegos from "./about-legos"
 
 export default function About() {
   return (
-    <>
+    <main className="pb-(--spacing-xxl)">
       <PageHeader>
         <h1 className="text-header">
           <ScrambleText duration={0.5}>a veritable force</ScrambleText>
@@ -110,7 +110,7 @@ export default function About() {
         </Container>
       </div>
 
-      <div className="my-(--spacing-xxl)">
+      <div>
         <Container>
           <div className="mb-(--spacing-xs)">
             <ScrambleText>
@@ -196,6 +196,6 @@ export default function About() {
           </Row>
         </Container>
       </div>
-    </>
+    </main>
   )
 }

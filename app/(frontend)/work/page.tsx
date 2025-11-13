@@ -1,5 +1,4 @@
 import PageHeader from "@/components/PageHeader"
-import MaskHeading from "@/components/MaskHeading"
 import Container from "@/components/Container"
 import Row from "@/components/Row"
 import Column from "@/components/Column"
@@ -11,14 +10,14 @@ export default async function Work() {
   const { projects } = await getProjects(1, 20)
 
   return (
-    <>
+    <main className="pb-(--spacing-xxl)">
       <PageHeader>
         <h1 className="text-header">
           <ScrambleText duration={0.5}>Design + Technology</ScrambleText>
         </h1>
       </PageHeader>
       <div className="overflow-hidden">
-        <Container className="mb-(--spacing-xxl)">
+        <Container>
           <Row>
             {projects.map((project, i) => {
               return (
@@ -30,6 +29,6 @@ export default async function Work() {
           </Row>
         </Container>
       </div>
-    </>
+    </main>
   )
 }

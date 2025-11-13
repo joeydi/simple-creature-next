@@ -5,7 +5,7 @@ import Column from "@/components/Column"
 
 export default function Home() {
   return (
-    <>
+    <main className="pb-(--spacing-xxl)">
       <PageHeader>
         <h1 className="text-header">intelligence, not artificial</h1>
       </PageHeader>
@@ -101,6 +101,6 @@ export default function Home() {
           </Row>
         </Container>
       </div>
-    </>
+    </main>
   )
 }

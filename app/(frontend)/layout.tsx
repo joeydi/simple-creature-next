@@ -32,9 +32,7 @@ export default function RootLayout({
           <Header />
           <BackgroundGradient />
           <FooterContent />
-          <SmoothScroller>
-            <main className="pb-24">{children}</main>
-          </SmoothScroller>
+          <SmoothScroller>{children}</SmoothScroller>
         </MenuProvider>
       </body>
     </html>

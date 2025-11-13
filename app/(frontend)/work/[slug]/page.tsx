@@ -25,7 +25,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
   const projectTags = project.tags as Array<[string, string]> | null
 
   return (
-    <>
+    <main className="pb-(--spacing-xxl)">
       <PageHeader>
         <h1 className="text-header">
           <MaskHeading>{project.title}</MaskHeading>
@@ -52,7 +52,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
         const Component = blockMap[block.type as keyof typeof blockMap]
         return <Component key={block.id} block={block as any} />
       })}
-    </>
+    </main>
   )
 }
 
