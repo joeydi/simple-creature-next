@@ -140,7 +140,7 @@ export default function AnimatedGradient({
     if (!rendererRef.current || !gradientRef.current || !clockRef.current || !cameraRef.current) return
 
     const animate = () => {
-      if (isAnimating && rendererRef.current && gradientRef.current && clockRef.current && cameraRef.current) {
+      if (rendererRef.current && gradientRef.current && clockRef.current && cameraRef.current) {
         const elapsedTime = clockRef.current.getElapsedTime()
         gradientRef.current.update(elapsedTime)
         rendererRef.current.render(sceneRef.current!, cameraRef.current)
