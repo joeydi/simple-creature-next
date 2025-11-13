@@ -114,7 +114,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
     >
       <div ref={layerRef}>
         <div className="z-1 rounded-(--media-radius) relative overflow-hidden">
-          <div ref={imageRef} className="aspect-video">
+          <div ref={imageRef} className="relative aspect-video">
             <Image fill src={project.thumbnailUrl || ""} alt={project.thumbnailAlt || ""} />
           </div>
         </div>
