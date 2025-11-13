@@ -26,13 +26,13 @@ export default function AboutLegos() {
       trigger: containerRef.current,
       start: "top bottom",
       onEnter: () => {
-        lastX.current = 90
+        lastX.current = 85
       },
       onEnterBack: () => {
-        lastX.current = 90
+        lastX.current = 15
       },
       onLeave: () => {
-        lastX.current = 40
+        lastX.current = 60
         lerpXFactor.current = 0.05
       },
       onLeaveBack: () => {
