@@ -4,10 +4,8 @@ import ScrambleText from "@/components/ScrambleText"
 import Container from "@/components/Container"
 import Column from "@/components/Column"
 import Row from "@/components/Row"
-import AnimatedGradient from "@/components/animated-gradient"
-import LogoDistortion from "@/components/LogoDistortion"
-import { AlphaVideo } from "@/components/alpha-video"
 import AboutLegos from "./about-legos"
+import AboutHero from "./about-hero"
 
 export default function About() {
   return (
@@ -18,20 +16,8 @@ export default function About() {
         </h1>
       </PageHeader>
 
-      <Container className="relative">
-        <div className="mb-(--spacing-xl) rounded-(--media-radius) relative aspect-video overflow-hidden bg-black">
-          <AnimatedGradient
-            colors={["#4A79A6", "#000000", "#1A3EBF", "#B6FD6E", "#4A79A6"]}
-            amount={0.15}
-            frequencyX={2}
-            frequencyY={2}
-            speed={0.5}
-          />
-          <div className="aspect-1217/1401 absolute -left-0.5 top-0 w-[calc(100%+4px)]">
-            <LogoDistortion />
-          </div>
-          <AlphaVideo src="/aboutLoop_alpha.mp4" />
-        </div>
+      <Container className="mb-(--spacing-xl) relative">
+        <AboutHero />
       </Container>
 
       <div className="my-(--spacing-xxl)">
