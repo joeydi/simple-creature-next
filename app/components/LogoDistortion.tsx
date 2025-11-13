@@ -46,22 +46,18 @@ interface MyVec2 extends Vec2 {
 }
 
 const LogoDistortion = () => {
-  const divRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   // Set up OGL canvas
   useEffect(() => {
     const falloff = 0.5
     const dissipation = 0.95
-    const deformationSize = 0.02
+    const deformationSize = 0.025
     const imgSize = [2560, 2922]
     const imageAspect = imgSize[1] / imgSize[0]
-
-    const div = divRef.current
     const canvas = canvasRef.current
-    if (!div || !canvas) {
-      return
-    }
+
+    if (!canvas) return
 
     const renderer = new Renderer({
       canvas,
@@ -79,17 +75,17 @@ const LogoDistortion = () => {
     const resize = () => {
       let a1, a2
 
-      if (div.clientHeight / div.clientWidth < imageAspect) {
+      if (canvas.clientHeight / canvas.clientWidth < imageAspect) {
         a1 = 1
-        a2 = div.clientHeight / div.clientWidth / imageAspect
+        a2 = canvas.clientHeight / canvas.clientWidth / imageAspect
       } else {
-        a1 = (div.clientWidth / div.clientHeight) * imageAspect
+        a1 = (canvas.clientWidth / canvas.clientHeight) * imageAspect
         a2 = 1
       }
 
-      mesh.program.uniforms.res.value = new Vec4(div.clientWidth, div.clientHeight, a1, a2)
-      renderer.setSize(div.clientWidth, div.clientHeight)
-      aspect = div.clientWidth / div.clientHeight
+      mesh.program.uniforms.res.value = new Vec4(canvas.clientWidth, canvas.clientHeight, a1, a2)
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight)
+      aspect = canvas.clientWidth / canvas.clientHeight
     }
 
     const flowmap = new Flowmap(gl, { falloff, dissipation })
@@ -110,21 +106,17 @@ const LogoDistortion = () => {
 
     const img = new Image()
     img.onload = () => {
-      gsap.to(divRef.current, {
-        opacity: 1,
-        duration: 1,
-      })
       texture.image = img
     }
     img.crossOrigin = "Anonymous"
     img.src = Logo.src
 
     let a1, a2
-    if (div.clientHeight / div.clientWidth < imageAspect) {
+    if (canvas.clientHeight / canvas.clientWidth < imageAspect) {
       a1 = 1
-      a2 = div.clientHeight / div.clientWidth / imageAspect
+      a2 = canvas.clientHeight / canvas.clientWidth / imageAspect
     } else {
-      a1 = (div.clientWidth / div.clientHeight) * imageAspect
+      a1 = (canvas.clientWidth / canvas.clientHeight) * imageAspect
       a2 = 1
     }
 
@@ -208,19 +200,15 @@ const LogoDistortion = () => {
       updateMouse(e.offsetX, e.offsetY)
     }
 
-    div.addEventListener("mousemove", mouseMoveHandler, { passive: true })
+    canvas.addEventListener("mousemove", mouseMoveHandler, { passive: true })
 
     return () => {
       window.removeEventListener("resize", resize)
-      div.removeEventListener("mousemove", mouseMoveHandler)
+      canvas.removeEventListener("mousemove", mouseMoveHandler)
     }
   }, [])
 
-  return (
-    <div ref={divRef} className="absolute left-0 top-0 size-full opacity-0">
-      <canvas ref={canvasRef} className="absolute left-0 top-0 size-full" />
-    </div>
-  )
+  return <canvas ref={canvasRef} className="size-full! absolute left-0 top-0" />
 }
 
 export default LogoDistortion
