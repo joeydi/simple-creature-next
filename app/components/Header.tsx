@@ -77,10 +77,18 @@ const Header = () => {
 
       if ((scrollRemainder < 100 && e.deltaY > 0) || e.deltaY < 0) {
         menuScrollProgress.current = gsap.utils.clamp(0, 600, menuScrollProgress.current + e.deltaY)
+
+        if (circleRef.current) {
+          circleRef.current.style.opacity = "1"
+        }
       }
 
       if (menuScrollProgress.current >= 600) {
         setIsActive(true)
+
+        if (circleRef.current) {
+          circleRef.current.style.opacity = "0"
+        }
       }
     }
 
@@ -157,7 +165,7 @@ const Header = () => {
           <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
             <span>Menu</span>
             <svg
-              className="absolute inset-0"
+              className={cn("absolute inset-0 overflow-visible")}
               width="72"
               height="72"
               viewBox="0 0 72 72"
@@ -165,6 +173,7 @@ const Header = () => {
             >
               <circle
                 ref={circleRef}
+                className="origin-center transition-opacity duration-300"
                 cx="36"
                 cy="36"
                 r="34"
