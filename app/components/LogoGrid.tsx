@@ -84,32 +84,37 @@ export const LogoGrid = () => {
       return
     }
 
-    const gridWidth = grid?.clientWidth
-    const gridHeight = grid?.clientWidth
+    // Batch all reads first to avoid forced reflows
+    const gridWidth = grid.clientWidth
+    const gridHeight = grid.clientWidth
+    const viewportWidth = window.innerWidth
+    const viewportHeight = window.innerHeight
 
-    logos.forEach((logo, i) => {
+    // Pre-calculate all logo positions
+    const logoPositions = Array.from(logos).map((logo, i) => {
       const column = i % columns
       const row = Math.floor(i / columns)
 
-      const x = column * (gridWidth / columns) + (row % 2) * (gridWidth / columns / 2)
-      const y = row * (gridHeight / rows)
-      const z = getRandom(-window.innerWidth / 2, window.innerWidth / 4)
-
-      gsap.set(logo, {
-        x,
-        y,
-        z,
-      })
+      return {
+        x: column * (gridWidth / columns) + (row % 2) * (gridWidth / columns / 2),
+        y: row * (gridHeight / rows),
+        z: getRandom(-viewportWidth / 2, viewportWidth / 4),
+      }
     })
 
     const sizeValues = Array.from(stars).map(() => {
       return getRandomInt(5, 20)
     })
 
+    // Then batch all writes
+    logos.forEach((logo, i) => {
+      gsap.set(logo, logoPositions[i])
+    })
+
     gsap.set(stars, {
-      x: () => getRandomInt(window.innerWidth * -1, window.innerWidth * 3),
-      y: () => getRandomInt(window.innerHeight * -1, window.innerHeight * 2.5),
-      z: () => getRandom(-window.innerWidth * 10, -window.innerWidth),
+      x: () => getRandomInt(viewportWidth * -1, viewportWidth * 3),
+      y: () => getRandomInt(viewportHeight * -1, viewportHeight * 2.5),
+      z: () => getRandom(-viewportWidth * 10, -viewportWidth),
       width: (i) => sizeValues[i],
       height: (i) => sizeValues[i],
     })

@@ -4,8 +4,6 @@ import { useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Container from "@/components/Container"
-import MaskHeading from "@/components/MaskHeading"
 import { fluid } from "@/lib/utils"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
@@ -22,6 +20,11 @@ const ServicesMarquee = () => {
     const oddChildren = marqueeRef.current?.querySelectorAll("span:nth-child(odd)")
     const evenChildren = marqueeRef.current?.querySelectorAll("span:nth-child(even)")
 
+    // Pre-calculate all widths to avoid forced reflows in GSAP callbacks
+    const oddWidths = oddChildren ? Array.from(oddChildren).map((el) => el.getBoundingClientRect().width) : []
+    const evenWidths = evenChildren ? Array.from(evenChildren).map((el) => el.getBoundingClientRect().width) : []
+    const viewportWidth = window.innerWidth
+
     const timeline = gsap.timeline({
       scrollTrigger: {
         invalidateOnRefresh: true,
@@ -36,9 +39,9 @@ const ServicesMarquee = () => {
       timeline.to(
         oddChildren,
         {
-          x: (_, el) => {
-            const width = el.getBoundingClientRect().width
-            return (window.innerWidth - width) / 4
+          x: (index) => {
+            const width = oddWidths[index]
+            return (viewportWidth - width) / 4
           },
           duration: 1,
           ease: "none",
@@ -51,9 +54,9 @@ const ServicesMarquee = () => {
       timeline.to(
         evenChildren,
         {
-          x: (_, el) => {
-            const width = el.getBoundingClientRect().width
-            return (width - window.innerWidth) / 4
+          x: (index) => {
+            const width = evenWidths[index]
+            return (width - viewportWidth) / 4
           },
           duration: 1,
           ease: "none",

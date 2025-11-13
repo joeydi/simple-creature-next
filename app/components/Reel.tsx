@@ -28,6 +28,7 @@ const Reel = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<HTMLDivElement>(null);
   const posterRef = useRef<HTMLImageElement>(null);
+  const cachedButtonRectRef = useRef<DOMRect | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useGSAP(() => {
@@ -137,11 +138,12 @@ const Reel = () => {
   });
 
   const mouseMoveHandler = (e: React.MouseEvent) => {
-    if (!playButtonWrapperRef.current) {
+    if (!playButtonWrapperRef.current || !cachedButtonRectRef.current) {
       return;
     }
 
-    const buttonRect = playButtonWrapperRef.current.getBoundingClientRect();
+    // Use cached rect to avoid forced reflow
+    const buttonRect = cachedButtonRectRef.current;
     const x = e.clientX - buttonRect.x - buttonRect.width / 2;
     const y = e.clientY - buttonRect.y - buttonRect.height / 2;
 
@@ -189,6 +191,22 @@ const Reel = () => {
       setIsActive(false);
     }, 1000);
   };
+
+  // Cache button rect to avoid forced reflows on mousemove
+  useEffect(() => {
+    const updateCachedRect = () => {
+      if (playButtonWrapperRef.current) {
+        cachedButtonRectRef.current = playButtonWrapperRef.current.getBoundingClientRect();
+      }
+    };
+
+    updateCachedRect();
+    window.addEventListener("resize", updateCachedRect);
+
+    return () => {
+      window.removeEventListener("resize", updateCachedRect);
+    };
+  }, []);
 
   useEffect(() => {
     if (isPlaying) {

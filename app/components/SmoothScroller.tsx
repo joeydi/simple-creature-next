@@ -30,29 +30,38 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   })
 
   useEffect(() => {
+    let rafId: number | null = null
+
     const calc = () => {
-      const menu = document.querySelector("#menu")
+      // Cancel previous frame if queued
+      if (rafId) cancelAnimationFrame(rafId)
 
-      if (!menu) return
+      // Use RAF to avoid forced reflows during resize
+      rafId = requestAnimationFrame(() => {
+        const menu = document.querySelector("#menu")
 
-      const windowWidth = window.innerWidth
-      const padding = fluidValue(20, 80, undefined, undefined, windowWidth)
-      const menuRect = menu.getBoundingClientRect()
-      const availableWidth = windowWidth > 768 ? menuRect.x - padding * 2 : windowWidth - padding * 2
+        if (!menu) return
 
-      setScale(availableWidth / windowWidth)
-      setTranslate(padding)
+        const windowWidth = window.innerWidth
+        const padding = fluidValue(20, 80, undefined, undefined, windowWidth)
+        const menuRect = menu.getBoundingClientRect()
+        const availableWidth = windowWidth > 768 ? menuRect.x - padding * 2 : windowWidth - padding * 2
+
+        setScale(availableWidth / windowWidth)
+        setTranslate(padding)
+      })
     }
 
     // Calculate once on mount
     calc()
 
     // Calculate on window resize
-    window.addEventListener("resize", calc)
+    window.addEventListener("resize", calc, { passive: true })
 
     return () => {
       // Remove resize handler on unmount
       window.removeEventListener("resize", calc)
+      if (rafId) cancelAnimationFrame(rafId)
     }
   }, [])
 
