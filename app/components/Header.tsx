@@ -108,7 +108,7 @@ const Header = () => {
     const updateCircle = () => {
       // lerp menuScrollProgress back to zero
       if (!isActiveRef.current) {
-        menuScrollProgress.current *= isWheelingRef.current ? 1 : 0.8
+        menuScrollProgress.current *= isWheelingRef.current ? 0.98 : 0.8
       } else {
         menuScrollProgress.current *= 0.9
       }
