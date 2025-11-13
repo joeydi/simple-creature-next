@@ -30,27 +30,6 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   })
 
   useEffect(() => {
-    let lastScrollY = 0
-
-    const scrollHandler = () => {
-      const scrollY = window.scrollY
-      const scrollRemainder = document.documentElement.scrollHeight - window.innerHeight - scrollY
-
-      if (scrollY > lastScrollY && scrollRemainder < 100) {
-        setIsActive(true)
-      }
-
-      lastScrollY = scrollY
-    }
-
-    window.addEventListener("scroll", scrollHandler)
-
-    return () => {
-      window.removeEventListener("scroll", scrollHandler)
-    }
-  }, [])
-
-  useEffect(() => {
     const calc = () => {
       const menu = document.querySelector("#menu")
 
@@ -96,19 +75,21 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   }, [pathname])
 
   return (
-    <div
-      id="smooth-wrapper"
-      className={cn(
-        "origin-left bg-white transition-all duration-1000",
-        "ease-[cubic-bezier(0.62,0.21,0,1)] translate-x-(--translate) scale-(--scale)",
-        isActive ? "rounded-4xl" : "rounded-none",
-      )}
-      style={{
-        ["--translate" as any]: isActive ? `${translate}px` : "0px",
-        ["--scale" as any]: isActive ? scale : 1,
-      }}
-    >
-      <div id="smooth-content">{children}</div>
+    <div id="menu-scroll" className="fixed inset-0 h-screen origin-[15%]">
+      <div
+        id="smooth-wrapper"
+        className={cn(
+          "origin-left bg-white transition-all duration-1000",
+          "ease-[cubic-bezier(0.62,0.21,0,1)] translate-x-(--translate) scale-(--scale)",
+          isActive ? "rounded-4xl" : "rounded-none",
+        )}
+        style={{
+          ["--translate" as any]: isActive ? `${translate}px` : "0px",
+          ["--scale" as any]: isActive ? scale : 1,
+        }}
+      >
+        <div id="smooth-content">{children}</div>
+      </div>
     </div>
   )
 }

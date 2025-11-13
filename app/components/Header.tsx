@@ -7,6 +7,7 @@ import { cn, fluid } from "@/lib/utils"
 import Container from "./Container"
 import { useMenu } from "@/contexts/MenuContext"
 import { usePathname } from "next/navigation"
+import gsap from "gsap"
 
 const links = [
   {
@@ -36,6 +37,16 @@ const Header = () => {
   const headerRef = useRef<HTMLElement>(null)
   const { isActive, setIsActive } = useMenu()
   const pathname = usePathname()
+  const menuScrollProgress = useRef(0)
+  const menuScrollLerped = useRef(0)
+  const circleRef = useRef<SVGCircleElement>(null)
+  const rafRef = useRef<number | null>(null)
+  const isActiveRef = useRef(isActive)
+  const isWheelingRef = useRef(false)
+
+  useEffect(() => {
+    isActiveRef.current = isActive
+  }, [isActive])
 
   useEffect(() => {
     setIsActive(false)
@@ -48,11 +59,36 @@ const Header = () => {
         setIsActive(false)
       }
     }
-
     window.addEventListener("scroll", scrollHandler, { passive: true })
+
+    let wheelTimeout = 0
+
+    const wheelHandler = (e: WheelEvent) => {
+      if (isActiveRef.current) return
+
+      const scrollY = window.scrollY
+      const scrollRemainder = document.documentElement.scrollHeight - window.innerHeight - scrollY
+
+      isWheelingRef.current = true
+      window.clearTimeout(wheelTimeout)
+      wheelTimeout = window.setTimeout(() => {
+        isWheelingRef.current = false
+      }, 100)
+
+      if ((scrollRemainder < 100 && e.deltaY > 0) || e.deltaY < 0) {
+        menuScrollProgress.current = gsap.utils.clamp(0, 600, menuScrollProgress.current + e.deltaY)
+      }
+
+      if (menuScrollProgress.current >= 600) {
+        setIsActive(true)
+      }
+    }
+
+    window.addEventListener("wheel", wheelHandler)
 
     return () => {
       window.removeEventListener("scroll", scrollHandler)
+      window.removeEventListener("wheel", wheelHandler)
     }
   }, [])
 
@@ -68,6 +104,44 @@ const Header = () => {
     }
   }, [isActive])
 
+  useEffect(() => {
+    const updateCircle = () => {
+      // lerp menuScrollProgress back to zero
+      if (!isActiveRef.current) {
+        menuScrollProgress.current *= isWheelingRef.current ? 1 : 0.8
+      } else {
+        menuScrollProgress.current *= 0.9
+      }
+
+      menuScrollLerped.current = gsap.utils.interpolate(menuScrollLerped.current, menuScrollProgress.current, 0.1)
+
+      const wrapper: HTMLDivElement | null = document.querySelector("#menu-scroll")
+      if (wrapper) {
+        const scale = gsap.utils.mapRange(0, 600, 1, 0.95, menuScrollLerped.current)
+        const scaleClamped = gsap.utils.clamp(0, 1, scale)
+        wrapper.style.scale = `${scaleClamped}`
+      }
+
+      if (circleRef.current) {
+        const circumference = 2 * Math.PI * 34
+        const progress = gsap.utils.mapRange(10, 600, 0, 1, menuScrollProgress.current)
+        const progressClamped = gsap.utils.clamp(0, 1, progress)
+        const offset = circumference - progressClamped * circumference
+        circleRef.current.style.strokeDashoffset = offset.toString()
+      }
+
+      rafRef.current = requestAnimationFrame(updateCircle)
+    }
+
+    rafRef.current = requestAnimationFrame(updateCircle)
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+    }
+  }, [])
+
   const clickHandler = () => {
     setIsActive(!isActive)
   }
@@ -82,6 +156,25 @@ const Header = () => {
         <div className="relative">
           <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
             <span>Menu</span>
+            <svg
+              className="absolute inset-0"
+              width="72"
+              height="72"
+              viewBox="0 0 72 72"
+              style={{ transform: "rotate(-90deg)" }}
+            >
+              <circle
+                ref={circleRef}
+                cx="36"
+                cy="36"
+                r="34"
+                fill="none"
+                stroke="#F43791"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray={2 * Math.PI * 34}
+              />
+            </svg>
           </button>
           <ul
             id="menu"
@@ -96,7 +189,7 @@ const Header = () => {
                 <li
                   key={link.title}
                   className={cn(
-                    "duration-400",
+                    "duration-500",
                     isActive
                       ? `${timings[i]} translate-y-0 scale-y-100 opacity-100 blur-none`
                       : `${timingsReverse[i]} ${translations[i]} scale-y-150 opacity-0 blur-md delay-0`,

@@ -17,7 +17,7 @@ export default function BackgroundGradient() {
         isActive ? "scale-100" : "scale-150",
       )}
     >
-      <AnimatedGradient colors={COLORS} amount={0.1} frequencyX={2} frequencyY={3} speed={0.1} isAnimating={isActive} />
+      <AnimatedGradient colors={COLORS} amount={0.1} frequencyX={2} frequencyY={3} speed={0.1} isAnimating={true} />
     </div>
   )
 }
