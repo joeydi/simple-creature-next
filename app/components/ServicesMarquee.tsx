@@ -74,11 +74,6 @@ const ServicesMarquee = () => {
 
   return (
     <section className="z-1 relative -mb-1">
-      <Container>
-        <h2 className="mb-(--spacing-sm)">
-          <MaskHeading reset={true}>Our Services</MaskHeading>
-        </h2>
-      </Container>
       <div ref={spacerRef} className="overflow-hidden bg-black">
         <div
           ref={marqueeRef}
