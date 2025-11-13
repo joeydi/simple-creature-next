@@ -9,7 +9,7 @@ import MaskHeading from "@/components/MaskHeading"
 import { fluid } from "@/lib/utils"
 import { CustomEase } from "gsap/all"
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(useGSAP, ScrollTrigger, CustomEase)
 
 const MarqueeSpan = ({ children }: React.ComponentProps<"span">) => {
   return <span className="block whitespace-nowrap odd:self-start even:self-end">{children}</span>
