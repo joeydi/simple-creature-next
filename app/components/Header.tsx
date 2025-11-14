@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 import styles from "./Header.module.scss"
 import { useEffect, useRef } from "react"
 import { cn, fluid } from "@/lib/utils"
