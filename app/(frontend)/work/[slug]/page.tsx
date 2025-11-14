@@ -8,6 +8,7 @@ import { FullWidthContent } from "@/components/full-width-content"
 import Row from "@/components/Row"
 import Column from "@/components/Column"
 import { ProjectContent } from "@/lib/schemas/project-content"
+import Main from "@/components/main"
 
 const blockMap = {
   "full-width-media": FullWidthMedia,
@@ -25,7 +26,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
   const projectTags = project.tags as Array<[string, string]> | null
 
   return (
-    <main className="pb-(--spacing-xxl)">
+    <Main className="pb-(--spacing-xxl)">
       <PageHeader>
         <h1 className="text-header">
           <MaskHeading>{project.title}</MaskHeading>
@@ -52,7 +53,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
         const Component = blockMap[block.type as keyof typeof blockMap]
         return <Component key={block.id} block={block as any} />
       })}
-    </main>
+    </Main>
   )
 }
 

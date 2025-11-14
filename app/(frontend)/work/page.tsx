@@ -5,12 +5,13 @@ import Column from "@/components/Column"
 import ProjectCard from "@/components/ProjectCard"
 import { getProjects } from "@/(admin)/admin/projects/actions"
 import ScrambleText from "@/components/ScrambleText"
+import Main from "@/components/main"
 
 export default async function Work() {
   const { projects } = await getProjects(1, 20)
 
   return (
-    <main className="pb-(--spacing-xxl)">
+    <Main className="pb-(--spacing-xxl)">
       <PageHeader>
         <h1 className="text-header">
           <ScrambleText duration={0.5}>Design + Technology</ScrambleText>
@@ -29,6 +30,6 @@ export default async function Work() {
           </Row>
         </Container>
       </div>
-    </main>
+    </Main>
   )
 }
