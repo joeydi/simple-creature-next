@@ -6,10 +6,12 @@ import Column from "@/components/Column"
 import Row from "@/components/Row"
 import AboutLegos from "./about-legos"
 import AboutHero from "./about-hero"
+import Main from "@/components/main"
+import SplitHeading from "@/components/SplitHeading"
 
 export default function About() {
   return (
-    <main className="pb-(--spacing-xxl)">
+    <Main className="pb-(--spacing-xxl)">
       <PageHeader>
         <h1 className="text-header">
           <ScrambleText duration={0.5}>a veritable force</ScrambleText>
@@ -28,13 +30,17 @@ export default function About() {
                 <MaskHeading>Who is we?</MaskHeading>
               </h1>
             </Column>
-            <Column lg="5">
+            <Column lg="5" className="lg:mt-4">
               <p data-lag="0.05" className="text-balance">
                 <ScrambleText>
                   We&rsquo;re James Kowalski and Joe di Stefano—long-time friends and a design-development duo crafting
-                  bold digital experiences. From CMS websites and mobile apps to motion graphics, explainer videos,
-                  visual effects, and UI/UX design, we combine creative design with reliable code to build thoughtful,
-                  engaging digital work.
+                  bold digital experiences.
+                </ScrambleText>
+              </p>
+              <p data-lag="0.05" className="text-balance">
+                <ScrambleText>
+                  From CMS websites and mobile apps to motion graphics, explainer videos, visual effects, and UI/UX
+                  design, we combine creative design with reliable code to build thoughtful, engaging digital work.
                 </ScrambleText>
               </p>
             </Column>
@@ -49,13 +55,13 @@ export default function About() {
           <Row>
             <Column lg="6">
               <h1>
-                <MaskHeading>
+                <SplitHeading>
                   Prowess &amp;
                   <br /> Partnership
-                </MaskHeading>
+                </SplitHeading>
               </h1>
             </Column>
-            <Column lg="5">
+            <Column lg="4" className="lg:mt-4">
               <p data-lag="0.05" className="text-balance">
                 <ScrambleText>
                   We collaborate closely with our clients to design and develop digital solutions that are visually
@@ -182,6 +188,6 @@ export default function About() {
           </Row>
         </Container>
       </div>
-    </main>
+    </Main>
   )
 }
