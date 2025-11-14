@@ -38,3 +38,27 @@
     font: inherit;
   }
 }
+
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+::view-transition-old(main) {
+  animation: 250ms linear both fade-out;
+}
+
+::view-transition-new(main) {
+  animation: 250ms linear 125ms both fade-in;
+}
