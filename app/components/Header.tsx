@@ -1,6 +1,5 @@
 "use client"
 
-import { Link } from "next-view-transitions"
 import styles from "./Header.module.scss"
 import { useEffect, useRef } from "react"
 import { cn, fluid } from "@/lib/utils"
@@ -8,6 +7,7 @@ import Container from "./Container"
 import { useMenu } from "@/contexts/MenuContext"
 import { usePathname } from "next/navigation"
 import gsap from "gsap"
+import Link from "next/link"
 
 const links = [
   {
@@ -136,6 +136,9 @@ const Header = () => {
         const progressClamped = gsap.utils.clamp(0, 1, progress)
         const offset = circumference - progressClamped * circumference
         circleRef.current.style.strokeDashoffset = offset.toString()
+
+        circleRef.current.style.strokeWidth = gsap.utils.mapRange(0, 1, 4, 36, progress).toString()
+        circleRef.current.style.r = gsap.utils.mapRange(0, 1, 34, 18, progress).toString()
       }
 
       rafRef.current = requestAnimationFrame(updateCircle)
@@ -165,7 +168,7 @@ const Header = () => {
           <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
             <span>Menu</span>
             <svg
-              className={cn("absolute inset-0 overflow-visible")}
+              className={cn("absolute inset-0")}
               width="72"
               height="72"
               viewBox="0 0 72 72"
@@ -182,6 +185,7 @@ const Header = () => {
                 strokeWidth="4"
                 strokeLinecap="round"
                 strokeDasharray={2 * Math.PI * 34}
+                strokeDashoffset={2 * Math.PI * 34}
               />
             </svg>
           </button>
