@@ -86,7 +86,7 @@ const Hero = () => {
   return (
     <div className="mb-(--spacing-lg)" ref={heroRef}>
       <Container>
-        <div className="mb-(--spacing-xs) rounded-(--media-radius) relative aspect-[2.55] overflow-hidden bg-black">
+        <div className="mb-(--spacing-xs) rounded-media relative aspect-[2.55] overflow-hidden bg-black">
           <div ref={gradientRef} className="opacity-0">
             <AnimatedGradient colors={GRADIENT_COLORS} amount={0.15} frequencyX={2} frequencyY={2} speed={0.2} />
           </div>

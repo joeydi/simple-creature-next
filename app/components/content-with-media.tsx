@@ -32,21 +32,13 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
                     alt={asset.altText || ""}
                     width={asset.metadata.width}
                     height={asset.metadata.height}
-                    className="rounded-(--media-radius)"
+                    className="rounded-media"
                   />
                 )
               }
               if (asset.assetType === "video") {
                 return (
-                  <video
-                    key={asset.id}
-                    src={asset.s3Url}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="rounded-(--media-radius)"
-                  />
+                  <video key={asset.id} src={asset.s3Url} autoPlay loop muted playsInline className="rounded-media" />
                 )
               }
             })}

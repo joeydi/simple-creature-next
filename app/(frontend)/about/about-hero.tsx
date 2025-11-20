@@ -79,7 +79,7 @@ export default function AboutHero() {
   })
 
   return (
-    <div ref={heroRef} className="rounded-(--media-radius) relative aspect-video overflow-hidden bg-black">
+    <div ref={heroRef} className="rounded-media relative aspect-video overflow-hidden bg-black">
       <div ref={gradientRef} className="opacity-0">
         <AnimatedGradient colors={GRADIENT_COLORS} amount={0.15} frequencyX={2} frequencyY={2} speed={0.5} />
       </div>

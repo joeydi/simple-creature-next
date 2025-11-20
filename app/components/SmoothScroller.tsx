@@ -90,7 +90,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
         className={cn(
           "origin-left bg-white transition-all duration-1000",
           "ease-[cubic-bezier(0.62,0.21,0,1)] translate-x-(--translate) scale-(--scale)",
-          isActive ? "rounded-4xl" : "rounded-none",
+          isActive ? "rounded-media" : "rounded-none",
         )}
         style={{
           ["--translate" as any]: isActive ? `${translate}px` : "0px",

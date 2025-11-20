@@ -19,7 +19,7 @@ export default function Scene({
   bg = "#B944FC",
 }: FullscreenSceneProps) {
   return (
-    <div className="rounded-(--media-radius) aspect-video w-full overflow-hidden bg-[#6e16a0]">
+    <div className="rounded-media aspect-video w-full overflow-hidden bg-[#6e16a0]">
       <Canvas shadows dpr={[1, 2]} camera={{ position: camera, fov: 50 }}>
         {/* Background */}
         <color attach="background" args={[bg]} />
