@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils"
 import SmoothScroller from "@/components/SmoothScroller"
 import BackgroundGradient from "@/components/background-gradient"
 import FooterContent from "@/components/footer-content"
-import { ViewTransitions } from "next-view-transitions"
 
 const clash = localFont({
   src: "../fonts/ClashGrotesk-Variable.woff2",
@@ -33,9 +32,7 @@ export default function RootLayout({
           <Header />
           <BackgroundGradient />
           <FooterContent />
-          <SmoothScroller>
-            <ViewTransitions>{children}</ViewTransitions>
-          </SmoothScroller>
+          <SmoothScroller>{children}</SmoothScroller>
         </MenuProvider>
       </body>
     </html>

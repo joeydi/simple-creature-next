@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
     position: "bottom-right",
   },
   experimental: {
-    viewTransition: true,
     serverActions: {
       bodySizeLimit: "50mb",
     },
