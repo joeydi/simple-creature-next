@@ -5,6 +5,7 @@ import { project, projectCategory, category, asset } from "@/db/schema"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
 import { nanoid } from "nanoid"
 import { desc, count, eq, inArray, or, ilike } from "drizzle-orm"
 import { Asset } from "../assets/types"
@@ -147,6 +148,10 @@ export async function createProject(formData: FormData) {
       })),
     )
   }
+
+  // Revalidate frontend pages
+  revalidatePath("/work")
+  revalidatePath("/")
 
   redirect("/admin/projects")
 }
@@ -385,6 +390,11 @@ export async function updateProject(id: string, formData: FormData) {
       })),
     )
   }
+
+  // Revalidate frontend pages
+  revalidatePath(`/work/${slug}`)
+  revalidatePath("/work")
+  revalidatePath("/")
 }
 
 export async function deleteProject(id: string) {
@@ -399,6 +409,10 @@ export async function deleteProject(id: string) {
 
   // Delete project
   await db.delete(project).where(eq(project.id, id))
+
+  // Revalidate frontend pages
+  revalidatePath("/work")
+  revalidatePath("/")
 
   redirect("/admin/projects")
 }
