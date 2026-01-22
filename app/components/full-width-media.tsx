@@ -14,6 +14,7 @@ export function FullWidthMedia({ block }: { block: FullWidthMediaBlockProps }) {
           alt={asset.altText || ""}
           width={asset.metadata.width}
           height={asset.metadata.height}
+          className="w-full"
         />
       )}
       {asset.assetType === "video" && <video src={asset.s3Url} controls className="w-full" />}
