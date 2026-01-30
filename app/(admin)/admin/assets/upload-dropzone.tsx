@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { uploadAsset } from "./actions"
+import { getUploadUrl, completeAssetUpload } from "./actions"
 import { Button } from "@/components/ui/button"
 import { Upload, X, FileImage, FileVideo, FileText, Check, Clock, Loader2, AlertCircle, RotateCw } from "lucide-react"
 import { nanoid } from "nanoid"
@@ -121,13 +121,37 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
 
   const uploadSingleFile = async (fileWithStatus: FileWithStatus) => {
     updateFileStatus(fileWithStatus.id, "uploading")
+    const file = fileWithStatus.file
 
     try {
-      const formData = new FormData()
-      formData.append("file", fileWithStatus.file)
-      await uploadAsset(formData)
+      // Step 1: Get presigned URL from server
+      const { presignedUrl, s3Key, s3Url } = await getUploadUrl(file.name, file.type, file.size)
+
+      // Step 2: Upload directly to S3
+      const uploadResponse = await fetch(presignedUrl, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
+      })
+
+      if (!uploadResponse.ok) {
+        throw new Error(`S3 upload failed: ${uploadResponse.status} ${uploadResponse.statusText}`)
+      }
+
+      // Step 3: Save asset metadata to database
+      await completeAssetUpload({
+        s3Key,
+        s3Url,
+        filename: file.name,
+        mimeType: file.type,
+        fileSize: file.size,
+      })
+
       updateFileStatus(fileWithStatus.id, "success")
     } catch (err) {
+      console.error("Upload error:", err)
       const errorMessage = err instanceof Error ? err.message : "Failed to upload file"
       updateFileStatus(fileWithStatus.id, "error", errorMessage)
     }

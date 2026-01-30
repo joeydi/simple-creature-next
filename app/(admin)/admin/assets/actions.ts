@@ -7,7 +7,7 @@ import { headers } from "next/headers"
 import { eq, desc, or, ilike, and, count } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-import { uploadToS3, deleteFromS3, generateS3Key } from "@/lib/s3"
+import { uploadToS3, deleteFromS3, generateS3Key, getPresignedUploadUrl, getS3Url } from "@/lib/s3"
 import { nanoid } from "nanoid"
 import sharp from "sharp"
 import type { AssetType, ImageMetadata, VideoMetadata, PDFMetadata, Asset } from "./types"
@@ -112,6 +112,105 @@ export async function uploadAsset(formData: FormData) {
   } catch (error) {
     console.error("Error uploading asset:", error)
     throw error
+  }
+}
+
+// Get presigned URL for direct browser upload to S3
+export async function getUploadUrl(filename: string, contentType: string, fileSize: number) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  // Validate file size (50MB limit)
+  const MAX_FILE_SIZE = 50 * 1024 * 1024
+  if (fileSize > MAX_FILE_SIZE) {
+    throw new Error(`File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`)
+  }
+
+  // Validate file type
+  const isImage = contentType.startsWith("image/")
+  const isVideo = contentType.startsWith("video/")
+  const isPDF = contentType === "application/pdf"
+
+  if (!isImage && !isVideo && !isPDF) {
+    throw new Error("Only images, videos, and PDFs are allowed")
+  }
+
+  try {
+    const s3Key = generateS3Key(filename)
+    const presignedUrl = await getPresignedUploadUrl(s3Key, contentType)
+    const s3Url = getS3Url(s3Key)
+
+    return {
+      presignedUrl,
+      s3Key,
+      s3Url,
+      bucket: process.env.AWS_S3_BUCKET!,
+    }
+  } catch (error) {
+    console.error("Error generating presigned URL:", error)
+    throw new Error("Failed to prepare upload. Please try again.")
+  }
+}
+
+// Complete asset upload after successful S3 upload
+export async function completeAssetUpload(data: {
+  s3Key: string
+  s3Url: string
+  filename: string
+  mimeType: string
+  fileSize: number
+}) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  try {
+    const assetType = getAssetType(data.mimeType)
+
+    // For images, fetch from S3 and extract metadata
+    let metadata: ImageMetadata | VideoMetadata | PDFMetadata | null = null
+    if (assetType === "image") {
+      try {
+        const response = await fetch(data.s3Url)
+        const buffer = Buffer.from(await response.arrayBuffer())
+        metadata = await extractMetadata(buffer, data.mimeType)
+      } catch (err) {
+        console.error("Error extracting image metadata:", err)
+        // Continue without metadata - not a fatal error
+      }
+    }
+
+    const newAsset = (await db
+      .insert(asset)
+      .values({
+        id: nanoid(),
+        filename: data.filename,
+        originalFilename: data.filename,
+        mimeType: data.mimeType,
+        fileSize: data.fileSize,
+        s3Key: data.s3Key,
+        s3Bucket: process.env.AWS_S3_BUCKET!,
+        s3Url: data.s3Url,
+        assetType,
+        metadata: metadata as any,
+        uploadedBy: session.user.id,
+      })
+      .returning()) as Asset[]
+
+    revalidatePath("/admin/assets")
+    return newAsset[0]
+  } catch (error) {
+    console.error("Error completing asset upload:", error)
+    throw new Error("Failed to save asset. The file was uploaded but metadata could not be saved.")
   }
 }
 

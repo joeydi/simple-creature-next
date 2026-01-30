@@ -1,4 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION!,
@@ -80,4 +81,39 @@ export function generateS3Key(filename: string, prefix: string = "assets"): stri
   const nameWithoutExt = filename.replace(`.${extension}`, "").replace(/[^a-zA-Z0-9-_]/g, "-")
 
   return `${prefix}/${timestamp}-${randomString}-${nameWithoutExt}.${extension}`
+}
+
+/**
+ * Generate a presigned URL for direct browser upload to S3
+ * @param key - S3 key (path) for the file
+ * @param contentType - MIME type of the file
+ * @param expiresIn - URL expiration time in seconds (default: 1 hour)
+ * @returns Presigned URL for PUT operation
+ */
+export async function getPresignedUploadUrl(
+  key: string,
+  contentType: string,
+  expiresIn: number = 3600
+): Promise<string> {
+  const bucket = process.env.AWS_S3_BUCKET!
+
+  const command = new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    ContentType: contentType,
+  })
+
+  const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn })
+
+  return presignedUrl
+}
+
+/**
+ * Get the public URL for an S3 object
+ * @param key - S3 key (path) for the file
+ * @returns Public URL for the object
+ */
+export function getS3Url(key: string): string {
+  const bucket = process.env.AWS_S3_BUCKET!
+  return `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
 }
