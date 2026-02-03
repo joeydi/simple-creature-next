@@ -6,6 +6,7 @@ import { getUploadUrl, completeAssetUpload } from "./actions"
 import { Button } from "@/components/ui/button"
 import { Upload, X, FileImage, FileVideo, FileText, Check, Clock, Loader2, AlertCircle, RotateCw } from "lucide-react"
 import { nanoid } from "nanoid"
+import { MAX_FILE_SIZE } from "@/lib/constants"
 
 const ACCEPTED_FILE_TYPES = {
   "image/*": [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"],
@@ -13,7 +14,6 @@ const ACCEPTED_FILE_TYPES = {
   "application/pdf": [".pdf"],
 }
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
 const MAX_FILE_COUNT = 20
 const CONCURRENT_UPLOADS = 3
 

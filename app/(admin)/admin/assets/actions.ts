@@ -8,6 +8,7 @@ import { eq, desc, or, ilike, and, count } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { uploadToS3, deleteFromS3, generateS3Key, getPresignedUploadUrl, getS3Url } from "@/lib/s3"
+import { MAX_FILE_SIZE } from "@/lib/constants"
 import { nanoid } from "nanoid"
 import sharp from "sharp"
 import type { AssetType, ImageMetadata, VideoMetadata, PDFMetadata, Asset } from "./types"
@@ -125,8 +126,7 @@ export async function getUploadUrl(filename: string, contentType: string, fileSi
     throw new Error("Unauthorized")
   }
 
-  // Validate file size (50MB limit)
-  const MAX_FILE_SIZE = 50 * 1024 * 1024
+  // Validate file size
   if (fileSize > MAX_FILE_SIZE) {
     throw new Error(`File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`)
   }

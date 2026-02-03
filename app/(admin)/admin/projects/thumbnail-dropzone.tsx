@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Asset } from "../assets/types"
+import { MAX_FILE_SIZE } from "@/lib/constants"
 
 interface ThumbnailDropzoneProps {
   thumbnailAsset: Asset | null
@@ -15,8 +16,6 @@ interface ThumbnailDropzoneProps {
   onClick?: () => void
   onClear?: () => void
 }
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB for images
 
 export function ThumbnailDropzone({ thumbnailAsset, onAssetUploaded, onClick, onClear }: ThumbnailDropzoneProps) {
   const [isDragging, setIsDragging] = useState(false)
