@@ -5,6 +5,7 @@ import { getProjectBySlug, getProjects } from "@/(admin)/admin/projects/actions"
 import { ContentWithMedia } from "@/components/content-with-media"
 import { FullWidthMedia } from "@/components/full-width-media"
 import { FullWidthContent } from "@/components/full-width-content"
+import { MediaGrid } from "@/components/media-grid"
 import Row from "@/components/Row"
 import Column from "@/components/Column"
 import { ProjectContent } from "@/lib/schemas/project-content"
@@ -14,6 +15,7 @@ const blockMap = {
   "full-width-media": FullWidthMedia,
   "full-width-content": FullWidthContent,
   "content-with-media": ContentWithMedia,
+  "media-grid": MediaGrid,
 }
 
 export default async function Project(props: PageProps<"/work/[slug]">) {
