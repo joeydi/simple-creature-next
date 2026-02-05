@@ -1,38 +1,22 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlignLeft, AlignRight, Image as ImageIcon } from "lucide-react"
+import { Image as ImageIcon } from "lucide-react"
 import { Asset } from "@/lib/schemas/project-content"
 import { MultiAssetSelectorModal } from "./multi-asset-selector-modal"
 import { SortableAssetItem } from "./sortable-asset-item"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from "@dnd-kit/sortable"
-import "@uiw/react-md-editor/markdown-editor.css"
-import "@uiw/react-markdown-preview/markdown.css"
 
-// Dynamically import MDEditor to avoid SSR issues
-const MDEditor = dynamic(() => import("@uiw/react-md-editor").then((mod) => mod.default), {
-  ssr: false,
-})
-
-export interface ContentWithMediaBlockProps {
-  content: string
+export interface MediaGridBlockProps {
   assets: Asset[]
-  align: "left" | "right"
-  width: "small" | "medium" | "large"
-  onChange: (data: {
-    content?: string
-    assets?: Asset[]
-    align?: "left" | "right"
-    width?: "small" | "medium" | "large"
-  }) => void
+  columns: "1" | "2" | "3" | "4"
+  onChange: (data: { assets?: Asset[]; columns?: "1" | "2" | "3" | "4" }) => void
 }
 
-export function ContentWithMediaBlock({ content, assets, align, width, onChange }: ContentWithMediaBlockProps) {
+export function MediaGridBlock({ assets, columns, onChange }: MediaGridBlockProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const sensors = useSensors(
@@ -63,55 +47,23 @@ export function ContentWithMediaBlock({ content, assets, align, width, onChange 
 
   return (
     <div className="space-y-4">
-      {/* Layout Options */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Media Alignment</label>
-          <ToggleGroup
-            type="single"
-            variant="outline"
-            value={align}
-            onValueChange={(value) => value && onChange({ align: value as "left" | "right" })}
-            className="justify-start"
-          >
-            <ToggleGroupItem value="left" aria-label="Align left">
-              <AlignLeft className="size-4" />
-              <span className="ml-1">Left</span>
-            </ToggleGroupItem>
-            <ToggleGroupItem value="right" aria-label="Align right">
-              <AlignRight className="size-4" />
-              <span className="ml-1">Right</span>
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Media Width</label>
-          <Select value={width} onValueChange={(value) => onChange({ width: value as "small" | "medium" | "large" })}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="small">Small (6 / 12)</SelectItem>
-              <SelectItem value="medium">Medium (7 / 12)</SelectItem>
-              <SelectItem value="large">Large (8 / 12)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Content Editor */}
-      <div className="space-y-3">
-        <label className="text-sm font-medium">Content</label>
-        <div data-color-mode="light">
-          <MDEditor
-            value={content}
-            onChange={(value) => onChange({ content: value || "" })}
-            preview="edit"
-            height={200}
-            visibleDragbar={false}
-          />
-        </div>
+      {/* Column Options */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Grid Columns</label>
+        <Select
+          value={columns}
+          onValueChange={(value) => onChange({ columns: value as "1" | "2" | "3" | "4" })}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1">1 Column</SelectItem>
+            <SelectItem value="2">2 Columns</SelectItem>
+            <SelectItem value="3">3 Columns</SelectItem>
+            <SelectItem value="4">4 Columns</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Media Assets */}

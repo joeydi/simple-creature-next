@@ -30,7 +30,7 @@ export function validateProjectContent(content: unknown): content is ProjectCont
       return false
     }
 
-    return ["full-width-media", "full-width-content", "content-with-media"].includes(b.type as string)
+    return ["full-width-media", "full-width-content", "content-with-media", "media-grid"].includes(b.type as string)
   })
 }
 
@@ -71,6 +71,13 @@ export function createNewBlock(type: Block["type"]): Block {
         align: "left",
         width: "medium",
       }
+    case "media-grid":
+      return {
+        id,
+        type: "media-grid",
+        assets: [],
+        columns: "2",
+      }
   }
 }
 
@@ -97,6 +104,8 @@ export function getBlockTypeName(type: Block["type"]): string {
       return "Full-Width Content"
     case "content-with-media":
       return "Content with Media"
+    case "media-grid":
+      return "Media Grid"
   }
 }
 
@@ -111,6 +120,8 @@ export function isBlockValid(block: Block): boolean {
       return block.content.trim().length > 0
     case "content-with-media":
       return block.content.trim().length > 0 && block.assets.length > 0
+    case "media-grid":
+      return block.assets.length > 0
     default:
       return false
   }

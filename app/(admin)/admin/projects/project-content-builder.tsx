@@ -13,7 +13,7 @@ import {
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Plus, FileText, Image as ImageIcon, Layout } from "lucide-react"
+import { Plus, FileText, Image as ImageIcon, Layout, Grid } from "lucide-react"
 import { Project } from "./types"
 import { Block, ProjectContent } from "@/lib/schemas/project-content"
 import { createEmptyContent, createNewBlock, validateProjectContent } from "@/lib/project-content-utils"
@@ -21,6 +21,7 @@ import { SortableBlockWrapper } from "./blocks/sortable-block-wrapper"
 import { FullWidthMediaBlock } from "./blocks/full-width-media-block"
 import { FullWidthContentBlock } from "./blocks/full-width-content-block"
 import { ContentWithMediaBlock } from "./blocks/content-with-media-block"
+import { MediaGridBlock } from "./blocks/media-grid-block"
 
 interface Props {
   project: Project
@@ -106,6 +107,10 @@ export function ProjectContentBuilder({ project }: Props) {
               <Layout className="mr-2 size-4" />
               Content with Media
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => addBlock("media-grid")}>
+              <Grid className="mr-2 size-4" />
+              Media Grid
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -138,6 +143,13 @@ export function ProjectContentBuilder({ project }: Props) {
                       assets={block.assets}
                       align={block.align}
                       width={block.width}
+                      onChange={(updates) => updateBlock(block.id, updates)}
+                    />
+                  )}
+                  {block.type === "media-grid" && (
+                    <MediaGridBlock
+                      assets={block.assets}
+                      columns={block.columns}
                       onChange={(updates) => updateBlock(block.id, updates)}
                     />
                   )}

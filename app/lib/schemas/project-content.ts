@@ -62,11 +62,19 @@ export const contentWithMediaBlockSchema = z.object({
   width: z.enum(["small", "medium", "large"]),
 })
 
+export const mediaGridBlockSchema = z.object({
+  id: z.string(),
+  type: z.literal("media-grid"),
+  assets: z.array(assetSchema),
+  columns: z.enum(["1", "2", "3", "4"]),
+})
+
 // Union of all block types
 export const blockSchema = z.discriminatedUnion("type", [
   fullWidthMediaBlockSchema,
   fullWidthContentBlockSchema,
   contentWithMediaBlockSchema,
+  mediaGridBlockSchema,
 ])
 
 // Main project content schema
@@ -79,5 +87,6 @@ export type Asset = z.infer<typeof assetSchema>
 export type FullWidthMediaBlock = z.infer<typeof fullWidthMediaBlockSchema>
 export type FullWidthContentBlock = z.infer<typeof fullWidthContentBlockSchema>
 export type ContentWithMediaBlock = z.infer<typeof contentWithMediaBlockSchema>
+export type MediaGridBlock = z.infer<typeof mediaGridBlockSchema>
 export type Block = z.infer<typeof blockSchema>
 export type ProjectContent = z.infer<typeof projectContentSchema>

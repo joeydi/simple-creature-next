@@ -3,9 +3,10 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Image as ImageIcon, Video, X } from "lucide-react"
-import Image from "next/image"
 import { Asset } from "@/lib/schemas/project-content"
+import { formatFileSize } from "@/lib/utils"
 import { AssetSelectorModal } from "../asset-selector-modal"
+import { AssetPreview } from "./asset-preview"
 
 export interface FullWidthMediaBlockProps {
   asset: Asset | null
@@ -39,13 +40,7 @@ export function FullWidthMediaBlock({ asset, onChange }: FullWidthMediaBlockProp
         <div className="space-y-2 rounded-lg border bg-muted/50 p-4">
           {/* Preview */}
           <div className="relative aspect-video overflow-hidden rounded-md bg-background">
-            {asset.assetType === "image" ? (
-              <Image src={asset.s3Url} alt={asset.altText || asset.filename} fill className="object-cover" />
-            ) : asset.assetType === "video" ? (
-              <video src={asset.s3Url} controls className="h-full w-full">
-                <track kind="captions" />
-              </video>
-            ) : null}
+            <AssetPreview asset={asset} showControls />
           </div>
 
           {/* Metadata */}
@@ -66,7 +61,7 @@ export function FullWidthMediaBlock({ asset, onChange }: FullWidthMediaBlockProp
                   ? `${asset.metadata.width} × ${asset.metadata.height}`
                   : ""}
               </span>
-              <span>{(asset.fileSize / 1024).toFixed(2)} KB</span>
+              <span>{formatFileSize(asset.fileSize)}</span>
             </div>
           </div>
 
