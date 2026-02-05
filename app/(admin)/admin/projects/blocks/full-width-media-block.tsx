@@ -2,11 +2,10 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Image as ImageIcon, Video, X } from "lucide-react"
+import { Image as ImageIcon, Video } from "lucide-react"
 import { Asset } from "@/lib/schemas/project-content"
-import { formatFileSize } from "@/lib/utils"
 import { AssetSelectorModal } from "../asset-selector-modal"
-import { AssetPreview } from "./asset-preview"
+import { AssetThumbnail } from "./asset-thumbnail"
 
 export interface FullWidthMediaBlockProps {
   asset: Asset | null
@@ -29,45 +28,16 @@ export function FullWidthMediaBlock({ asset, onChange }: FullWidthMediaBlockProp
       <div className="flex items-center justify-between">
         <label className="text-sm font-medium">Media Asset</label>
         {asset && (
-          <Button variant="ghost" size="sm" onClick={handleRemoveAsset}>
-            <X className="mr-1 size-4" />
-            Remove
+          <Button variant="outline" size="sm" onClick={() => setIsModalOpen(true)}>
+            <ImageIcon className="mr-2 size-4" />
+            Manage Asset
           </Button>
         )}
       </div>
 
       {asset ? (
-        <div className="space-y-2 rounded-lg border bg-muted/50 p-4">
-          {/* Preview */}
-          <div className="relative aspect-video overflow-hidden rounded-md bg-background">
-            <AssetPreview asset={asset} showControls />
-          </div>
-
-          {/* Metadata */}
-          <div className="space-y-1 text-sm">
-            {asset.title && (
-              <div>
-                <span className="font-medium">Title:</span> {asset.title}
-              </div>
-            )}
-            {asset.altText && (
-              <div>
-                <span className="font-medium">Alt Text:</span> {asset.altText}
-              </div>
-            )}
-            <div className="flex gap-4 text-muted-foreground">
-              <span>
-                {asset.assetType === "image" && asset.metadata && "width" in asset.metadata
-                  ? `${asset.metadata.width} × ${asset.metadata.height}`
-                  : ""}
-              </span>
-              <span>{formatFileSize(asset.fileSize)}</span>
-            </div>
-          </div>
-
-          <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(true)} className="w-full">
-            Change Media
-          </Button>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+          <AssetThumbnail asset={asset} onRemove={handleRemoveAsset} />
         </div>
       ) : (
         <Button type="button" variant="outline" onClick={() => setIsModalOpen(true)} className="h-24 w-full">

@@ -2,8 +2,8 @@
 
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { GripVertical, X } from "lucide-react"
-import { AssetPreview } from "./asset-preview"
+import { GripVertical } from "lucide-react"
+import { AssetThumbnail } from "./asset-thumbnail"
 import { Asset } from "@/lib/schemas/project-content"
 
 interface SortableAssetItemProps {
@@ -12,7 +12,8 @@ interface SortableAssetItemProps {
 }
 
 /**
- * Sortable asset item for drag-and-drop reordering in blocks
+ * Sortable asset item for drag-and-drop reordering in blocks.
+ * Uses AssetThumbnail with drag handle overlay.
  */
 export function SortableAssetItem({ asset, onRemove }: SortableAssetItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -26,28 +27,18 @@ export function SortableAssetItem({ asset, onRemove }: SortableAssetItemProps) {
   }
 
   return (
-    <div ref={setNodeRef} style={style} className="group relative aspect-video overflow-hidden rounded-lg border">
-      {/* Drag Handle */}
-      <button
-        type="button"
-        className="absolute left-2 top-2 z-10 cursor-grab touch-none rounded bg-background/80 p-1 opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="h-4 w-4" />
-      </button>
-
-      {/* Asset Preview */}
-      <AssetPreview asset={asset} />
-
-      {/* Remove Button */}
-      <button
-        onClick={onRemove}
-        className="absolute right-2 top-2 z-10 rounded-full bg-destructive p-1 opacity-0 transition-opacity group-hover:opacity-100"
-        type="button"
-      >
-        <X className="h-3 w-3 text-destructive-foreground" />
-      </button>
+    <div ref={setNodeRef} style={style}>
+      <AssetThumbnail asset={asset} onRemove={onRemove}>
+        {/* Drag Handle */}
+        <button
+          type="button"
+          className="absolute left-2 top-2 z-10 cursor-grab touch-none rounded bg-background/80 p-1 opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="h-4 w-4" />
+        </button>
+      </AssetThumbnail>
     </div>
   )
 }
