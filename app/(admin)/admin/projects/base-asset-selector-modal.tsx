@@ -57,15 +57,14 @@ export function BaseAssetSelectorModal<T extends BaseAsset>({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[80vh] max-w-4xl flex-col overflow-auto">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
+      <DialogContent className="flex max-h-[80vh] max-w-4xl flex-col overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-y-auto space-y-4">
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
 
-        <UploadDropzone onUploadComplete={onRefresh} />
-
-        <div className="flex flex-1 flex-col space-y-4">
+          <UploadDropzone onUploadComplete={onRefresh} />
           {/* Search Input */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -85,7 +84,7 @@ export function BaseAssetSelectorModal<T extends BaseAsset>({
           )}
 
           {/* Asset Grid */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1">
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
                 <p className="text-sm text-muted-foreground">Loading assets...</p>
@@ -115,10 +114,10 @@ export function BaseAssetSelectorModal<T extends BaseAsset>({
               </div>
             )}
           </div>
-
-          {/* Footer */}
-          <div className="flex justify-end gap-2 border-t pt-4">{footer}</div>
         </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-2 border-t pt-4">{footer}</div>
       </DialogContent>
     </Dialog>
   )
