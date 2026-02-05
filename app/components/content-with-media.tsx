@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm"
 import Row from "./Row"
 import Column from "./Column"
 import Container from "./Container"
+import Sticky from "./Sticky"
 
 export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps }) {
   const widthMap = {
@@ -17,9 +18,11 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
     <Container className="my-(--spacing-xl) flex flex-col gap-8 lg:flex-row">
       <Row className={block.align === "left" ? "flex-row-reverse" : ""}>
         <Column lg={12 - widthMap[block.width]}>
-          <div className="sticky top-0 p-4 lg:p-8 [&>h3]:text-gray-500">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{block.content}</ReactMarkdown>
-          </div>
+          <Sticky>
+            <div className="p-4 lg:p-8 [&>h3]:text-gray-500">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{block.content}</ReactMarkdown>
+            </div>
+          </Sticky>
         </Column>
         <Column lg={widthMap[block.width]}>
           <div className="gap-(--spacing-sm) flex flex-col">
