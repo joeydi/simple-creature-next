@@ -1,18 +1,21 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Loader2 } from "lucide-react"
+import { toast } from "sonner"
 import { createProject } from "../actions"
 import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { AssetSelectorModal } from "../asset-selector-modal"
 import { ThumbnailDropzone } from "../thumbnail-dropzone"
 import { generateSlug } from "../slug-utils"
+import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { Asset } from "../../assets/types"
 import { Category } from "../types"
 import { ProjectContentBuilder } from "../project-content-builder"
@@ -22,6 +25,25 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
   const [isSelectorOpen, setIsSelectorOpen] = useState(false)
   const [slug, setSlug] = useState("")
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false)
+  const [isPending, startTransition] = useTransition()
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+
+    startTransition(async () => {
+      try {
+        await createProject(formData)
+        toast.success("Project created successfully")
+      } catch (error) {
+        if (isRedirectError(error)) {
+          throw error
+        }
+        toast.error("Failed to create project")
+        console.error(error)
+      }
+    })
+  }
 
   const handleAssetSelect = (asset: Asset) => {
     if (asset.id) {
@@ -58,7 +80,7 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
         {/* Main Form */}
         <div className="flex-1">
           <Card className="p-6">
-            <form id="add-form" action={createProject}>
+            <form id="add-form" onSubmit={handleSubmit}>
               <input type="hidden" name="thumbnailId" value={thumbnailAsset?.id || ""} />
               <div className="space-y-6">
                 <div className="space-y-2">
@@ -129,8 +151,15 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Button type="submit" form="add-form" className="w-full">
-                  Create Project
+                <Button type="submit" form="add-form" className="w-full" disabled={isPending}>
+                  {isPending ? (
+                    <>
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    "Create Project"
+                  )}
                 </Button>
               </div>
 

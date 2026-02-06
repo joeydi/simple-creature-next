@@ -17,6 +17,7 @@ import { ThumbnailDropzone } from "../thumbnail-dropzone"
 import { DeleteProjectButton } from "./delete-project-button"
 import { ProjectContentBuilder, ProjectContentBuilderRef } from "../project-content-builder"
 import { Category, Project } from "../types"
+import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { Asset } from "../../assets/types"
 
 interface EditProjectFormProps {
@@ -43,6 +44,9 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
         await updateProjectAction(formData)
         toast.success("Project updated successfully")
       } catch (error) {
+        if (isRedirectError(error)) {
+          throw error
+        }
         toast.error("Failed to update project")
         console.error(error)
       }
