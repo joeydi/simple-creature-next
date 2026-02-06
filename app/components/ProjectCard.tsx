@@ -124,7 +124,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
             />
           </div>
         </div>
-        <div className="m-4">
+        <div className="mx-(--spacing-xs) my-4">
           <h2>
             <MaskHeading delay={0.125} reset={true}>
               {project.title}

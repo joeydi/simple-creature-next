@@ -49,7 +49,7 @@ export default function WorkPageContent({ projects, categories }: Props) {
   return (
     <Container>
       <Row className="mb-(--spacing-lg)">
-        <Column sm="6">
+        <Column sm="6" className="px-(--spacing-xs)">
           <CategoryFilter
             categories={categories}
             activeCategory={activeCategory}

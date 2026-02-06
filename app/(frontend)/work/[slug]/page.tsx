@@ -36,7 +36,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
       </PageHeader>
       <Container className="my-(--spacing-xxl)">
         <Row className="justify-between">
-          <Column md={8} lg={7} xl={8} className="px-4">
+          <Column md={8} lg={7} xl={8} className="px-(--spacing-xs)">
             <h2>{project.longDescription}</h2>
           </Column>
           <Column md={4} xl={3}>
