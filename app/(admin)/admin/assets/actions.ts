@@ -164,6 +164,7 @@ export async function completeAssetUpload(data: {
   filename: string
   mimeType: string
   fileSize: number
+  videoMetadata?: VideoMetadata
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -176,7 +177,7 @@ export async function completeAssetUpload(data: {
   try {
     const assetType = getAssetType(data.mimeType)
 
-    // For images, fetch from S3 and extract metadata
+    // Extract or use provided metadata
     let metadata: ImageMetadata | VideoMetadata | PDFMetadata | null = null
     if (assetType === "image") {
       try {
@@ -187,6 +188,8 @@ export async function completeAssetUpload(data: {
         console.error("Error extracting image metadata:", err)
         // Continue without metadata - not a fatal error
       }
+    } else if (assetType === "video" && data.videoMetadata) {
+      metadata = data.videoMetadata
     }
 
     const newAsset = (await db
@@ -362,6 +365,7 @@ export async function replaceAsset(
     filename: string
     mimeType: string
     fileSize: number
+    videoMetadata?: VideoMetadata
   }
 ) {
   const session = await auth.api.getSession({
@@ -386,7 +390,7 @@ export async function replaceAsset(
 
   const oldS3Key = existingAsset.s3Key
 
-  // Extract metadata for the new file
+  // Extract or use provided metadata for the new file
   let metadata: ImageMetadata | VideoMetadata | PDFMetadata | null = null
   if (newAssetType === "image") {
     try {
@@ -397,6 +401,8 @@ export async function replaceAsset(
       console.error("Error extracting image metadata:", err)
       // Continue without metadata - not a fatal error
     }
+  } else if (newAssetType === "video" && data.videoMetadata) {
+    metadata = data.videoMetadata
   }
 
   // Update database record with new file info (preserves title, description, altText, tags)

@@ -3,6 +3,8 @@
 import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { getUploadUrl, completeAssetUpload } from "./actions"
+import { extractVideoMetadata } from "./utils"
+import type { VideoMetadata } from "./types"
 import { Button } from "@/components/ui/button"
 import { Upload, X, FileImage, FileVideo, FileText, Check, Clock, Loader2, AlertCircle, RotateCw } from "lucide-react"
 import { nanoid } from "nanoid"
@@ -140,13 +142,20 @@ export function UploadDropzone({ onUploadComplete }: { onUploadComplete?: () => 
         throw new Error(`S3 upload failed: ${uploadResponse.status} ${uploadResponse.statusText}`)
       }
 
-      // Step 3: Save asset metadata to database
+      // Step 3: Extract video metadata if applicable
+      let videoMetadata: VideoMetadata | undefined
+      if (file.type.startsWith("video/")) {
+        videoMetadata = await extractVideoMetadata(file)
+      }
+
+      // Step 4: Save asset metadata to database
       await completeAssetUpload({
         s3Key,
         s3Url,
         filename: file.name,
         mimeType: file.type,
         fileSize: file.size,
+        videoMetadata,
       })
 
       updateFileStatus(fileWithStatus.id, "success")

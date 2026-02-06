@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { updateAsset, getUploadUrl, replaceAsset } from "./actions"
+import { extractVideoMetadata } from "./utils"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { FileVideo, FileText, Sparkles, Upload, Loader2 } from "lucide-react"
-import type { Asset, ImageMetadata } from "./types"
+import type { Asset, ImageMetadata, VideoMetadata } from "./types"
 import { AltTextGeneratorDialog } from "./alt-text-generator-dialog"
 import { MAX_FILE_SIZE } from "@/lib/constants"
 
@@ -97,13 +98,20 @@ export function AssetEditModal({
         throw new Error(`Upload failed: ${uploadResponse.status} ${uploadResponse.statusText}`)
       }
 
-      // Step 3: Replace asset in database
+      // Step 3: Extract video metadata if applicable
+      let videoMetadata: VideoMetadata | undefined
+      if (file.type.startsWith("video/")) {
+        videoMetadata = await extractVideoMetadata(file)
+      }
+
+      // Step 4: Replace asset in database
       const updatedAsset = await replaceAsset(currentAsset.id, {
         s3Key,
         s3Url,
         filename: file.name,
         mimeType: file.type,
         fileSize: file.size,
+        videoMetadata,
       })
 
       // Update local state with new asset data
