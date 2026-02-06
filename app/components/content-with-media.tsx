@@ -41,7 +41,17 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
               }
               if (asset.assetType === "video") {
                 return (
-                  <video key={asset.id} src={asset.s3Url} autoPlay loop muted playsInline className="rounded-media" />
+                  <video
+                    key={asset.id}
+                    src={asset.s3Url}
+                    width={asset.metadata?.width}
+                    height={asset.metadata?.height}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="rounded-media bg-white"
+                  />
                 )
               }
             })}

@@ -17,7 +17,18 @@ export function FullWidthMedia({ block }: { block: FullWidthMediaBlockProps }) {
           className="w-full"
         />
       )}
-      {asset.assetType === "video" && <video src={asset.s3Url} autoPlay loop muted playsInline className="w-full" />}
+      {asset.assetType === "video" && (
+        <video
+          src={asset.s3Url}
+          width={asset.metadata?.width}
+          height={asset.metadata?.height}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full bg-white"
+        />
+      )}
     </div>
   )
 }

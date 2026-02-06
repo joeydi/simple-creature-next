@@ -12,7 +12,7 @@ const columnClasses: Record<string, string> = {
 export function MediaGrid({ block }: { block: MediaGridBlockProps }) {
   return (
     <Container className="my-(--spacing-xl)">
-      <div className={`grid gap-(--spacing-sm) ${columnClasses[block.columns]}`}>
+      <div className={`gap-(--spacing-sm) grid ${columnClasses[block.columns]}`}>
         {block.assets.map((asset) => {
           if (asset.assetType === "image") {
             return (
@@ -22,13 +22,23 @@ export function MediaGrid({ block }: { block: MediaGridBlockProps }) {
                 alt={asset.altText || ""}
                 width={asset.metadata.width}
                 height={asset.metadata.height}
-                className="w-full rounded-media"
+                className="rounded-media w-full"
               />
             )
           }
           if (asset.assetType === "video") {
             return (
-              <video key={asset.id} src={asset.s3Url} autoPlay loop muted playsInline className="rounded-media" />
+              <video
+                key={asset.id}
+                src={asset.s3Url}
+                width={asset.metadata?.width}
+                height={asset.metadata?.height}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="rounded-media bg-white"
+              />
             )
           }
         })}
