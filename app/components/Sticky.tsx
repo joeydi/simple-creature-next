@@ -24,7 +24,7 @@ const Sticky = ({ className, children, ...props }: React.ComponentProps<"div">) 
 
   return (
     <div ref={stickyRef} className={cn("min-h-full", className)} {...props}>
-      <div ref={childRef}>{children}</div>
+      <div ref={childRef} className="will-change-transform">{children}</div>
     </div>
   )
 }
