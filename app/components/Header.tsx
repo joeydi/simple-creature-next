@@ -39,7 +39,6 @@ const Header = () => {
   const pathname = usePathname()
   const menuScrollProgress = useRef(0)
   const menuScrollLerped = useRef(0)
-  const circleRef = useRef<SVGCircleElement>(null)
   const rafRef = useRef<number | null>(null)
   const isActiveRef = useRef(isActive)
   const isWheelingRef = useRef(false)
@@ -77,18 +76,10 @@ const Header = () => {
 
       if ((scrollRemainder < 100 && e.deltaY > 0) || e.deltaY < 0) {
         menuScrollProgress.current = gsap.utils.clamp(0, 600, menuScrollProgress.current + e.deltaY)
-
-        if (circleRef.current) {
-          circleRef.current.style.opacity = "1"
-        }
       }
 
       if (menuScrollProgress.current >= 600) {
         setIsActive(true)
-
-        if (circleRef.current) {
-          circleRef.current.style.opacity = "0"
-        }
       }
     }
 
@@ -130,17 +121,6 @@ const Header = () => {
         wrapper.style.scale = `${scaleClamped}`
       }
 
-      if (circleRef.current) {
-        const circumference = 2 * Math.PI * 34
-        const progress = gsap.utils.mapRange(10, 600, 0, 1, menuScrollProgress.current)
-        const progressClamped = gsap.utils.clamp(0, 1, progress)
-        const offset = circumference - progressClamped * circumference
-        circleRef.current.style.strokeDashoffset = offset.toString()
-
-        circleRef.current.style.strokeWidth = gsap.utils.mapRange(0, 1, 4, 36, progress).toString()
-        circleRef.current.style.r = gsap.utils.mapRange(0, 1, 34, 18, progress).toString()
-      }
-
       rafRef.current = requestAnimationFrame(updateCircle)
     }
 
@@ -167,27 +147,6 @@ const Header = () => {
         <div className="relative">
           <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
             <span>Menu</span>
-            <svg
-              className={cn("absolute inset-0")}
-              width="72"
-              height="72"
-              viewBox="0 0 72 72"
-              style={{ transform: "rotate(-90deg)" }}
-            >
-              <circle
-                ref={circleRef}
-                className="origin-center transition-opacity duration-300"
-                cx="36"
-                cy="36"
-                r="34"
-                fill="none"
-                stroke="#F43791"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeDasharray={2 * Math.PI * 34}
-                strokeDashoffset={2 * Math.PI * 34}
-              />
-            </svg>
           </button>
           <ul
             id="menu"
