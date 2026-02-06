@@ -107,7 +107,6 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
     <Link
       ref={cardRef}
       href={`/work/${project.slug}`}
-      style={style}
       className={cn(
         "perspective-[100vw] text-decoration-none block text-inherit",
         align === "left" ? "md:perspective-origin-right" : "md:perspective-origin-left",
