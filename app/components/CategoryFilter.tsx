@@ -37,7 +37,22 @@ export default function CategoryFilter({ categories, activeCategory, onCategoryC
           {category.name}
           <span className={styles.count}>
             <span>(</span>
-            {activeCategory === category.id ? <span className="scale-[1.25]">&times;</span> : category.projectCount}
+            <span
+              className={cn(
+                "scale-160 duration-250 font-light transition-all",
+                activeCategory === category.id ? "" : "scale-80 opacity-0 blur-sm",
+              )}
+            >
+              &times;
+            </span>
+            <span
+              className={cn(
+                "duration-250 transition-all",
+                activeCategory === category.id ? "scale-50 opacity-0 blur-sm" : "",
+              )}
+            >
+              {category.projectCount + 10}
+            </span>
             <span>)</span>
           </span>
         </button>
