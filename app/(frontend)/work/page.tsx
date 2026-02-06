@@ -1,14 +1,12 @@
 import PageHeader from "@/components/PageHeader"
-import Container from "@/components/Container"
-import Row from "@/components/Row"
-import Column from "@/components/Column"
-import ProjectCard from "@/components/ProjectCard"
 import { getProjects } from "@/(admin)/admin/projects/actions"
 import ScrambleText from "@/components/ScrambleText"
 import Main from "@/components/main"
+import WorkPageContent from "./WorkPageContent"
+import { getCategoriesWithCounts } from "./actions"
 
 export default async function Work() {
-  const { projects } = await getProjects(1, 100)
+  const [{ projects }, categories] = await Promise.all([getProjects(1, 100), getCategoriesWithCounts()])
 
   return (
     <Main className="pb-(--spacing-xxl)">
@@ -18,17 +16,7 @@ export default async function Work() {
         </h1>
       </PageHeader>
       <div className="overflow-hidden">
-        <Container>
-          <Row>
-            {projects.map((project, i) => {
-              return (
-                <Column sm="6" key={project.id}>
-                  <ProjectCard align={i % 2 ? "right" : "left"} project={project} />
-                </Column>
-              )
-            })}
-          </Row>
-        </Container>
+        <WorkPageContent projects={projects} categories={categories} />
       </div>
     </Main>
   )

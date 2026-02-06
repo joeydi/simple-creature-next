@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, useRef } from "react"
+import { useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -32,6 +32,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
 
     const timeline = gsap.timeline({
       scrollTrigger: {
+        invalidateOnRefresh: true,
         scrub: true,
         trigger: cardRef.current,
         start: "top bottom",
@@ -106,6 +107,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
     <Link
       ref={cardRef}
       href={`/work/${project.slug}`}
+      style={style}
       className={cn(
         "perspective-[100vw] text-decoration-none block text-inherit",
         align === "left" ? "md:perspective-origin-right" : "md:perspective-origin-left",

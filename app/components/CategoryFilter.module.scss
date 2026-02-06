@@ -1,0 +1,43 @@
+@use "../styles/variables" as *;
+@use "../styles/functions" as *;
+
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filterItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  line-height: 1;
+  font-size: #{fluid(30, 60, $sm, $max)};
+  font-weight: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    color 200ms,
+    opacity 200ms;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.filterItemActive {
+  color: $pink;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.count {
+  transform: translateY(-25%);
+  font-size: 0.6em;
+  opacity: 0.5;
+}
