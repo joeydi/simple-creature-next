@@ -142,9 +142,9 @@ const Header = () => {
   const translations = ["-translate-y-12", "-translate-y-24", "-translate-y-36", "-translate-y-48", "-translate-y-60"]
 
   return (
-    <header className="fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center" ref={headerRef}>
+    <header className="fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center pointer-events-none" ref={headerRef}>
       <Container className="flex justify-end">
-        <div className="relative">
+        <div className="relative pointer-events-auto">
           <button className={cn(styles.menuButton, isActive ? styles.menuButtonActive : "")} onClick={clickHandler}>
             <span>Menu</span>
           </button>
