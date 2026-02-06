@@ -9,7 +9,7 @@ export function FullWidthContent({ block }: { block: FullWidthContentBlockProps 
   return (
     <Container className="my-(--spacing-xl)">
       <Row>
-        <Column lg={10}>
+        <Column lg={10} xl={9} className="[&>p]:max-w-5xl">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{block.content}</ReactMarkdown>
         </Column>
       </Row>
