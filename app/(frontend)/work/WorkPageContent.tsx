@@ -13,10 +13,6 @@ import { CategoryWithCount } from "./actions"
 
 gsap.registerPlugin(ScrollTrigger)
 
-ScrollTrigger.addEventListener("refresh", () => {
-  console.log("refresh")
-})
-
 interface Props {
   projects: Project[]
   categories: CategoryWithCount[]
@@ -45,7 +41,7 @@ export default function WorkPageContent({ projects, categories }: Props) {
       .timeline()
       .to(projectsRef.current, {
         opacity: 0,
-        duration: 0.25,
+        duration: 0.125,
       })
       .add(() => setActiveCategory(categoryId))
   }, [])
