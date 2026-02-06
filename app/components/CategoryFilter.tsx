@@ -35,11 +35,11 @@ export default function CategoryFilter({ categories, activeCategory, onCategoryC
           onClick={() => handleClick(category.id)}
         >
           {category.name}
-          {activeCategory === category.id ? (
-            <span className={styles.count}>(&times;)</span>
-          ) : (
-            <span className={styles.count}>({category.projectCount})</span>
-          )}
+          <span className={styles.count}>
+            <span>(</span>
+            {activeCategory === category.id ? <span className="scale-[1.25]">&times;</span> : category.projectCount}
+            <span>)</span>
+          </span>
         </button>
       ))}
     </div>
