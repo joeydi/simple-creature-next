@@ -8,7 +8,7 @@ import ScrambleText from "@/components/ScrambleText"
 import Main from "@/components/main"
 
 export default async function Work() {
-  const { projects } = await getProjects(1, 20)
+  const { projects } = await getProjects(1, 100)
 
   return (
     <Main className="pb-(--spacing-xxl)">
