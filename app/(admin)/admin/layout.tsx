@@ -11,7 +11,7 @@ export default function AdminLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>{children}</SidebarInset>
-      <Toaster position="top-right" />
+      <Toaster position="top-right" richColors />
     </SidebarProvider>
   )
 }

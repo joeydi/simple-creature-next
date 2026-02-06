@@ -1,13 +1,14 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, AlertCircle, RefreshCw } from "lucide-react"
+import { Calendar, AlertCircle, RefreshCw, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 import { getImageAssets } from "../actions"
 import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
@@ -30,7 +31,23 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
   const [slug, setSlug] = useState(project.slug)
   const [slugChanged, setSlugChanged] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const contentBuilderRef = useRef<ProjectContentBuilderRef>(null)
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+
+    startTransition(async () => {
+      try {
+        await updateProjectAction(formData)
+        toast.success("Project updated successfully")
+      } catch (error) {
+        toast.error("Failed to update project")
+        console.error(error)
+      }
+    })
+  }
 
   // Load initial thumbnail if exists
   useEffect(() => {
@@ -94,7 +111,7 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
         {/* Main Form */}
         <div className="flex-1">
           <Card className="p-6">
-            <form id="edit-form" action={updateProjectAction}>
+            <form id="edit-form" onSubmit={handleSubmit}>
               <input type="hidden" name="thumbnailId" value={thumbnailAsset?.id || ""} />
               <div className="space-y-6">
                 <div className="space-y-2">
@@ -188,8 +205,15 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
                   <RefreshCw className={`mr-2 size-4 ${isRefreshing ? "animate-spin" : ""}`} />
                   {isRefreshing ? "Refreshing..." : "Refresh Assets"}
                 </Button>
-                <Button type="submit" form="edit-form" className="w-full">
-                  Update Project
+                <Button type="submit" form="edit-form" className="w-full" disabled={isPending}>
+                  {isPending ? (
+                    <>
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                      Updating...
+                    </>
+                  ) : (
+                    "Update Project"
+                  )}
                 </Button>
               </div>
 
