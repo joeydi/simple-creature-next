@@ -353,6 +353,82 @@ export async function deleteAsset(id: string) {
   redirect("/admin/assets")
 }
 
+// Replace asset file
+export async function replaceAsset(
+  id: string,
+  data: {
+    s3Key: string
+    s3Url: string
+    filename: string
+    mimeType: string
+    fileSize: number
+  }
+) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  // Get existing asset to verify type match and get old S3 key
+  const existingAsset = await getAsset(id)
+  if (!existingAsset) {
+    throw new Error("Asset not found")
+  }
+
+  // Validate new file type matches original asset type
+  const newAssetType = getAssetType(data.mimeType)
+  if (newAssetType !== existingAsset.assetType) {
+    throw new Error(`Cannot replace ${existingAsset.assetType} with ${newAssetType}. File types must match.`)
+  }
+
+  const oldS3Key = existingAsset.s3Key
+
+  // Extract metadata for the new file
+  let metadata: ImageMetadata | VideoMetadata | PDFMetadata | null = null
+  if (newAssetType === "image") {
+    try {
+      const response = await fetch(data.s3Url)
+      const buffer = Buffer.from(await response.arrayBuffer())
+      metadata = await extractMetadata(buffer, data.mimeType)
+    } catch (err) {
+      console.error("Error extracting image metadata:", err)
+      // Continue without metadata - not a fatal error
+    }
+  }
+
+  // Update database record with new file info (preserves title, description, altText, tags)
+  await db
+    .update(asset)
+    .set({
+      filename: data.filename,
+      originalFilename: data.filename,
+      mimeType: data.mimeType,
+      fileSize: data.fileSize,
+      s3Key: data.s3Key,
+      s3Url: data.s3Url,
+      metadata: metadata as any,
+      updatedAt: new Date(),
+    })
+    .where(eq(asset.id, id))
+
+  // Delete old file from S3
+  try {
+    await deleteFromS3(oldS3Key)
+  } catch (err) {
+    console.error("Error deleting old S3 file:", err)
+    // Don't throw - the replacement succeeded, old file cleanup is non-critical
+  }
+
+  // Get updated asset to return
+  const updatedAsset = await getAsset(id)
+
+  revalidatePath("/admin/assets")
+  return updatedAsset
+}
+
 // Generate alt text using OpenAI Vision API
 export async function generateAltText(imageUrl: string, keywords?: string) {
   const session = await auth.api.getSession({
