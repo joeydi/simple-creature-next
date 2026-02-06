@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, forwardRef, useImperativeHandle } from "react"
 import {
   DndContext,
   closestCenter,
@@ -22,12 +22,21 @@ import { FullWidthMediaBlock } from "./blocks/full-width-media-block"
 import { FullWidthContentBlock } from "./blocks/full-width-content-block"
 import { ContentWithMediaBlock } from "./blocks/content-with-media-block"
 import { MediaGridBlock } from "./blocks/media-grid-block"
+import { getAssetsByIds } from "../assets/actions"
+import type { Asset } from "../assets/types"
 
 interface Props {
   project: Project
 }
 
-export function ProjectContentBuilder({ project }: Props) {
+export interface ProjectContentBuilderRef {
+  refreshAssets: () => Promise<number>
+}
+
+export const ProjectContentBuilder = forwardRef<ProjectContentBuilderRef, Props>(function ProjectContentBuilder(
+  { project },
+  ref,
+) {
   const [content, setContent] = useState<ProjectContent>(() => {
     // Initialize from project.content or create empty
     if (project.content && validateProjectContent(project.content)) {
@@ -82,6 +91,62 @@ export function ProjectContentBuilder({ project }: Props) {
       ) as Block[],
     }))
   }
+
+  // Extract all asset IDs from content blocks
+  const getAssetIdsFromContent = (projectContent: ProjectContent): string[] => {
+    const ids: string[] = []
+    for (const block of projectContent.blocks) {
+      if (block.type === "full-width-media" && block.asset) {
+        ids.push(block.asset.id)
+      } else if (block.type === "content-with-media" || block.type === "media-grid") {
+        ids.push(...block.assets.map((a) => a.id))
+      }
+    }
+    return [...new Set(ids)] // dedupe
+  }
+
+  // Update blocks with fresh asset data
+  const updateBlocksWithFreshAssets = (
+    projectContent: ProjectContent,
+    assetMap: Map<string, Asset>,
+  ): ProjectContent => {
+    return {
+      blocks: projectContent.blocks.map((block) => {
+        if (block.type === "full-width-media" && block.asset) {
+          const freshAsset = assetMap.get(block.asset.id)
+          return { ...block, asset: freshAsset || block.asset }
+        } else if (block.type === "content-with-media") {
+          return {
+            ...block,
+            assets: block.assets.map((a) => assetMap.get(a.id) || a),
+          }
+        } else if (block.type === "media-grid") {
+          return {
+            ...block,
+            assets: block.assets.map((a) => assetMap.get(a.id) || a),
+          }
+        }
+        return block
+      }) as Block[],
+    }
+  }
+
+  // Expose refreshAssets method to parent via ref
+  useImperativeHandle(ref, () => ({
+    refreshAssets: async () => {
+      const assetIds = getAssetIdsFromContent(content)
+      if (assetIds.length === 0) {
+        return 0
+      }
+
+      const freshAssets = await getAssetsByIds(assetIds)
+      const assetMap = new Map(freshAssets.map((a) => [a.id, a]))
+
+      setContent((currentContent) => updateBlocksWithFreshAssets(currentContent, assetMap))
+
+      return freshAssets.length
+    },
+  }))
 
   return (
     <div className="space-y-4">
@@ -168,4 +233,4 @@ export function ProjectContentBuilder({ project }: Props) {
       </div> */}
     </div>
   )
-}
+})

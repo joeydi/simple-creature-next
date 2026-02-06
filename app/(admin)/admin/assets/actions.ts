@@ -4,7 +4,7 @@ import { db } from "@/db"
 import { asset } from "@/db/schema"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
-import { eq, desc, or, ilike, and, count } from "drizzle-orm"
+import { eq, desc, or, ilike, and, count, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { uploadToS3, deleteFromS3, generateS3Key, getPresignedUploadUrl, getS3Url } from "@/lib/s3"
@@ -297,6 +297,25 @@ export async function getAsset(id: string) {
   }
 
   return result[0]
+}
+
+// Get multiple assets by IDs
+export async function getAssetsByIds(ids: string[]): Promise<Asset[]> {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  if (ids.length === 0) {
+    return []
+  }
+
+  const assets = (await db.select().from(asset).where(inArray(asset.id, ids))) as Asset[]
+
+  return assets
 }
 
 // Update asset metadata

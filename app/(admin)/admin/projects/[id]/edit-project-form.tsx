@@ -1,20 +1,20 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, X, AlertCircle } from "lucide-react"
+import { Calendar, AlertCircle, RefreshCw } from "lucide-react"
 import { getImageAssets } from "../actions"
 import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { AssetSelectorModal } from "../asset-selector-modal"
 import { ThumbnailDropzone } from "../thumbnail-dropzone"
 import { DeleteProjectButton } from "./delete-project-button"
-import { ProjectContentBuilder } from "../project-content-builder"
+import { ProjectContentBuilder, ProjectContentBuilderRef } from "../project-content-builder"
 import { Category, Project } from "../types"
 import { Asset } from "../../assets/types"
 
@@ -29,6 +29,8 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
   const [isSelectorOpen, setIsSelectorOpen] = useState(false)
   const [slug, setSlug] = useState(project.slug)
   const [slugChanged, setSlugChanged] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const contentBuilderRef = useRef<ProjectContentBuilderRef>(null)
 
   // Load initial thumbnail if exists
   useEffect(() => {
@@ -69,6 +71,20 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
       setSlugChanged(true)
     } else {
       setSlugChanged(false)
+    }
+  }
+
+  const handleRefreshAssets = async () => {
+    if (!contentBuilderRef.current) return
+
+    setIsRefreshing(true)
+    try {
+      const count = await contentBuilderRef.current.refreshAssets()
+      console.log(`Refreshed ${count} assets`)
+    } catch (error) {
+      console.error("Failed to refresh assets:", error)
+    } finally {
+      setIsRefreshing(false)
     }
   }
 
@@ -148,7 +164,7 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
 
                 <CategorySelect categories={categories} defaultSelectedIds={project.categoryIds} />
 
-                <ProjectContentBuilder project={project} />
+                <ProjectContentBuilder ref={contentBuilderRef} project={project} />
               </div>
             </form>
           </Card>
@@ -162,6 +178,16 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleRefreshAssets}
+                  disabled={isRefreshing}
+                >
+                  <RefreshCw className={`mr-2 size-4 ${isRefreshing ? "animate-spin" : ""}`} />
+                  {isRefreshing ? "Refreshing..." : "Refresh Assets"}
+                </Button>
                 <Button type="submit" form="edit-form" className="w-full">
                   Update Project
                 </Button>
