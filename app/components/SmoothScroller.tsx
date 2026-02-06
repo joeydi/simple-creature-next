@@ -88,7 +88,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
       <div
         id="smooth-wrapper"
         className={cn(
-          "origin-left bg-white transition-all duration-1000",
+          "origin-left bg-[#FAFBFE] transition-all duration-1000",
           "ease-[cubic-bezier(0.62,0.21,0,1)] translate-x-(--translate) scale-(--scale)",
           isActive ? "rounded-media" : "rounded-none",
         )}
