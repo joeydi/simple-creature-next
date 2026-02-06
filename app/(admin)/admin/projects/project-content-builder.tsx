@@ -87,7 +87,7 @@ export function ProjectContentBuilder({ project }: Props) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <label className="text-sm font-medium">Content Blocks</label>
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" type="button">
               <Plus className="mr-2 size-4" />
