@@ -254,10 +254,10 @@ export function AssetEditModal({
       )
     }
 
-    const Icon = currentAsset.assetType === "video" ? FileVideo : FileText
+    // Must be PDF at this point
     return (
       <div className="flex aspect-video w-full items-center justify-center rounded-lg bg-muted">
-        <Icon className="h-16 w-16 text-muted-foreground" />
+        <FileText className="h-16 w-16 text-muted-foreground" />
       </div>
     )
   }
