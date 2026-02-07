@@ -37,6 +37,25 @@ export function AssetTable({
       )
     }
 
+    // For videos, show thumbnail if available
+    if (asset.assetType === "video" && asset.thumbnailS3Url) {
+      return (
+        <button
+          className="relative block aspect-video w-24 overflow-hidden rounded bg-muted"
+          onClick={() => onEdit(asset)}
+        >
+          <Image
+            src={asset.thumbnailS3Url}
+            alt={asset.title || asset.filename}
+            fill
+            className="object-cover"
+            sizes="96px"
+          />
+        </button>
+      )
+    }
+
+    // Fallback to icon
     const Icon = asset.assetType === "video" ? FileVideo : FileText
     return (
       <div className="flex h-12 w-12 items-center justify-center rounded bg-muted">

@@ -31,6 +31,8 @@ export interface Asset {
   s3Url: string
   assetType: AssetType
   metadata: ImageMetadata | VideoMetadata | PDFMetadata
+  thumbnailS3Key: string | null
+  thumbnailS3Url: string | null
   title: string | null
   description: string | null
   altText: string | null

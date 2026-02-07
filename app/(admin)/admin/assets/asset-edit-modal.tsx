@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { updateAsset, getUploadUrl, replaceAsset } from "./actions"
+import { updateAsset, getUploadUrl, replaceAsset, replaceThumbnail } from "./actions"
 import { extractVideoMetadata } from "./utils"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
@@ -37,6 +37,11 @@ export function AssetEditModal({
   const [isReplacing, setIsReplacing] = useState(false)
   const [replaceError, setReplaceError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Thumbnail replacement state
+  const [isReplacingThumbnail, setIsReplacingThumbnail] = useState(false)
+  const [thumbnailError, setThumbnailError] = useState<string | null>(null)
+  const thumbnailInputRef = useRef<HTMLInputElement>(null)
 
   const getAcceptedTypes = () => {
     switch (currentAsset.assetType) {
@@ -125,6 +130,62 @@ export function AssetEditModal({
     }
   }
 
+  const handleThumbnailSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Reset input so same file can be selected again
+    e.target.value = ""
+
+    // Validate file is an image
+    if (!file.type.startsWith("image/")) {
+      setThumbnailError("Please select an image file")
+      return
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      setThumbnailError(`File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`)
+      return
+    }
+
+    setIsReplacingThumbnail(true)
+    setThumbnailError(null)
+
+    try {
+      // Step 1: Get presigned URL
+      const { presignedUrl, s3Key, s3Url } = await getUploadUrl(file.name, file.type, file.size)
+
+      // Step 2: Upload to S3
+      const uploadResponse = await fetch(presignedUrl, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
+      })
+
+      if (!uploadResponse.ok) {
+        throw new Error(`Upload failed: ${uploadResponse.status} ${uploadResponse.statusText}`)
+      }
+
+      // Step 3: Replace thumbnail in database
+      const updatedAsset = await replaceThumbnail(currentAsset.id, {
+        s3Key,
+        s3Url,
+      })
+
+      // Update local state with new asset data
+      setCurrentAsset(updatedAsset as Asset)
+      router.refresh()
+    } catch (err) {
+      console.error("Error replacing thumbnail:", err)
+      setThumbnailError(err instanceof Error ? err.message : "Failed to replace thumbnail")
+    } finally {
+      setIsReplacingThumbnail(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -164,6 +225,31 @@ export function AssetEditModal({
             sizes="(max-width: 768px) 100vw, 600px"
             key={currentAsset.s3Url}
           />
+        </div>
+      )
+    }
+
+    if (currentAsset.assetType === "video") {
+      // Show thumbnail if available
+      if (currentAsset.thumbnailS3Url) {
+        return (
+          <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
+            <Image
+              src={currentAsset.thumbnailS3Url}
+              alt={`Thumbnail for ${currentAsset.title || currentAsset.filename}`}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 600px"
+              key={currentAsset.thumbnailS3Url}
+            />
+          </div>
+        )
+      }
+
+      // Fallback to icon if no thumbnail
+      return (
+        <div className="flex aspect-video w-full items-center justify-center rounded-lg bg-muted">
+          <FileVideo className="h-16 w-16 text-muted-foreground" />
         </div>
       )
     }
@@ -216,36 +302,72 @@ export function AssetEditModal({
           <div className="space-y-4">
             {renderPreview()}
 
-            {/* Replace File Button */}
-            <div className="flex items-center gap-2">
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileSelect}
-                accept={getAcceptedTypes()}
-                className="hidden"
-                disabled={isReplacing || isPending}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isReplacing || isPending}
-              >
-                {isReplacing ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Replacing...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    Replace File
-                  </>
-                )}
-              </Button>
-              {replaceError && <p className="text-sm text-destructive">{replaceError}</p>}
+            <div className="flex flex-wrap justify-between gap-4">
+              {/* Replace File Button */}
+              <div className="flex items-center gap-2">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileSelect}
+                  accept={getAcceptedTypes()}
+                  className="hidden"
+                  disabled={isReplacing || isPending}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isReplacing || isPending}
+                >
+                  {isReplacing ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Replacing...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="mr-2 h-4 w-4" />
+                      Replace File
+                    </>
+                  )}
+                </Button>
+                {replaceError && <p className="text-sm text-destructive">{replaceError}</p>}
+              </div>
+
+              {/* Replace Thumbnail Button (for videos only) */}
+              {currentAsset.assetType === "video" && (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="file"
+                    ref={thumbnailInputRef}
+                    onChange={handleThumbnailSelect}
+                    accept="image/*"
+                    className="hidden"
+                    disabled={isReplacingThumbnail || isPending}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => thumbnailInputRef.current?.click()}
+                    disabled={isReplacingThumbnail || isPending}
+                  >
+                    {isReplacingThumbnail ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Replacing Thumbnail...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="mr-2 h-4 w-4" />
+                        {currentAsset.thumbnailS3Url ? "Replace Thumbnail" : "Upload Thumbnail"}
+                      </>
+                    )}
+                  </Button>
+                  {thumbnailError && <p className="text-sm text-destructive">{thumbnailError}</p>}
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-sm">
@@ -330,7 +452,12 @@ export function AssetEditModal({
               </div>
 
               <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending || isReplacing}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                  disabled={isPending || isReplacing}
+                >
                   Cancel
                 </Button>
                 <Button type="submit" disabled={isPending || isReplacing}>

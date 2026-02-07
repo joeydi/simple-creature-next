@@ -9,6 +9,7 @@ interface AssetPreviewProps {
     s3Url: string
     altText?: string | null
     filename: string
+    thumbnailS3Url?: string | null
   }
   className?: string
   fill?: boolean
@@ -33,7 +34,12 @@ export function AssetPreview({ asset, className, fill = true, showControls = fal
 
   if (asset.assetType === "video") {
     return (
-      <video src={asset.s3Url} controls={showControls} className={cn("h-full w-full object-cover", className)}>
+      <video
+        src={asset.s3Url}
+        poster={asset.thumbnailS3Url || undefined}
+        controls={showControls}
+        className={cn("h-full w-full object-cover", className)}
+      >
         <track kind="captions" />
       </video>
     )

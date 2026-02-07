@@ -119,6 +119,9 @@ export const asset = pgTable("asset", {
   assetType: text("assetType").notNull(),
   // Type-specific metadata stored as JSONB
   metadata: jsonb("metadata"),
+  // Video thumbnail references
+  thumbnailS3Key: text("thumbnailS3Key"),
+  thumbnailS3Url: text("thumbnailS3Url"),
   // Optional descriptive fields
   title: text("title"),
   description: text("description"),

@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "50mb",
     },
   },
+  serverExternalPackages: ["fluent-ffmpeg", "@ffprobe-installer/ffprobe"],
 }
 
 export default nextConfig

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardContent } from "@/components/dashboard-content"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { FileImage, Images, Newspaper, PencilRuler, Users } from "lucide-react"
+import { FileImage, Images, Newspaper, PencilRuler, Users, FileVideo } from "lucide-react"
 import { getProjectCount, getProjects } from "./projects/actions"
 import Image from "next/image"
 import { format } from "timeago.js"
@@ -103,23 +103,38 @@ export default async function AdminPage() {
               <CardTitle>Recently Uploaded Assets</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              {assets.map((asset) => (
-                <div key={asset.id} className="flex items-center gap-4 border-t px-6 py-3">
-                  {asset.s3Url ? (
-                    <div className="relative aspect-video w-24 overflow-hidden rounded bg-muted">
-                      <Image src={asset.s3Url} alt={asset.altText || ""} fill className="object-cover" sizes="96px" />
+              {assets.map((asset) => {
+                // Determine which image URL to use
+                const imageUrl =
+                  asset.assetType === "video" && asset.thumbnailS3Url ? asset.thumbnailS3Url : asset.s3Url
+
+                // Determine which icon to use as fallback
+                const FallbackIcon = asset.assetType === "video" ? FileVideo : FileImage
+
+                return (
+                  <div key={asset.id} className="flex items-center gap-4 border-t px-6 py-3">
+                    {asset.assetType === "image" || (asset.assetType === "video" && asset.thumbnailS3Url) ? (
+                      <div className="relative aspect-video w-24 overflow-hidden rounded bg-muted">
+                        <Image
+                          src={imageUrl}
+                          alt={asset.altText || asset.filename}
+                          fill
+                          className="object-cover"
+                          sizes="96px"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex aspect-video w-20 items-center justify-center rounded bg-muted">
+                        <FallbackIcon className="size-6 text-muted-foreground" />
+                      </div>
+                    )}
+                    <div className="grow">
+                      <p className="font-semibold">{asset.title || asset.filename}</p>
+                      <p className="text-sm text-slate-500">{`Uploaded ${format(asset.createdAt)}`}</p>
                     </div>
-                  ) : (
-                    <div className="flex aspect-video w-20 items-center justify-center rounded bg-muted">
-                      <FileImage className="size-6 text-muted-foreground" />
-                    </div>
-                  )}
-                  <div className="grow">
-                    <p className="font-semibold">{asset.title || asset.filename}</p>
-                    <p className="text-sm text-slate-500">{`Uploaded ${format(asset.createdAt)}`}</p>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </CardContent>
           </Card>
         </div>

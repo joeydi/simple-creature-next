@@ -8,6 +8,7 @@ import { eq, desc, or, ilike, and, count, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { uploadToS3, deleteFromS3, generateS3Key, getPresignedUploadUrl, getS3Url } from "@/lib/s3"
+import { generateAndUploadThumbnail } from "@/lib/video-thumbnails"
 import { MAX_FILE_SIZE } from "@/lib/constants"
 import { nanoid } from "nanoid"
 import sharp from "sharp"
@@ -209,6 +210,29 @@ export async function completeAssetUpload(data: {
       })
       .returning()) as Asset[]
 
+    // If video asset, generate thumbnail
+    if (assetType === "video") {
+      try {
+        const thumbnail = await generateAndUploadThumbnail(data.s3Url)
+        if (thumbnail) {
+          await db
+            .update(asset)
+            .set({
+              thumbnailS3Key: thumbnail.key,
+              thumbnailS3Url: thumbnail.url,
+            })
+            .where(eq(asset.id, newAsset[0].id))
+
+          // Update the returned asset with thumbnail info
+          newAsset[0].thumbnailS3Key = thumbnail.key
+          newAsset[0].thumbnailS3Url = thumbnail.url
+        }
+      } catch (error) {
+        console.error("Thumbnail generation failed:", error)
+        // Continue - asset is still valid without thumbnail
+      }
+    }
+
     revalidatePath("/admin/assets")
     return newAsset[0]
   } catch (error) {
@@ -365,7 +389,17 @@ export async function deleteAsset(id: string) {
     throw new Error("Asset not found")
   }
 
-  // Delete from S3
+  // Delete thumbnail from S3 if it exists
+  if (assetToDelete.thumbnailS3Key) {
+    try {
+      await deleteFromS3(assetToDelete.thumbnailS3Key)
+    } catch (err) {
+      console.error("Error deleting thumbnail from S3:", err)
+      // Continue - don't fail asset deletion if thumbnail deletion fails
+    }
+  }
+
+  // Delete main file from S3
   await deleteFromS3(assetToDelete.s3Key)
 
   // Delete from database
@@ -408,6 +442,7 @@ export async function replaceAsset(
   }
 
   const oldS3Key = existingAsset.s3Key
+  const oldThumbnailS3Key = existingAsset.thumbnailS3Key
 
   // Extract or use provided metadata for the new file
   let metadata: ImageMetadata | VideoMetadata | PDFMetadata | null = null
@@ -424,6 +459,22 @@ export async function replaceAsset(
     metadata = data.videoMetadata
   }
 
+  // Generate new thumbnail for video replacements
+  let newThumbnailKey: string | null = null
+  let newThumbnailUrl: string | null = null
+  if (newAssetType === "video") {
+    try {
+      const thumbnail = await generateAndUploadThumbnail(data.s3Url)
+      if (thumbnail) {
+        newThumbnailKey = thumbnail.key
+        newThumbnailUrl = thumbnail.url
+      }
+    } catch (error) {
+      console.error("Thumbnail generation failed:", error)
+      // Continue without thumbnail
+    }
+  }
+
   // Update database record with new file info (preserves title, description, altText, tags)
   await db
     .update(asset)
@@ -435,9 +486,21 @@ export async function replaceAsset(
       s3Key: data.s3Key,
       s3Url: data.s3Url,
       metadata: metadata as any,
+      thumbnailS3Key: newThumbnailKey,
+      thumbnailS3Url: newThumbnailUrl,
       updatedAt: new Date(),
     })
     .where(eq(asset.id, id))
+
+  // Delete old thumbnail from S3 if it exists
+  if (oldThumbnailS3Key) {
+    try {
+      await deleteFromS3(oldThumbnailS3Key)
+    } catch (err) {
+      console.error("Error deleting old thumbnail from S3:", err)
+      // Don't throw - cleanup is non-critical
+    }
+  }
 
   // Delete old file from S3
   try {
@@ -449,6 +512,62 @@ export async function replaceAsset(
 
   // Get updated asset to return
   const updatedAsset = await getAsset(id)
+
+  revalidatePath("/admin/assets")
+  return updatedAsset
+}
+
+// Replace thumbnail for a video asset
+export async function replaceThumbnail(
+  assetId: string,
+  data: {
+    s3Key: string
+    s3Url: string
+  }
+) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  // Get existing asset
+  const existingAsset = await getAsset(assetId)
+  if (!existingAsset) {
+    throw new Error("Asset not found")
+  }
+
+  // Verify it's a video asset
+  if (existingAsset.assetType !== "video") {
+    throw new Error("Can only replace thumbnails for video assets")
+  }
+
+  const oldThumbnailS3Key = existingAsset.thumbnailS3Key
+
+  // Update database with new thumbnail
+  await db
+    .update(asset)
+    .set({
+      thumbnailS3Key: data.s3Key,
+      thumbnailS3Url: data.s3Url,
+      updatedAt: new Date(),
+    })
+    .where(eq(asset.id, assetId))
+
+  // Delete old thumbnail from S3 if it exists
+  if (oldThumbnailS3Key) {
+    try {
+      await deleteFromS3(oldThumbnailS3Key)
+    } catch (err) {
+      console.error("Error deleting old thumbnail from S3:", err)
+      // Don't throw - cleanup is non-critical
+    }
+  }
+
+  // Get updated asset to return
+  const updatedAsset = await getAsset(assetId)
 
   revalidatePath("/admin/assets")
   return updatedAsset

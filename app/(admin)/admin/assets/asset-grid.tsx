@@ -29,6 +29,22 @@ export function AssetGrid({ assets, onEdit }: { assets: Asset[]; onEdit: (asset:
       )
     }
 
+    // For videos, show thumbnail if available
+    if (asset.assetType === "video" && asset.thumbnailS3Url) {
+      return (
+        <div className="relative aspect-video w-full overflow-hidden bg-muted">
+          <Image
+            src={asset.thumbnailS3Url}
+            alt={asset.title || asset.filename}
+            fill
+            className="object-contain"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+      )
+    }
+
+    // Fallback to icon
     const Icon = asset.assetType === "video" ? FileVideo : FileText
     return (
       <div className="flex aspect-video w-full items-center justify-center bg-muted">
