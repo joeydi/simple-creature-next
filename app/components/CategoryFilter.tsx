@@ -51,7 +51,7 @@ export default function CategoryFilter({ categories, activeCategory, onCategoryC
                 activeCategory === category.id ? "scale-50 opacity-0 blur-sm" : "",
               )}
             >
-              {category.projectCount + 10}
+              {category.projectCount}
             </span>
             <span>)</span>
           </span>
