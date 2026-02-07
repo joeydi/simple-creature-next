@@ -1,67 +1,71 @@
-html::before {
-  --opacity: 0.05;
+@use "variables" as *;
 
-  outline: 1px solid red;
-  pointer-events: none;
-  content: "";
-  position: fixed;
-  z-index: 100;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  display: block;
-  width: calc(100% - var(--container-padding) * 2);
-  max-width: calc(var(--container-max-width) - var(--container-padding) * 2);
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 0, 0, var(--opacity)) 0%,
-    rgba(255, 0, 0, var(--opacity)) calc(1 / 12 * (100% - 11 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(1 / 12 * (100% - 11 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(1 / 12 * (100% - 11 * $grid-gutter-width) + (1 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(1 / 12 * (100% - 11 * $grid-gutter-width) + (1 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(2 / 12 * (100% - 11 * $grid-gutter-width) + (1 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(2 / 12 * (100% - 11 * $grid-gutter-width) + (1 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(2 / 12 * (100% - 11 * $grid-gutter-width) + (2 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(2 / 12 * (100% - 11 * $grid-gutter-width) + (2 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(3 / 12 * (100% - 11 * $grid-gutter-width) + (2 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(3 / 12 * (100% - 11 * $grid-gutter-width) + (2 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(3 / 12 * (100% - 11 * $grid-gutter-width) + (3 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(3 / 12 * (100% - 11 * $grid-gutter-width) + (3 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(4 / 12 * (100% - 11 * $grid-gutter-width) + (3 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(4 / 12 * (100% - 11 * $grid-gutter-width) + (3 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(4 / 12 * (100% - 11 * $grid-gutter-width) + (4 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(4 / 12 * (100% - 11 * $grid-gutter-width) + (4 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(5 / 12 * (100% - 11 * $grid-gutter-width) + (4 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(5 / 12 * (100% - 11 * $grid-gutter-width) + (4 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(5 / 12 * (100% - 11 * $grid-gutter-width) + (5 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(5 / 12 * (100% - 11 * $grid-gutter-width) + (5 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(6 / 12 * (100% - 11 * $grid-gutter-width) + (5 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(6 / 12 * (100% - 11 * $grid-gutter-width) + (5 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(6 / 12 * (100% - 11 * $grid-gutter-width) + (6 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(6 / 12 * (100% - 11 * $grid-gutter-width) + (6 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(7 / 12 * (100% - 11 * $grid-gutter-width) + (6 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(7 / 12 * (100% - 11 * $grid-gutter-width) + (6 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(7 / 12 * (100% - 11 * $grid-gutter-width) + (7 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(7 / 12 * (100% - 11 * $grid-gutter-width) + (7 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(8 / 12 * (100% - 11 * $grid-gutter-width) + (7 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(8 / 12 * (100% - 11 * $grid-gutter-width) + (7 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(8 / 12 * (100% - 11 * $grid-gutter-width) + (8 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(8 / 12 * (100% - 11 * $grid-gutter-width) + (8 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(9 / 12 * (100% - 11 * $grid-gutter-width) + (8 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(9 / 12 * (100% - 11 * $grid-gutter-width) + (8 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(9 / 12 * (100% - 11 * $grid-gutter-width) + (9 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(9 / 12 * (100% - 11 * $grid-gutter-width) + (9 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(10 / 12 * (100% - 11 * $grid-gutter-width) + (9 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(10 / 12 * (100% - 11 * $grid-gutter-width) + (9 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(10 / 12 * (100% - 11 * $grid-gutter-width) + (10 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(10 / 12 * (100% - 11 * $grid-gutter-width) + (10 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(11 / 12 * (100% - 11 * $grid-gutter-width) + (10 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(11 / 12 * (100% - 11 * $grid-gutter-width) + (10 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(11 / 12 * (100% - 11 * $grid-gutter-width) + (11 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(11 / 12 * (100% - 11 * $grid-gutter-width) + (11 * $grid-gutter-width)),
-    rgba(255, 0, 0, var(--opacity)) calc(12 / 12 * (100% - 11 * $grid-gutter-width) + (11 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) calc(12 / 12 * (100% - 11 * $grid-gutter-width) + (11 * $grid-gutter-width)),
-    rgba(255, 0, 0, 0) 100%
-  );
+@layer base {
+  html::before {
+    --opacity: 0.05;
+
+    outline: 1px solid red;
+    pointer-events: none;
+    content: "";
+    position: fixed;
+    z-index: 100;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    display: block;
+    width: calc(100% - var(--container-padding) * 2);
+    max-width: calc(var(--container-max-width) - var(--container-padding) * 2);
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(255, 0, 0, var(--opacity)) 0%,
+      rgba(255, 0, 0, var(--opacity)) calc(1 / 12 * (100% - 11 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(1 / 12 * (100% - 11 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(1 / 12 * (100% - 11 * $grid-gutter-width) + (1 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(1 / 12 * (100% - 11 * $grid-gutter-width) + (1 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(2 / 12 * (100% - 11 * $grid-gutter-width) + (1 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(2 / 12 * (100% - 11 * $grid-gutter-width) + (1 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(2 / 12 * (100% - 11 * $grid-gutter-width) + (2 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(2 / 12 * (100% - 11 * $grid-gutter-width) + (2 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(3 / 12 * (100% - 11 * $grid-gutter-width) + (2 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(3 / 12 * (100% - 11 * $grid-gutter-width) + (2 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(3 / 12 * (100% - 11 * $grid-gutter-width) + (3 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(3 / 12 * (100% - 11 * $grid-gutter-width) + (3 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(4 / 12 * (100% - 11 * $grid-gutter-width) + (3 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(4 / 12 * (100% - 11 * $grid-gutter-width) + (3 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(4 / 12 * (100% - 11 * $grid-gutter-width) + (4 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(4 / 12 * (100% - 11 * $grid-gutter-width) + (4 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(5 / 12 * (100% - 11 * $grid-gutter-width) + (4 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(5 / 12 * (100% - 11 * $grid-gutter-width) + (4 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(5 / 12 * (100% - 11 * $grid-gutter-width) + (5 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(5 / 12 * (100% - 11 * $grid-gutter-width) + (5 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(6 / 12 * (100% - 11 * $grid-gutter-width) + (5 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(6 / 12 * (100% - 11 * $grid-gutter-width) + (5 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(6 / 12 * (100% - 11 * $grid-gutter-width) + (6 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(6 / 12 * (100% - 11 * $grid-gutter-width) + (6 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(7 / 12 * (100% - 11 * $grid-gutter-width) + (6 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(7 / 12 * (100% - 11 * $grid-gutter-width) + (6 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(7 / 12 * (100% - 11 * $grid-gutter-width) + (7 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(7 / 12 * (100% - 11 * $grid-gutter-width) + (7 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(8 / 12 * (100% - 11 * $grid-gutter-width) + (7 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(8 / 12 * (100% - 11 * $grid-gutter-width) + (7 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(8 / 12 * (100% - 11 * $grid-gutter-width) + (8 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(8 / 12 * (100% - 11 * $grid-gutter-width) + (8 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(9 / 12 * (100% - 11 * $grid-gutter-width) + (8 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(9 / 12 * (100% - 11 * $grid-gutter-width) + (8 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(9 / 12 * (100% - 11 * $grid-gutter-width) + (9 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(9 / 12 * (100% - 11 * $grid-gutter-width) + (9 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(10 / 12 * (100% - 11 * $grid-gutter-width) + (9 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(10 / 12 * (100% - 11 * $grid-gutter-width) + (9 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(10 / 12 * (100% - 11 * $grid-gutter-width) + (10 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(10 / 12 * (100% - 11 * $grid-gutter-width) + (10 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(11 / 12 * (100% - 11 * $grid-gutter-width) + (10 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(11 / 12 * (100% - 11 * $grid-gutter-width) + (10 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(11 / 12 * (100% - 11 * $grid-gutter-width) + (11 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(11 / 12 * (100% - 11 * $grid-gutter-width) + (11 * $grid-gutter-width)),
+      rgba(255, 0, 0, var(--opacity)) calc(12 / 12 * (100% - 11 * $grid-gutter-width) + (11 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) calc(12 / 12 * (100% - 11 * $grid-gutter-width) + (11 * $grid-gutter-width)),
+      rgba(255, 0, 0, 0) 100%
+    );
+  }
 }

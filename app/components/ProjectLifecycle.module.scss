@@ -1,6 +1,6 @@
-@import "../styles/mixins";
-@import "../styles/variables";
-@import "../styles/functions";
+@use "@/styles/variables" as *;
+@use "@/styles/functions" as *;
+@use "@/styles/mixins" as *;
 
 .section {
   position: relative;

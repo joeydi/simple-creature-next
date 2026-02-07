@@ -1,55 +1,60 @@
-body {
-  font-family: var(--font-clash), sans-serif;
-  font-size: #{fluid(18, 24, $sm, $max)};
-  line-height: 1.4;
-  font-weight: 400;
-}
+@use "variables" as *;
+@use "functions" as *;
 
-h1 {
-  font-size: #{fluid(60, 120, $sm, $max)};
-  line-height: 1;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  margin-bottom: 0.75rem;
-  font-size: #{fluid(30, 60, $sm, $max)};
-  line-height: 1.125;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-}
-
-h3 {
-  margin-bottom: 0.75rem;
-  font-size: #{fluid(20, 30, $sm, $max)};
-  line-height: 1.25;
-  font-weight: 450;
-
-  &:last-child {
-    margin-bottom: 0;
+@layer base {
+  body {
+    font-family: var(--font-clash), sans-serif;
+    font-size: #{fluid(18, 24, $sm, $max)};
+    line-height: 1.4;
+    font-weight: 400;
   }
-}
 
-.text-header {
-  font-size: fluid(24, 48, $sm, $max);
-}
-
-p {
-  margin-bottom: 0.75rem;
-
-  &:last-child {
-    margin-bottom: 0;
+  h1 {
+    font-size: #{fluid(60, 120, $sm, $max)};
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.02em;
   }
-}
 
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  overflow-wrap: break-word;
+  h2 {
+    margin-bottom: 0.75rem;
+    font-size: #{fluid(30, 60, $sm, $max)};
+    line-height: 1.125;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  h3 {
+    margin-bottom: 0.75rem;
+    font-size: #{fluid(20, 30, $sm, $max)};
+    line-height: 1.25;
+    font-weight: 450;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .text-header {
+    font-size: fluid(24, 48, $sm, $max);
+  }
+
+  p {
+    margin-bottom: 0.75rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
 }

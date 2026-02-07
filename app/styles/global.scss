@@ -1,7 +1,8 @@
-@import "functions";
-@import "mixins";
-@import "variables";
-// @import "grid";
+@use "functions" as *;
+@use "variables" as *;
+
+@use "typography";
+// @use "grid";
 
 :root {
   --grid-gutter: 20px;
@@ -19,8 +20,6 @@
 }
 
 @layer base {
-  @import "typography";
-
   img,
   picture,
   video,
