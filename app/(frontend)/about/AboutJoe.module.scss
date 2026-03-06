@@ -1,0 +1,75 @@
+.scene {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  perspective: 100vw;
+  transform-style: preserve-3d;
+}
+
+.props {
+  transform-style: preserve-3d;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  border: 2px solid red;
+
+  > * {
+    grid-area: 1 / 1;
+    place-self: center;
+    transform-style: preserve-3d;
+    // opacity: 0.75;
+  }
+}
+
+.cup1 {
+  width: 12.26vw;
+  translate: -15.5vw 15.5vw 25vw;
+  scale: 0.8;
+}
+
+.cup2 {
+  width: 10.52vw;
+  translate: 21vw -9.2vw 29vw;
+  scale: 0.76;
+}
+
+.laptop1 {
+  width: 23.9vw;
+  translate: 27vw -29.5vw -10.6vw;
+  scale: 1.1;
+}
+
+.laptop2 {
+  width: 22.96vw;
+  translate: -27vw -15.5vw -18vw;
+  scale: 1.25;
+}
+
+.laptop3 {
+  width: 14.5vw;
+  translate: -36.5vw 4.5vw -18.3vw;
+  scale: 1.25;
+}
+
+.laptop4 {
+  width: 21.77vw;
+  translate: 25vw 15vw -7vw;
+  scale: 1.1;
+}
+
+.mug1 {
+  width: 8.22vw;
+  translate: 11.25vw 8.5vw 20.6vw;
+  scale: 0.85;
+}
+
+.mug2 {
+  width: 6.95vw;
+  translate: -16.4vw -24.75vw 5.2vw;
+  scale: 1;
+}
