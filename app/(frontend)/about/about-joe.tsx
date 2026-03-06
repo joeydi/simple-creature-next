@@ -24,7 +24,7 @@ export default function AboutJoe() {
   const propsRef = useRef<HTMLDivElement>(null)
   const current = useRef({ x: 0, y: 0 })
   const target = useRef({ x: 0, y: 0 })
-  const rafId = useRef<number>(null)
+  const rafId = useRef<number | null>(null)
 
   useEffect(() => {
     const scene = sceneRef.current
