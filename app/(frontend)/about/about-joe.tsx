@@ -47,6 +47,7 @@ export default function AboutJoe() {
       if (propsRef.current) {
         propsRef.current.style.setProperty("--rot-y", `${current.current.y}deg`)
         propsRef.current.style.setProperty("--rot-x", `${current.current.x}deg`)
+        propsRef.current.style.setProperty("--translate-x", `${current.current.y * 0.1}%`)
         propsRef.current.style.transform = `rotateX(var(--rot-x)) rotateY(var(--rot-y))`
       }
       rafId.current = requestAnimationFrame(tick)
@@ -83,7 +84,7 @@ export default function AboutJoe() {
       />
       <div className={styles.scene} ref={sceneRef}>
         <div className={styles.props} ref={propsRef}>
-          <Image className="w-full" src={Joe} alt="" />
+          <Image className={styles.lego} src={Joe} alt="" />
           <Image className={styles.cup1} src={Cup1} alt="" />
           <Image className={styles.cup2} src={Cup2} alt="" />
           <Image className={styles.laptop1} src={Laptop1} alt="" />

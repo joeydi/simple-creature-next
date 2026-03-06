@@ -25,6 +25,22 @@
   }
 }
 
+@keyframes bob {
+  0%,
+  100% {
+    translate: var(--translate-x, 0) 0px;
+  }
+  50% {
+    translate: var(--translate-x, 0) -3vh;
+  }
+}
+
+.lego {
+  width: 100%;
+  animation: bob 6s ease-in-out infinite;
+  //   scale: 0.8;
+}
+
 .cup1 {
   width: 12.26vw;
   translate: -15.5vw 15.5vw 25vw;
