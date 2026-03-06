@@ -16,12 +16,13 @@
   width: 100%;
   height: 100%;
   display: grid;
-  border: 2px solid red;
+  //   border: 2px solid red;
 
   > * {
     grid-area: 1 / 1;
     place-self: center;
     transform-style: preserve-3d;
+    rotate: y calc(-1 * var(--rot-y, 0deg));
     // opacity: 0.75;
   }
 }
