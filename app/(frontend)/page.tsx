@@ -5,6 +5,7 @@ import FeaturedProjects from "@/components/FeaturedProjects"
 import ServicesMarquee from "@/components/ServicesMarquee"
 import { LogoGrid } from "@/components/LogoGrid"
 import Main from "@/components/main"
+import HomepageReels from "@/components/HomepageReels"
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         </h1>
       </PageHeader>
       <Hero />
+      <HomepageReels />
       <FeaturedProjects />
       <ServicesMarquee />
       <LogoGrid />
