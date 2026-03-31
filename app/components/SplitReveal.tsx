@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { cn } from "@/lib/utils"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -108,7 +109,7 @@ export default function SplitReveal({ left, right, className, containerRef, onFr
   }, [])
 
   return (
-    <div ref={containerRef} className={className ?? "relative aspect-video overflow-hidden"}>
+    <div ref={containerRef} className={cn("relative aspect-video overflow-hidden", className)}>
       <div ref={leftRef} className="absolute inset-0">
         {left}
       </div>
