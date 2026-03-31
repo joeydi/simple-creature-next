@@ -1,0 +1,95 @@
+.scene {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  perspective: 100vw;
+}
+
+.props {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  transform-style: preserve-3d;
+  //   border: 2px solid red;
+
+  > * {
+    grid-area: 1 / 1;
+    place-self: center;
+    transform: rotateY(calc(-1 * var(--rot-y, 0deg))) rotateX(calc(-1 * var(--rot-x, 0deg)));
+    // opacity: 0.75;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    translate: var(--translate-x, 0) 0px;
+  }
+  50% {
+    translate: var(--translate-x, 0) -3vh;
+  }
+}
+
+.lego {
+  width: 100%;
+  animation: bob 6s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+
+.tablet1 {
+  width: 11.48vw;
+  translate: 17.5vw -25.5vw -25vw;
+  scale: 1.3;
+}
+
+.tablet2 {
+  width: 9.5vw;
+  translate: -47vw 6vw -29vw;
+  scale: 1.4;
+}
+
+.gpu1 {
+  width: 21.56vw;
+  translate: 23.5vw -9.5vw 15vw;
+  scale: 0.9;
+}
+
+.gpu2 {
+  width: 11.45vw;
+  translate: -24.5vw -13vw -5vw;
+  scale: 1.1;
+}
+
+.gpu3 {
+  width: 26.15vw;
+  translate: -20.5vw 9vw 18vw;
+  scale: 0.85;
+}
+
+.gpu4 {
+  width: 15.08vw;
+  translate: 25.75vw 12.25vw 5vw;
+  scale: 1;
+}
+
+.sack1 {
+  width: 4.35vw;
+  translate: 31.5vw 2vw -10vw;
+  scale: 1.1;
+}
+
+.sack2 {
+  width: 6.38vw;
+  translate: 12.5vw 17vw 16vw;
+  scale: 0.95;
+}
+
+.sack3 {
+  width: 6.95vw;
+  translate: -28vw -16vw 12vw;
+  scale: 0.8;
+}

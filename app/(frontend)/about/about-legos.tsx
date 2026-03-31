@@ -1,14 +1,12 @@
 "use client"
 
 import Image from "next/image"
-import Joe from "@/../public/about-jd.png"
-import James from "@/../public/about-jk.png"
-import PurpleBackground from "@/../public/about-bg-purple.jpg"
-import GreenBackground from "@/../public/about-bg-green.jpg"
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import AboutJoe from "./about-joe"
+import AboutJames from "./about-james"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -126,20 +124,10 @@ export default function AboutLegos() {
   return (
     <div ref={containerRef} className="relative aspect-video overflow-hidden">
       <div ref={leftRef} className="absolute inset-0">
-        <Image className="absolute inset-0 w-full" src={PurpleBackground} quality={90} alt="" />
-        <div
-          className="absolute inset-0 w-full opacity-20 mix-blend-darken"
-          style={{ backgroundImage: "url(/noise.gif)" }}
-        ></div>
-        <Image className="absolute inset-0 w-full" src={Joe} alt="" />
+        <AboutJoe containerRef={containerRef} />
       </div>
       <div ref={rightRef} className="absolute inset-0">
-        <Image className="absolute inset-0 w-full" src={GreenBackground} quality={90} alt="" />
-        <div
-          className="absolute inset-0 w-full opacity-20 mix-blend-darken"
-          style={{ backgroundImage: "url(/noise.gif)" }}
-        ></div>
-        <Image className="absolute inset-0 w-full" src={James} alt="" />
+        <AboutJames containerRef={containerRef} />
       </div>
       <div
         ref={leftBioRef}
