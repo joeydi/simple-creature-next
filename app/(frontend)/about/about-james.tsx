@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import Image from "next/image"
 import James from "@/images/props/lego-james.png"
-import PurpleBackground from "@/../public/about-bg-purple.jpg"
+import GreenBackground from "@/../public/about-bg-green.jpg"
 import styles from "./AboutJames.module.scss"
 
 import Tablet1 from "@/images/props/tablet-1.png"
@@ -67,7 +67,7 @@ export default function AboutJames({ containerRef }: Props) {
 
   return (
     <>
-      <Image className="absolute inset-0 w-full" src={PurpleBackground} quality={90} alt="" />
+      <Image className="absolute inset-0 w-full" src={GreenBackground} quality={90} alt="" />
       <div
         className="absolute inset-0 w-full opacity-20 mix-blend-darken"
         style={{ backgroundImage: "url(/noise.gif)" }}
