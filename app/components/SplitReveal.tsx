@@ -62,7 +62,7 @@ export default function SplitReveal({ left, right, className, containerRef, onFr
 
       const rect = containerRef.current.getBoundingClientRect()
       const x = e.clientX - rect.left
-      const percentage = (x / rect.width) * 100
+      const percentage = 100 - (x / rect.width) * 100
 
       const currentTime = performance.now()
       const deltaTime = currentTime - lastTime
