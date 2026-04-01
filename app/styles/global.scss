@@ -9,6 +9,11 @@
   --container-padding: #{fluid(20, 80, $sm, $max)};
   --container-max-width: 1920px;
 
+  --text-base: #{fluid(18, 24, $sm, $max)};
+  --text-h1: #{fluid(60, 120, $sm, $max)};
+  --text-h2: #{fluid(30, 60, $sm, $max)};
+  --text-h3: #{fluid(20, 30, $sm, $max)};
+
   --spacing-xxl: #{fluid(80, 160, $sm, $max)};
   --spacing-xl: #{fluid(60, 120, $sm, $max)};
   --spacing-lg: #{fluid(40, 80, $sm, $max)};
