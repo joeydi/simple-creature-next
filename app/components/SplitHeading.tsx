@@ -29,8 +29,8 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
     })
 
     // Use RAF to batch reads after writes complete
-    requestAnimationFrame(() => {
-      if (!divRef.current) return
+    const rafId = requestAnimationFrame(() => {
+      if (!divRef.current || split.lines.length < 2) return
 
       // Batch all reads together to avoid forced reflows
       const divRect = divRef.current.getBoundingClientRect()
@@ -115,6 +115,11 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
         opacity: 1,
       })
     })
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      split.revert()
+    }
   })
 
   return (
