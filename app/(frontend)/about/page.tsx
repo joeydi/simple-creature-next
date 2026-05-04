@@ -8,8 +8,12 @@ import AboutLegos from "./about-legos"
 import AboutHero from "./about-hero"
 import Main from "@/components/main"
 import SplitHeading from "@/components/SplitHeading"
+import CategoryFilter from "@/components/CategoryFilter"
+import { getCategoriesWithCounts } from "@/(frontend)/work/actions"
 
-export default function About() {
+export default async function About() {
+  const categories = await getCategoriesWithCounts()
+
   return (
     <Main className="pb-(--spacing-xxl)">
       <PageHeader>
@@ -78,11 +82,7 @@ export default function About() {
         <Container>
           <Row>
             <Column lg="4" xl="3">
-              <h2>Interactive</h2>
-              <h2>Motion</h2>
-              <h2>3D</h2>
-              <h2>Frontend</h2>
-              <h2>Design</h2>
+              <CategoryFilter categories={categories} linkTo="/work" />
             </Column>
             <Column lg="4" xl="3">
               <p data-lag="0.05" className="text-balance">

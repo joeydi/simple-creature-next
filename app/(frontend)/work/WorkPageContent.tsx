@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, useCallback, useRef, useEffect, useLayoutEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Container from "@/components/Container"
@@ -20,7 +21,13 @@ interface Props {
 
 export default function WorkPageContent({ projects, categories }: Props) {
   const projectsRef = useRef<HTMLDivElement>(null)
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const searchParams = useSearchParams()
+  const initialCategorySlug = searchParams.get("category")
+  const initialCategoryId = useMemo(
+    () => categories.find((c) => c.slug === initialCategorySlug)?.id ?? null,
+    [categories, initialCategorySlug],
+  )
+  const [activeCategory, setActiveCategory] = useState<string | null>(initialCategoryId)
 
   const filteredProjects = useMemo(() => {
     if (activeCategory === null) {
