@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import PageHeader from "@/components/PageHeader"
 import { getProjects } from "@/(admin)/admin/projects/actions"
 import ScrambleText from "@/components/ScrambleText"
@@ -16,7 +17,9 @@ export default async function Work() {
         </h1>
       </PageHeader>
       <div className="overflow-hidden">
-        <WorkPageContent projects={projects} categories={categories} />
+        <Suspense fallback={null}>
+          <WorkPageContent projects={projects} categories={categories} />
+        </Suspense>
       </div>
     </Main>
   )
