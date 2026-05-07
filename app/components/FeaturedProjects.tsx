@@ -2,10 +2,15 @@ import Container from "@/components/Container"
 import ProjectCard from "@/components/ProjectCard"
 import Row from "./Row"
 import Column from "./Column"
-import { getProjects } from "@/(admin)/admin/projects/actions"
+import { getProjects, getProjectsByIds } from "@/(admin)/admin/projects/actions"
 
-const FeaturedProjects = async () => {
-  const { projects } = await getProjects(1, 4)
+type FeaturedProjectsProps = {
+  ids?: string[]
+}
+
+const FeaturedProjects = async ({ ids }: FeaturedProjectsProps) => {
+  const projects =
+    ids && ids.length > 0 ? await getProjectsByIds(ids) : (await getProjects(1, 4)).projects
 
   return (
     <section className="my-(--spacing-xl) perspective-[100vw] overflow-hidden">

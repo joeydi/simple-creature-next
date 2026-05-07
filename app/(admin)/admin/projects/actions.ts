@@ -246,6 +246,53 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
   }
 }
 
+export async function getProjectsByIds(ids: string[]): Promise<Project[]> {
+  if (ids.length === 0) return []
+
+  const rows = (await db
+    .select({
+      id: project.id,
+      title: project.title,
+      slug: project.slug,
+      shortDescription: project.shortDescription,
+      longDescription: project.longDescription,
+      thumbnailId: project.thumbnailId,
+      thumbnailUrl: asset.s3Url,
+      thumbnailAlt: asset.altText,
+      tags: project.tags,
+      content: project.content,
+      createdAt: project.createdAt,
+      updatedAt: project.updatedAt,
+    })
+    .from(project)
+    .leftJoin(asset, eq(project.thumbnailId, asset.id))
+    .where(inArray(project.id, ids))) as Project[]
+
+  const categoriesData = await db
+    .select({
+      projectId: projectCategory.projectId,
+      categoryId: category.id,
+      categoryName: category.name,
+    })
+    .from(projectCategory)
+    .innerJoin(category, eq(projectCategory.categoryId, category.id))
+    .where(inArray(projectCategory.projectId, ids))
+
+  const byId = new Map(
+    rows.map((p) => [
+      p.id,
+      {
+        ...p,
+        categories: categoriesData
+          .filter((c) => c.projectId === p.id)
+          .map((c) => ({ id: c.categoryId, name: c.categoryName })),
+      } as Project,
+    ]),
+  )
+
+  return ids.map((id) => byId.get(id)).filter((p): p is Project => p !== undefined)
+}
+
 export async function getProject(id: string) {
   // Check authentication
   const session = await auth.api.getSession({
