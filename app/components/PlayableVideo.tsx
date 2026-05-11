@@ -57,6 +57,15 @@ const Fullscreen = () => (
   </svg>
 )
 
+const FullscreenExit = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+    <path
+      fill="currentColor"
+      d="M6 18H4q-.425 0-.712-.288T3 17t.288-.712T4 16h3q.425 0 .713.288T8 17v3q0 .425-.288.713T7 21t-.712-.288T6 20zm12 0v2q0 .425-.288.713T17 21t-.712-.288T16 20v-3q0-.425.288-.712T17 16h3q.425 0 .713.288T21 17t-.288.713T20 18zM6 6V4q0-.425.288-.712T7 3t.713.288T8 4v3q0 .425-.288.713T7 8H4q-.425 0-.712-.288T3 7t.288-.712T4 6zm12 0h2q.425 0 .713.288T21 7t-.288.713T20 8h-3q-.425 0-.712-.288T16 7V4q0-.425.288-.712T17 3t.713.288T18 4z"
+    />
+  </svg>
+)
+
 export function PlayableVideo({ src, poster, width, height, className }: PlayableVideoProps) {
   const id = useId()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -69,6 +78,7 @@ export function PlayableVideo({ src, poster, width, height, className }: Playabl
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [controlsVisible, setControlsVisible] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const { ownerId, claim, release } = usePlayableVideoAudio()
   const audioEnabled = ownerId === id
@@ -123,6 +133,12 @@ export function PlayableVideo({ src, poster, width, height, className }: Playabl
     if (!el) return
     el.muted = !audioEnabled
   }, [audioEnabled])
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(document.fullscreenElement === containerRef.current)
+    document.addEventListener("fullscreenchange", onChange)
+    return () => document.removeEventListener("fullscreenchange", onChange)
+  }, [])
 
   useEffect(() => {
     const el = videoRef.current
@@ -190,8 +206,12 @@ export function PlayableVideo({ src, poster, width, height, className }: Playabl
     el.currentTime = Number(e.target.value)
   }
 
-  const fullscreen = () => {
-    containerRef.current?.requestFullscreen?.()
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.()
+    } else {
+      containerRef.current?.requestFullscreen?.()
+    }
   }
 
   return (
@@ -244,8 +264,13 @@ export function PlayableVideo({ src, poster, width, height, className }: Playabl
           >
             {audioEnabled ? <VolumeOff /> : <VolumeOn />}
           </button>
-          <button type="button" className={styles.button} onClick={fullscreen} aria-label="Fullscreen">
-            <Fullscreen />
+          <button
+            type="button"
+            className={styles.button}
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+          >
+            {isFullscreen ? <FullscreenExit /> : <Fullscreen />}
           </button>
         </div>
       )}
