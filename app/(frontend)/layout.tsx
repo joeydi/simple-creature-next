@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import localFont from "next/font/local"
 import Header from "@/components/Header"
 import { MenuProvider } from "@/contexts/MenuContext"
+import { PlayableVideoProvider } from "@/contexts/PlayableVideoContext"
 import "@/styles/tailwind.css"
 import "@/styles/global.scss"
 import { cn } from "@/lib/utils"
@@ -29,10 +30,12 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body className={cn("h-full bg-indigo-500 antialiased", clash.variable)}>
         <MenuProvider>
-          <Header />
-          <BackgroundGradient />
-          <FooterContent />
-          <SmoothScroller>{children}</SmoothScroller>
+          <PlayableVideoProvider>
+            <Header />
+            <BackgroundGradient />
+            <FooterContent />
+            <SmoothScroller>{children}</SmoothScroller>
+          </PlayableVideoProvider>
         </MenuProvider>
       </body>
     </html>

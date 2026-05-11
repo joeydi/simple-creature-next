@@ -7,6 +7,7 @@ import Column from "./Column"
 import Container from "./Container"
 import Sticky from "./Sticky"
 import { LoopingVideo } from "./LoopingVideo"
+import { PlayableVideo } from "./PlayableVideo"
 
 export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps }) {
   const widthMap = {
@@ -36,19 +37,22 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
                     alt={asset.altText || ""}
                     width={asset.metadata.width}
                     height={asset.metadata.height}
-                    className="rounded-media"
+                    className="rounded-media w-full bg-white"
                   />
                 )
               }
               if (asset.assetType === "video") {
+                const VideoComponent = (asset.metadata as { isPlayable?: boolean } | null)?.isPlayable
+                  ? PlayableVideo
+                  : LoopingVideo
                 return (
-                  <LoopingVideo
+                  <VideoComponent
                     key={asset.id}
                     src={asset.s3Url}
                     poster={asset.thumbnailS3Url ?? undefined}
                     width={asset.metadata?.width}
                     height={asset.metadata?.height}
-                    className="rounded-media bg-white"
+                    className="rounded-media w-full bg-white"
                   />
                 )
               }
