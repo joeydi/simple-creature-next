@@ -17,7 +17,7 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
   }
 
   return (
-    <Container className="my-(--spacing-xl) flex flex-col gap-8 lg:flex-row">
+    <Container className="my-(--spacing-xl)">
       <Row className={block.align === "left" ? "flex-row-reverse" : ""}>
         <Column lg={12 - widthMap[block.width]}>
           <Sticky>
