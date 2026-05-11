@@ -4,7 +4,7 @@ import AboutJames from "../about-james"
 
 export default function AboutTest() {
   return (
-    <Main className="pb-(--spacing-xxl)">
+    <Main className="pb-(--spacing-sm)">
       <div className="my-(--spacing-xxl) relative aspect-video overflow-hidden">
         <AboutJoe />
       </div>

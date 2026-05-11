@@ -4,7 +4,7 @@ import Main from "@/components/main"
 
 export default function News() {
   return (
-    <Main className="pb-(--spacing-xxl)">
+    <Main className="pb-(--spacing-sm)">
       <PageHeader>
         <h1>
           <MaskHeading>Latest Updates</MaskHeading>

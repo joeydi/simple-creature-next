@@ -10,7 +10,7 @@ export default async function Work() {
   const [{ projects }, categories] = await Promise.all([getProjects(1, 100), getCategoriesWithCounts()])
 
   return (
-    <Main className="pb-(--spacing-xxl)">
+    <Main className="pb-(--spacing-sm)">
       <PageHeader>
         <h1 className="text-header">
           <ScrambleText duration={0.5}>Design + Technology</ScrambleText>

@@ -1,11 +1,12 @@
+import Main from "@/components/main"
 import Row from "@/components/Row"
 import Container from "@/components/Container"
-import PageHeader from "@/components/PageHeader"
 import Column from "@/components/Column"
+import PageHeader from "@/components/PageHeader"
 
 export default function Home() {
   return (
-    <main className="pb-(--spacing-xxl)">
+    <Main className="pb-(--spacing-sm)">
       <PageHeader>
         <h1 className="text-header">intelligence, not artificial</h1>
       </PageHeader>
@@ -101,6 +102,6 @@ export default function Home() {
           </Row>
         </Container>
       </div>
-    </main>
+    </Main>
   )
 }

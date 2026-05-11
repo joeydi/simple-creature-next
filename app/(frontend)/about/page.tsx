@@ -15,7 +15,7 @@ export default async function About() {
   const categories = await getCategoriesWithCounts()
 
   return (
-    <Main className="pb-(--spacing-xxl)">
+    <Main className="pb-(--spacing-sm)">
       <PageHeader>
         <h1 className="text-header">
           <ScrambleText duration={0.5}>a veritable force</ScrambleText>
