@@ -65,9 +65,11 @@ export default function WorkPageContent({ projects, categories }: Props) {
         </Column>
         <Column sm="6">
           <p className="max-w-2xl text-balance">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus
-            vel facilisis.
+            We create immersive digital experiences where design, motion, and technology work together as one system.
+          </p>
+          <p className="max-w-2xl text-balance">
+            From interactive websites and branded experiences to visual effects, UI design, and animation, we focus on
+            crafting work that feels polished, responsive, and full of personality.
           </p>
         </Column>
       </Row>
