@@ -73,6 +73,7 @@ export const project = pgTable("project", {
   slug: text("slug").notNull().unique(),
   shortDescription: text("shortDescription").notNull(),
   longDescription: text("longDescription"),
+  url: text("url"),
   thumbnailId: text("thumbnailId").references(() => asset.id, { onDelete: "set null" }),
   tags: jsonb("tags"),
   content: jsonb("content"),

@@ -181,6 +181,17 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="url">URL</Label>
+                  <Input
+                    id="url"
+                    name="url"
+                    type="url"
+                    defaultValue={project.url || ""}
+                    placeholder="https://example.com"
+                  />
+                </div>
+
                 <TagsInput defaultValue={project.tags as [string, string][] | undefined} />
 
                 <CategorySelect categories={categories} defaultSelectedIds={project.categoryIds} />

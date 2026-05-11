@@ -135,6 +135,11 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="url">URL</Label>
+                  <Input id="url" name="url" type="url" placeholder="https://example.com" />
+                </div>
+
                 <TagsInput />
 
                 <CategorySelect categories={categories} />
