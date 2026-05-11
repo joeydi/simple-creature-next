@@ -31,6 +31,8 @@ export const assetSchema = z.object({
   s3Url: z.string(),
   assetType: z.string(),
   metadata: z.any(),
+  thumbnailS3Key: z.string().nullable().optional(),
+  thumbnailS3Url: z.string().nullable().optional(),
   title: z.string().nullable(),
   description: z.string().nullable(),
   altText: z.string().nullable(),
