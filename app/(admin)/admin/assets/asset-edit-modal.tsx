@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 import { updateAsset, getUploadUrl, replaceAsset, replaceThumbnail } from "./actions"
 import { extractVideoMetadata } from "./utils"
 import { useRouter } from "next/navigation"
@@ -30,6 +31,9 @@ export function AssetEditModal({
   const [description, setDescription] = useState(asset.description || "")
   const [altText, setAltText] = useState(asset.altText || "")
   const [tags, setTags] = useState(Array.isArray(asset.tags) ? asset.tags.join(", ") : "")
+  const [isPlayable, setIsPlayable] = useState<boolean>(
+    asset.assetType === "video" ? Boolean((asset.metadata as VideoMetadata | null)?.isPlayable) : false,
+  )
   const [showAltGenerator, setShowAltGenerator] = useState(false)
 
   // File replacement state
@@ -204,6 +208,10 @@ export function AssetEditModal({
 
         formData.append("tags", JSON.stringify(tagsArray))
 
+        if (currentAsset.assetType === "video") {
+          formData.append("isPlayable", String(isPlayable))
+        }
+
         await updateAsset(asset.id, formData)
         onOpenChange(false)
         router.refresh()
@@ -370,7 +378,7 @@ export function AssetEditModal({
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm">
               <div>
                 <span className="text-muted-foreground">Filename:</span>
                 <p className="font-medium">{currentAsset.filename}</p>
@@ -387,6 +395,19 @@ export function AssetEditModal({
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {currentAsset.assetType === "video" && (
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="isPlayable"
+                    checked={isPlayable}
+                    onCheckedChange={(v) => setIsPlayable(v === true)}
+                    disabled={isPending || isReplacing}
+                    className="mt-0.5"
+                  />
+                  <Label htmlFor="isPlayable">Show player controls</Label>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
                 <Input

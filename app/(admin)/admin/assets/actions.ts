@@ -357,6 +357,16 @@ export async function updateAsset(id: string, formData: FormData) {
   const altText = formData.get("altText") as string | null
   const tagsStr = formData.get("tags") as string | null
   const tags = tagsStr ? JSON.parse(tagsStr) : null
+  const isPlayableStr = formData.get("isPlayable") as string | null
+
+  let metadataUpdate: VideoMetadata | undefined
+  if (isPlayableStr !== null) {
+    const existing = await db.select().from(asset).where(eq(asset.id, id)).limit(1)
+    if (existing[0]?.assetType === "video") {
+      const current = (existing[0].metadata as VideoMetadata | null) ?? {}
+      metadataUpdate = { ...current, isPlayable: isPlayableStr === "true" }
+    }
+  }
 
   await db
     .update(asset)
@@ -365,6 +375,7 @@ export async function updateAsset(id: string, formData: FormData) {
       description: description || null,
       altText: altText || null,
       tags,
+      ...(metadataUpdate ? { metadata: metadataUpdate as any } : {}),
       updatedAt: new Date(),
     })
     .where(eq(asset.id, id))
