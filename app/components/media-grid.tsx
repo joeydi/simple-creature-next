@@ -1,6 +1,7 @@
 import { MediaGridBlockProps } from "@/(admin)/admin/projects/blocks/media-grid-block"
 import Image from "next/image"
 import Container from "./Container"
+import { LoopingVideo } from "./LoopingVideo"
 
 const columnClasses: Record<string, string> = {
   "1": "grid-cols-1",
@@ -28,15 +29,12 @@ export function MediaGrid({ block }: { block: MediaGridBlockProps }) {
           }
           if (asset.assetType === "video") {
             return (
-              <video
+              <LoopingVideo
                 key={asset.id}
                 src={asset.s3Url}
+                poster={asset.thumbnailS3Url ?? undefined}
                 width={asset.metadata?.width}
                 height={asset.metadata?.height}
-                autoPlay
-                loop
-                muted
-                playsInline
                 className="rounded-media bg-white"
               />
             )

@@ -6,6 +6,7 @@ import Row from "./Row"
 import Column from "./Column"
 import Container from "./Container"
 import Sticky from "./Sticky"
+import { LoopingVideo } from "./LoopingVideo"
 
 export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps }) {
   const widthMap = {
@@ -41,15 +42,12 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
               }
               if (asset.assetType === "video") {
                 return (
-                  <video
+                  <LoopingVideo
                     key={asset.id}
                     src={asset.s3Url}
+                    poster={asset.thumbnailS3Url ?? undefined}
                     width={asset.metadata?.width}
                     height={asset.metadata?.height}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
                     className="rounded-media bg-white"
                   />
                 )

@@ -1,5 +1,6 @@
 import { FullWidthMediaBlockProps } from "@/(admin)/admin/projects/blocks/full-width-media-block"
 import Image from "next/image"
+import { LoopingVideo } from "./LoopingVideo"
 
 export function FullWidthMedia({ block }: { block: FullWidthMediaBlockProps }) {
   const asset = block.asset
@@ -18,14 +19,11 @@ export function FullWidthMedia({ block }: { block: FullWidthMediaBlockProps }) {
         />
       )}
       {asset.assetType === "video" && (
-        <video
+        <LoopingVideo
           src={asset.s3Url}
+          poster={asset.thumbnailS3Url ?? undefined}
           width={asset.metadata?.width}
           height={asset.metadata?.height}
-          autoPlay
-          loop
-          muted
-          playsInline
           className="w-full bg-white"
         />
       )}
