@@ -43,9 +43,9 @@ export default function AboutLegos() {
                 <p className="font-sm text-white/70">Technical Director</p>
               </div>
             </div>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo.
+            <p className="text-balance">
+              Joe is a designer and developer who specializes in crafting high-performance digital experiences that
+              blend thoughtful design with clean, scalable code.
             </p>
           </div>
         </>
@@ -70,9 +70,9 @@ export default function AboutLegos() {
                 <p className="font-sm text-white/70">Creative Director</p>
               </div>
             </div>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo.
+            <p className="text-balance">
+              James is a motion designer and visual storyteller known for creating cinematic animations, immersive
+              interfaces, and richly detailed digital experiences.
             </p>
           </div>
         </>
