@@ -56,6 +56,32 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
       })
 
       timeline.fromTo(
+        split.lines[0],
+        {
+          y: " -0.1em",
+        },
+        {
+          y: "0em",
+          duration: 2,
+          ease: "power3.inOut",
+        },
+        0,
+      )
+
+      timeline.fromTo(
+        split.lines[1],
+        {
+          y: "0.1em",
+        },
+        {
+          y: "0em",
+          duration: 2,
+          ease: "power3.inOut",
+        },
+        0,
+      )
+
+      timeline.fromTo(
         split.lines[0].querySelectorAll("div"),
         {
           yPercent: 100,
@@ -123,7 +149,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
   })
 
   return (
-    <div ref={divRef} style={{ opacity: 0 }}>
+    <div ref={divRef} style={{ opacity: 0 }} className="[&>div]:overflow-hidden">
       {children}
     </div>
   )
