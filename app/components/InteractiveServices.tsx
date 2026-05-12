@@ -90,29 +90,31 @@ export const InteractiveServices = () => {
       }
 
       const sectionRect = sectionRef.current.getBoundingClientRect()
+      const scaleFactor = window.innerWidth / sectionRect.width
       const list1Rect = list1Ref.current.getBoundingClientRect()
-      // const list2Rect = list2Ref.current.getBoundingClientRect()
-
       const points: number[][] = []
 
       list1Items?.forEach((item) => {
         const itemRect = item.getBoundingClientRect()
-        points.push([itemRect.x - sectionRect.x, itemRect.y - sectionRect.y])
+        points.push([(itemRect.x - sectionRect.x) * scaleFactor, (itemRect.y - sectionRect.y) * scaleFactor])
       })
 
       // Insert one point at the start to the top left of the first item
-      points.unshift([-window.innerWidth / 4, points[0][1] - list1Rect.height / 4])
+      points.unshift([-window.innerWidth / 4, (points[0][1] - list1Rect.height / 4) * scaleFactor])
 
       // Insert one point after the first list to the right
-      points.push([window.innerWidth * 1.25, sectionRect.height / 2])
+      points.push([window.innerWidth * 1.25, (sectionRect.height / 2) * scaleFactor])
 
       list2Items?.forEach((item) => {
         const itemRect = item.getBoundingClientRect()
-        points.push([itemRect.x + itemRect.width - sectionRect.x, itemRect.y - sectionRect.y])
+        points.push([
+          (itemRect.x + itemRect.width - sectionRect.x) * scaleFactor,
+          (itemRect.y - sectionRect.y) * scaleFactor,
+        ])
       })
 
       // Insert one point at the end to the bottom left of the last item
-      points.push([-window.innerWidth / 4, sectionRect.height])
+      points.push([-window.innerWidth / 4, sectionRect.height * scaleFactor])
 
       const spline = new BSpline(points, 3, false)
 
@@ -164,8 +166,6 @@ export const InteractiveServices = () => {
     }
     const totalLength = cum[cum.length - 1]
     if (totalLength === 0) return []
-
-    console.log({ totalLength })
 
     const indexAt = (targetLen: number) => {
       let lo = 0
