@@ -25,6 +25,8 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
   const imageRef = useRef<HTMLImageElement>(null)
 
   useGSAP(() => {
+    gsap.set(cardRef.current, { opacity: 1 })
+
     gsap.set(imageRef.current, {
       scale: 1.5,
       filter: "blur(8px)",
@@ -108,7 +110,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
       ref={cardRef}
       href={`/work/${project.slug}`}
       className={cn(
-        "perspective-[100vw] text-decoration-none block text-inherit",
+        "perspective-[100vw] text-decoration-none block text-inherit opacity-0",
         align === "left" ? "md:perspective-origin-right" : "md:perspective-origin-left",
         className,
       )}
