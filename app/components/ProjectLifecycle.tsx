@@ -13,7 +13,7 @@ import SplitHeading from "./SplitHeading"
 import MaskHeading from "./MaskHeading"
 import { useEffect, useRef, useState } from "react"
 import { BSpline } from "@/lib/BSpline"
-import { ProjectLifecycleItem } from "./ProjectLifecycleItem"
+import { ServiceItem } from "./ServiceItem"
 
 gsap.registerPlugin(useGSAP, DrawSVGPlugin, ScrollTrigger)
 
@@ -165,18 +165,18 @@ export const ProjectLifecycle = () => {
             <ScrambleText reset={true}>Nice little summary statement</ScrambleText>
           </p>
           <ul ref={list1Ref} className={styles.list1}>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.2}>
+            <ServiceItem progress={timelineProgress} trigger={0.2}>
               Research & Positioning
-            </ProjectLifecycleItem>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.28}>
+            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.28}>
               Goals Outline
-            </ProjectLifecycleItem>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.34}>
+            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.34}>
               Define Technical Approach
-            </ProjectLifecycleItem>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.39}>
+            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.39}>
               Project Management
-            </ProjectLifecycleItem>
+            </ServiceItem>
           </ul>
         </div>
         <div className={styles.section}>
@@ -187,21 +187,21 @@ export const ProjectLifecycle = () => {
             <ScrambleText reset={true}>Nice little summary statement</ScrambleText>
           </p>
           <ul ref={list2Ref} className={styles.list2}>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.58} align="right">
+            <ServiceItem progress={timelineProgress} trigger={0.58} align="right">
               Identify & Perception
-            </ProjectLifecycleItem>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.61} align="right">
+            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.61} align="right">
               User Research / UX
-            </ProjectLifecycleItem>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.65} align="right">
+            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.65} align="right">
               UI Design
-            </ProjectLifecycleItem>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.7} align="right">
+            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.7} align="right">
               Art Direction
-            </ProjectLifecycleItem>
-            <ProjectLifecycleItem progress={timelineProgress} trigger={0.75} align="right">
+            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.75} align="right">
               Web / Motion Design
-            </ProjectLifecycleItem>
+            </ServiceItem>
           </ul>
         </div>
       </Container>

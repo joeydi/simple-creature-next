@@ -1,0 +1,82 @@
+@use "@/styles/variables" as *;
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  justify-self: flex-start;
+  gap: 1rem;
+  padding: 20px;
+  font-weight: 500;
+  color: var(--color);
+  white-space: nowrap;
+
+  &:hover .description {
+    z-index: 1;
+    pointer-events: all;
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate(-50%, 0px);
+  }
+}
+
+.right {
+  flex-direction: row-reverse;
+  justify-self: flex-end;
+}
+
+.box {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 3px;
+  border: 1px solid var(--color);
+  will-change: transform;
+}
+
+.dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background-color: var(--color);
+  will-change: transform;
+}
+
+.mask {
+  overflow: hidden;
+}
+
+.description {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(20px);
+  transform: translate(-50%, -20px);
+  transition:
+    opacity 300ms,
+    filter 300ms,
+    transform 500ms $ease-out;
+  width: 100vw;
+  max-width: 480px;
+  padding: var(--spacing-md);
+  white-space: wrap;
+  color: white;
+  backdrop-filter: blur(32px);
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--colorStart) 15%, transparent),
+    color-mix(in srgb, var(--colorEnd) 15%, transparent)
+  );
+  border-radius: clamp(16px, 9.14286px + 1.19048vw, 32px);
+
+  @supports (corner-shape: superellipse(0.5)) {
+    border-radius: clamp(30px, 17.1429px + 2.23214vw, 60px);
+    corner-shape: superellipse(2);
+  }
+}

@@ -8,7 +8,7 @@ import styles from "./InteractiveServices.module.scss"
 import Container from "./Container"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { BSpline } from "@/lib/BSpline"
-import { ProjectLifecycleItem } from "./ProjectLifecycleItem"
+import { ServiceItem } from "./ServiceItem"
 
 gsap.registerPlugin(useGSAP, DrawSVGPlugin, ScrollTrigger)
 
@@ -20,26 +20,38 @@ const TEXT_COLORS = ["#FFFFFF", "#1A3EBF", "#B6FD6E", "#FFFFFF", "#1A3EBF", "#F4
 const list1 = [
   {
     label: "Monthly Maintenance",
+    description:
+      "Website maintenance focused on security, performance, updates, backups, and ongoing support to keep your site stable, fast, and running smoothly.",
     trigger: 0.1,
   },
   {
     label: "Front End Design",
+    description:
+      "Thoughtfully designed, responsive interfaces that balance visual clarity, usability, and performance across every screen size.",
     trigger: 0.16,
   },
   {
     label: "Interactive Animation",
+    description:
+      "Custom motion and interactive experiences that bring digital products to life through purposeful, engaging animation.",
     trigger: 0.21,
   },
   {
     label: "Content Management",
+    description:
+      "Flexible content management systems that make it easy for teams to update, organize, and scale website content.",
     trigger: 0.26,
   },
   {
     label: "App Development",
+    description:
+      "Custom web applications built for speed, reliability, and seamless user experiences across modern devices and platforms.",
     trigger: 0.31,
   },
   {
-    label: "Integrations",
+    label: "Back End Integrations",
+    description:
+      "Reliable integrations connecting websites and applications with third-party platforms, APIs, databases, and business systems.",
     trigger: 0.37,
   },
 ]
@@ -47,22 +59,32 @@ const list1 = [
 const list2 = [
   {
     label: "Website Migrations",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
     trigger: 0.58,
   },
   {
     label: "Front End Design",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
     trigger: 0.62,
   },
   {
     label: "Creative Coding",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
     trigger: 0.69,
   },
   {
     label: "Back End Integrations",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
     trigger: 0.76,
   },
   {
     label: "Performance Analysis",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
     trigger: 0.82,
   },
 ]
@@ -207,9 +229,10 @@ export const InteractiveServices = () => {
       drawSVG: "0 100% live",
       ease: "none",
       scrollTrigger: {
+        markers: true,
         trigger: sectionRef.current,
         start: "top 90%",
-        end: "bottom bottom",
+        end: "bottom 75%",
         scrub: 1,
         onUpdate: (self) => {
           setTimelineProgress(self.progress)
@@ -221,7 +244,7 @@ export const InteractiveServices = () => {
   return (
     <section
       ref={sectionRef}
-      className="pb-(--spacing-xxl) relative bg-black text-white"
+      className="relative mb-[25vw] bg-black text-white"
       onClick={() => {
         setReset(reset + 1)
       }}
@@ -270,28 +293,38 @@ export const InteractiveServices = () => {
       <Container>
         <ul ref={list1Ref} className={styles.list1}>
           {list1.map((service) => (
-            <ProjectLifecycleItem
+            <ServiceItem
               key={service.label}
-              style={{ "--color": gsap.utils.interpolate(TEXT_COLORS, service.trigger) }}
+              style={{
+                "--color": gsap.utils.interpolate(TEXT_COLORS, service.trigger),
+                "--colorStart": gsap.utils.interpolate(TEXT_COLORS, service.trigger - 0.05),
+                "--colorEnd": gsap.utils.interpolate(TEXT_COLORS, service.trigger + 0.05),
+              }}
               progress={timelineProgress}
               trigger={service.trigger}
               align="left"
-            >
-              {service.label}
-            </ProjectLifecycleItem>
+              label={service.label}
+              description={service.description}
+            />
           ))}
         </ul>
         <ul ref={list2Ref} className={styles.list2}>
           {list2.map((service) => (
-            <ProjectLifecycleItem
+            <ServiceItem
               key={service.label}
-              style={{ "--color": gsap.utils.interpolate(TEXT_COLORS, service.trigger) }}
+              style={{
+                "--color": gsap.utils.interpolate(TEXT_COLORS, service.trigger),
+                "--colorStart": gsap.utils.interpolate(TEXT_COLORS, service.trigger - 0.05),
+                "--colorEnd": gsap.utils.interpolate(TEXT_COLORS, service.trigger + 0.05),
+              }}
               progress={timelineProgress}
               trigger={service.trigger}
               align="right"
+              label={service.label}
+              description={service?.description}
             >
               {service.label}
-            </ProjectLifecycleItem>
+            </ServiceItem>
           ))}
         </ul>
       </Container>

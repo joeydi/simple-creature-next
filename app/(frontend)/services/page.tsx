@@ -45,7 +45,7 @@ export default function Services() {
       </Container>
       <FeaturedProjects ids={projects} />
 
-      <div className="bg-black text-white">
+      <div className="bg-black pb-1 text-white">
         <Container className="py-(--spacing-xl)">
           <Row>
             <Column lg="6">
