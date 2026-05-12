@@ -123,7 +123,7 @@ export const LogoGrid = () => {
       scrollTrigger: {
         trigger: maskRef.current,
         start: "top bottom",
-        end: "bottom top",
+        end: "bottom bottom",
         scrub: 1,
       },
     })
@@ -133,10 +133,12 @@ export const LogoGrid = () => {
       {
         xPercent: 0,
         yPercent: 0,
+        rotateY: 10,
       },
       {
         xPercent: -50,
         yPercent: -50,
+        rotateY: -10,
         duration: 1,
         ease: "none",
       },
