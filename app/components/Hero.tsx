@@ -101,8 +101,8 @@ const Hero = () => {
           <Column lg="6">
             <h1 className="ml-4">
               <SplitHeading>
-                Design &amp; <br />
-                Animation
+                Web Design <br />
+                &amp; Animation
               </SplitHeading>
             </h1>
           </Column>
