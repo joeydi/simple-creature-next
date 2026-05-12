@@ -20,6 +20,7 @@
   --spacing-md: #{fluid(32, 64, $sm, $max)};
   --spacing-sm: #{fluid(24, 48, $sm, $max)};
   --spacing-xs: #{fluid(16, 32, $sm, $max)};
+  --spacing-xxs: #{fluid(12, 24, $sm, $max)};
 
   --media-radius: #{fluid(16, 32, $sm, $max)};
 }

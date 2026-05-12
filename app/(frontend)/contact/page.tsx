@@ -5,7 +5,7 @@ import Main from "@/components/main"
 export default function Contact() {
   return (
     <Main className="pb-(--spacing-sm)">
-      <PageHeader>
+      <PageHeader crumbs={[]}>
         <h1>
           <MaskHeading>Contact Us</MaskHeading>
         </h1>

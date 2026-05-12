@@ -16,7 +16,7 @@ export default async function About() {
 
   return (
     <Main className="pb-(--spacing-sm)">
-      <PageHeader>
+      <PageHeader crumbs={[]}>
         <h1 className="text-header">
           <ScrambleText duration={0.5}>a veritable force</ScrambleText>
         </h1>

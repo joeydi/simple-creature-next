@@ -29,7 +29,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
 
   return (
     <Main className="pb-(--spacing-sm)">
-      <PageHeader>
+      <PageHeader crumbs={[{ href: "/work", label: "Work" }]}>
         <h1 className="text-header">
           <MaskHeading>{project.title}</MaskHeading>
         </h1>

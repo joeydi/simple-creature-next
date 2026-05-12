@@ -19,7 +19,7 @@ const projects = [
 export default function Services() {
   return (
     <Main>
-      <PageHeader>
+      <PageHeader crumbs={[]}>
         <h1 className="text-header">
           <ScrambleText duration={0.5}>Creative, Elegant, and Responsive</ScrambleText>
         </h1>
