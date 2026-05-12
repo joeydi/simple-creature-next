@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { CSSProperties, useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
@@ -11,10 +11,11 @@ interface Props {
   progress: number;
   trigger: number;
   align?: "left" | "right";
+  style?: CSSProperties & Record<`--${string}`, string | number>;
   children: string;
 }
 
-export const ProjectLifecycleItem = ({ progress, trigger, align = "left", children }: Props) => {
+export const ProjectLifecycleItem = ({ progress, trigger, align = "left", style, children }: Props) => {
   const boxRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -82,7 +83,7 @@ export const ProjectLifecycleItem = ({ progress, trigger, align = "left", childr
   );
 
   return (
-    <li className={`${styles.item} ${styles[align]}`}>
+    <li className={`${styles.item} ${styles[align]}`} style={style}>
       <div ref={boxRef} className={styles.box}>
         <div ref={dotRef} className={styles.dot}></div>
       </div>

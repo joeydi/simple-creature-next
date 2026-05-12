@@ -2,7 +2,7 @@
 
 import { gsap } from "gsap"
 import { useGSAP } from "@gsap/react"
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin"
+import { MotionPathPlugin } from "gsap/MotionPathPlugin"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import styles from "./InteractiveServices.module.scss"
 import Container from "./Container"
@@ -10,7 +10,11 @@ import { useEffect, useRef, useState } from "react"
 import { BSpline } from "@/lib/BSpline"
 import { ProjectLifecycleItem } from "./ProjectLifecycleItem"
 
-gsap.registerPlugin(useGSAP, DrawSVGPlugin, ScrollTrigger)
+gsap.registerPlugin(useGSAP, MotionPathPlugin, ScrollTrigger)
+
+const NUM_DOTS = 600
+const STROKE_WIDTH = 50
+const GRADIENT_COLORS = ["#FFFFFF", "#1A3EBF", "#B6FD6E", "#FFFFFF", "#1A3EBF", "#F43791", "#FFFFFF"]
 
 const list1 = [
   {
@@ -66,6 +70,7 @@ export const InteractiveServices = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const polylineRef = useRef<SVGPolylineElement>(null)
+  const dotsGroupRef = useRef<SVGGElement>(null)
   const list1Ref = useRef<HTMLUListElement>(null)
   const list2Ref = useRef<HTMLUListElement>(null)
 
@@ -144,20 +149,45 @@ export const InteractiveServices = () => {
   }, [reset])
 
   useGSAP(() => {
-    if (!splinePoints || !polylineRef.current) {
+    if (!splinePoints || !splinePoints.length || !polylineRef.current || !dotsGroupRef.current) {
       return
     }
 
-    gsap.set(polylineRef.current, {
-      drawSVG: "0% 0%",
-    })
+    const dotsGroup = dotsGroupRef.current
+    dotsGroup.innerHTML = ""
 
-    gsap.to(polylineRef.current, {
-      drawSVG: "0 100% live",
-      stroke: "#e5307c",
+    const pathData = `M ${splinePoints.map(([x, y]) => `${x},${y}`).join(" L ")}`
+
+    const dots: SVGCircleElement[] = []
+    for (let idx = 0; idx < NUM_DOTS; idx++) {
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+      dotsGroup.appendChild(circle)
+
+      gsap.set(circle, {
+        motionPath: {
+          path: pathData,
+          start: idx / NUM_DOTS,
+          end: idx / NUM_DOTS,
+        },
+        attr: {
+          cx: 0,
+          cy: 0,
+          r: STROKE_WIDTH / 2,
+          fill: gsap.utils.interpolate(GRADIENT_COLORS, idx / NUM_DOTS),
+        },
+        scale: 0,
+        transformOrigin: "center center",
+      })
+
+      dots.push(circle)
+    }
+
+    gsap.to(dots, {
+      scale: 1,
+      duration: 0,
       ease: "none",
+      stagger: { each: 1 / NUM_DOTS },
       scrollTrigger: {
-        // markers: true,
         trigger: sectionRef.current,
         start: "top 75%",
         end: "bottom bottom",
@@ -188,17 +218,19 @@ export const InteractiveServices = () => {
               return `${x},${y}`
             })
             .join(" ")}
-          stroke="#0f6cc6"
-          strokeWidth={40}
+          stroke="none"
+          strokeWidth={STROKE_WIDTH}
           strokeLinecap="round"
           fill="none"
         />
+        <g ref={dotsGroupRef} />
       </svg>
       <Container>
         <ul ref={list1Ref} className={styles.list1}>
           {list1.map((service) => (
             <ProjectLifecycleItem
               key={service.label}
+              style={{ "--color": gsap.utils.interpolate(GRADIENT_COLORS, service.trigger) }}
               progress={timelineProgress}
               trigger={service.trigger}
               align="left"
@@ -211,6 +243,7 @@ export const InteractiveServices = () => {
           {list2.map((service) => (
             <ProjectLifecycleItem
               key={service.label}
+              style={{ "--color": gsap.utils.interpolate(GRADIENT_COLORS, service.trigger) }}
               progress={timelineProgress}
               trigger={service.trigger}
               align="right"
