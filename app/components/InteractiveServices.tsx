@@ -322,9 +322,7 @@ export const InteractiveServices = () => {
               align="right"
               label={service.label}
               description={service?.description}
-            >
-              {service.label}
-            </ServiceItem>
+            />
           ))}
         </ul>
       </Container>
