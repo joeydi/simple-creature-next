@@ -10,6 +10,7 @@ import Row from "@/components/Row"
 import Column from "@/components/Column"
 import { ProjectContent } from "@/lib/schemas/project-content"
 import Main from "@/components/main"
+import ScrambleText from "@/components/ScrambleText"
 
 const blockMap = {
   "full-width-media": FullWidthMedia,
@@ -31,7 +32,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
     <Main className="pb-(--spacing-sm)">
       <PageHeader crumbs={[{ href: "/work", label: "Work" }]}>
         <h1 className="text-header">
-          <MaskHeading>{project.title}</MaskHeading>
+          <ScrambleText duration={0.5}>{project.title}</ScrambleText>
         </h1>
       </PageHeader>
       <Container className="my-(--spacing-xxl)">
