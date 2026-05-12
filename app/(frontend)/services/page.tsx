@@ -45,27 +45,29 @@ export default function Services() {
       </Container>
       <FeaturedProjects ids={projects} />
 
-      <Container className="py-(--spacing-xl) bg-black text-white">
-        <Row>
-          <Column lg="6">
-            <h1 className="ml-(--spacing-xs)">
-              <SplitHeading>Interactive Services</SplitHeading>
-            </h1>
-          </Column>
-          <Column lg="4" className="text-balance lg:mt-4">
-            <p data-lag="0.05" className="ml-(--spacing-xs) lg:ml-0">
-              <ScrambleText>
-                Interactive work sparked our journey and still sits at the core of what we do. It continues to shape how
-                we think, create, and collaborate—bringing clients thoughtful, evolving solutions grounded in
-                experience.
-              </ScrambleText>
-            </p>
-          </Column>
-          <Column lg="2"></Column>
-        </Row>
-      </Container>
+      <div className="bg-black text-white">
+        <Container className="py-(--spacing-xl)">
+          <Row>
+            <Column lg="6">
+              <h1 className="ml-(--spacing-xs)">
+                <SplitHeading>Interactive Services</SplitHeading>
+              </h1>
+            </Column>
+            <Column lg="4" className="text-balance lg:mt-4">
+              <p data-lag="0.05" className="ml-(--spacing-xs) lg:ml-0">
+                <ScrambleText>
+                  Interactive work sparked our journey and still sits at the core of what we do. It continues to shape
+                  how we think, create, and collaborate—bringing clients thoughtful, evolving solutions grounded in
+                  experience.
+                </ScrambleText>
+              </p>
+            </Column>
+            <Column lg="2"></Column>
+          </Row>
+        </Container>
 
-      <InteractiveServices />
+        <InteractiveServices />
+      </div>
     </Main>
   )
 }
