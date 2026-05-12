@@ -5,10 +5,10 @@
   align-self: flex-start;
   justify-self: flex-start;
   gap: 1rem;
-  padding: 6px;
-  border-radius: 4px;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.5);
+  // padding: 6px;
+  // border-radius: 4px;
+  // backdrop-filter: blur(10px);
+  // background: rgba(255, 255, 255, 0.5);
   white-space: nowrap;
 }
 
@@ -25,14 +25,16 @@
   width: 1.5em;
   height: 1.5em;
   border-radius: 3px;
-  border: 1px solid black;
+  border: 1px solid white;
+  will-change: transform;
 }
 
 .dot {
   width: 0.5em;
   height: 0.5em;
   border-radius: 50%;
-  background-color: black;
+  background-color: white;
+  will-change: transform;
 }
 
 .mask {

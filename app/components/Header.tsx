@@ -19,8 +19,8 @@ const links = [
     url: "/work",
   },
   {
-    title: "News",
-    url: "/news",
+    title: "Services",
+    url: "/services",
   },
   {
     title: "About",
