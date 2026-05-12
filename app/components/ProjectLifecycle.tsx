@@ -165,18 +165,10 @@ export const ProjectLifecycle = () => {
             <ScrambleText reset={true}>Nice little summary statement</ScrambleText>
           </p>
           <ul ref={list1Ref} className={styles.list1}>
-            <ServiceItem progress={timelineProgress} trigger={0.2}>
-              Research & Positioning
-            </ServiceItem>
-            <ServiceItem progress={timelineProgress} trigger={0.28}>
-              Goals Outline
-            </ServiceItem>
-            <ServiceItem progress={timelineProgress} trigger={0.34}>
-              Define Technical Approach
-            </ServiceItem>
-            <ServiceItem progress={timelineProgress} trigger={0.39}>
-              Project Management
-            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.2} label="Research & Positioning" />
+            <ServiceItem progress={timelineProgress} trigger={0.28} label="Goals Outline" />
+            <ServiceItem progress={timelineProgress} trigger={0.34} label="Define Technical Approach" />
+            <ServiceItem progress={timelineProgress} trigger={0.39} label="Project Management" />
           </ul>
         </div>
         <div className={styles.section}>
@@ -187,21 +179,11 @@ export const ProjectLifecycle = () => {
             <ScrambleText reset={true}>Nice little summary statement</ScrambleText>
           </p>
           <ul ref={list2Ref} className={styles.list2}>
-            <ServiceItem progress={timelineProgress} trigger={0.58} align="right">
-              Identify & Perception
-            </ServiceItem>
-            <ServiceItem progress={timelineProgress} trigger={0.61} align="right">
-              User Research / UX
-            </ServiceItem>
-            <ServiceItem progress={timelineProgress} trigger={0.65} align="right">
-              UI Design
-            </ServiceItem>
-            <ServiceItem progress={timelineProgress} trigger={0.7} align="right">
-              Art Direction
-            </ServiceItem>
-            <ServiceItem progress={timelineProgress} trigger={0.75} align="right">
-              Web / Motion Design
-            </ServiceItem>
+            <ServiceItem progress={timelineProgress} trigger={0.58} align="right" label="Identify & Perception" />
+            <ServiceItem progress={timelineProgress} trigger={0.61} align="right" label="User Research / UX" />
+            <ServiceItem progress={timelineProgress} trigger={0.65} align="right" label="UI Design" />
+            <ServiceItem progress={timelineProgress} trigger={0.7} align="right" label="Art Direction" />
+            <ServiceItem progress={timelineProgress} trigger={0.75} align="right" label="Web / Motion Design" />
           </ul>
         </div>
       </Container>
