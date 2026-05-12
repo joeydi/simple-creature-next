@@ -49,6 +49,10 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  --color-blue: #1a3ebf;
+  --color-green: #b6fd6e;
+  --color-pink: #f43791;
+
   --text-body: clamp(16px, 12.5714px + 0.595238vw, 24px);
   --text-body--line-height: 1.4;
   --text-body--font-weight: 400;
