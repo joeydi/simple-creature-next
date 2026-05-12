@@ -21,7 +21,7 @@ export function ContentWithMedia({ block }: { block: ContentWithMediaBlockProps 
       <Row className={block.align === "left" ? "flex-row-reverse" : ""}>
         <Column lg={12 - widthMap[block.width]}>
           <Sticky>
-            <div className="p-4 lg:p-8 [&>h3]:text-gray-500">
+            <div className="markdown-content p-4 lg:p-8">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{block.content}</ReactMarkdown>
             </div>
           </Sticky>

@@ -12,6 +12,18 @@
   }
 }
 
+@utility markdown-content {
+  & h3 {
+    color: var(--color-gray-500);
+  }
+
+  & a {
+    color: var(--color-pink);
+    font-weight: 450;
+    border-bottom: 1px dotted var(--color-gray-300);
+  }
+}
+
 @theme {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
