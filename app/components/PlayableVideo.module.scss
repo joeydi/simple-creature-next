@@ -1,3 +1,5 @@
+@use "@/styles/variables" as *;
+
 .container {
   position: relative;
   display: block;
@@ -20,6 +22,7 @@
   border: 0;
   border-radius: 50%;
   background: rgba(128, 128, 128, 0.25);
+  background: $pink;
   color: white;
   display: grid;
   place-items: center;
@@ -67,6 +70,11 @@
   &:first-child {
     width: 4rem;
     height: 4rem;
+    transition: background 300ms;
+
+    @starting-style {
+      background: $pink;
+    }
 
     svg {
       width: 2rem;
