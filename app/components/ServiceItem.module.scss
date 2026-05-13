@@ -31,16 +31,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: 3px;
+  width: 1.75em;
+  height: 1.75em;
+  border-radius: 4px;
   border: 1px solid var(--color);
   will-change: transform;
 }
 
 .dot {
-  width: 0.5em;
-  height: 0.5em;
+  width: 0.5833em;
+  height: 0.5833em;
   border-radius: 50%;
   background-color: var(--color);
   will-change: transform;
