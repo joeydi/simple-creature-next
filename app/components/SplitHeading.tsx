@@ -9,10 +9,11 @@ import { useRef } from "react"
 gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger)
 
 interface Props {
+  delay?: number
   reset?: boolean
 }
 
-const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props>) => {
+const SplitHeading = ({ reset = false, delay = 0, children }: React.PropsWithChildren<Props>) => {
   const divRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
@@ -65,7 +66,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
           duration: 2,
           ease: "power3.inOut",
         },
-        0,
+        0 + delay,
       )
 
       timeline.fromTo(
@@ -78,7 +79,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
           duration: 2,
           ease: "power3.inOut",
         },
-        0,
+        0 + delay,
       )
 
       timeline.fromTo(
@@ -92,7 +93,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
           stagger: 0.125,
           ease: "power3.out",
         },
-        0,
+        0 + delay,
       )
 
       timeline.fromTo(
@@ -106,7 +107,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
           stagger: 0.125,
           ease: "power3.inOut",
         },
-        0,
+        0 + delay,
       )
 
       timeline.fromTo(
@@ -120,7 +121,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
           stagger: 0.125,
           ease: "power3.out",
         },
-        0,
+        0 + delay,
       )
 
       timeline.fromTo(
@@ -134,7 +135,7 @@ const SplitHeading = ({ reset = false, children }: React.PropsWithChildren<Props
           stagger: 0.125,
           ease: "power3.inOut",
         },
-        0,
+        0 + delay,
       )
 
       gsap.set(divRef.current, {
