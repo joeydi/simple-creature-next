@@ -3,11 +3,12 @@
 import { useCallback, useRef } from "react"
 import gsap from "gsap"
 import SplitReveal from "./SplitReveal"
+import Link from "next/link"
 
 const HomepageReels = () => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const leftBioRef = useRef<HTMLDivElement>(null)
-  const rightBioRef = useRef<HTMLDivElement>(null)
+  const leftBioRef = useRef<HTMLAnchorElement>(null)
+  const rightBioRef = useRef<HTMLAnchorElement>(null)
 
   const handleFrame = useCallback((lerpedX: number) => {
     const x = gsap.utils.mapRange(100, 0, -30, 30, lerpedX)
@@ -39,12 +40,13 @@ const HomepageReels = () => {
             muted
             playsInline
           />
-          <div
+          <Link
             ref={leftBioRef}
+            href="/services"
             className="absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-white/15 px-12 py-8 text-center text-black shadow-2xl backdrop-blur-xl backdrop-brightness-110 backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
           >
             <h3 className="text-h2 mb-0">Motion</h3>
-          </div>
+          </Link>
         </>
       }
       right={
@@ -58,12 +60,13 @@ const HomepageReels = () => {
             muted
             playsInline
           />
-          <div
+          <Link
             ref={rightBioRef}
+            href="/services"
             className="absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-black/15 px-12 py-8 text-center text-white shadow-2xl backdrop-blur-xl backdrop-brightness-90 backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
           >
             <h3 className="text-h2 mb-0">Interactive</h3>
-          </div>
+          </Link>
         </>
       }
     />
