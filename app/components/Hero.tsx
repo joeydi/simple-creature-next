@@ -100,7 +100,7 @@ const Hero = () => {
         <Row className="justify-between">
           <Column lg="6">
             <h1 className="ml-4">
-              <SplitHeading>
+              <SplitHeading delay={0.5}>
                 Web Design <br />
                 &amp; Animation
               </SplitHeading>
@@ -108,12 +108,12 @@ const Hero = () => {
           </Column>
           <Column lg="4" className="lg:mt-4">
             <p data-lag="0.05">
-              <ScrambleText>
+              <ScrambleText delay={1.25}>
                 We believe the best digital work feels effortless &mdash; precisely because it&rsquo;s built with care.
               </ScrambleText>
             </p>
             <p data-lag="0.05">
-              <ScrambleText>
+              <ScrambleText delay={1.25}>
                 Since 2014, we&rsquo;ve been shaping creative ideas through a lens of technical excellence, bringing
                 clarity, motion, and meaning to the digital world.
               </ScrambleText>
