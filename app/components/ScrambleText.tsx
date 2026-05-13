@@ -20,6 +20,7 @@ const ScrambleText = ({ duration = 1, delay = 0, reset = false, children }: Reac
 
   useGSAP(() => {
     const split = new SplitText(spanRef.current, { type: "lines,chars" })
+    const onLeave = reset ? "reset" : "resume"
 
     gsap.set(split.lines, {
       whiteSpace: "nowrap",
@@ -33,22 +34,29 @@ const ScrambleText = ({ duration = 1, delay = 0, reset = false, children }: Reac
       opacity: 1,
     })
 
-    split.lines.forEach((line, i) => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: spanRef.current,
+        toggleActions: `play ${onLeave} resume ${onLeave}`,
+      },
+    })
+
+    split.lines.forEach((line, lineIndex) => {
       const chars = line.querySelectorAll("div")
-      gsap.to(chars, {
-        opacity: 1,
-        scrambleText: {
-          text: "{original}",
-          chars: "#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~",
-          speed: 1,
+      tl.to(
+        chars,
+        {
+          opacity: 1,
+          scrambleText: {
+            text: "{original}",
+            chars: "#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            speed: 1,
+          },
+          duration: duration / 2,
+          stagger: duration / chars.length / 2,
         },
-        duration: duration / 2,
-        stagger: duration / chars.length,
-        scrollTrigger: {
-          trigger: spanRef.current,
-          toggleActions: `play resume resume ${reset ? "reset" : "resume"}`,
-        },
-      })
+        0.1 * lineIndex + delay,
+      )
     })
   }, [])
 
