@@ -20,6 +20,7 @@ export async function generateMetadata(props: PageProps<"/work/[slug]">): Promis
 
   return {
     title: project.title,
+    description: project.longDescription,
   }
 }
 
