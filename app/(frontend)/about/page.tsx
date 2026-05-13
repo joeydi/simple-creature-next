@@ -1,3 +1,4 @@
+import { Metadata } from "next"
 import PageHeader from "@/components/PageHeader"
 import MaskHeading from "@/components/MaskHeading"
 import ScrambleText from "@/components/ScrambleText"
@@ -10,6 +11,11 @@ import Main from "@/components/main"
 import SplitHeading from "@/components/SplitHeading"
 import CategoryFilter from "@/components/CategoryFilter"
 import { getCategoriesWithCounts } from "@/(frontend)/work/actions"
+
+export const metadata: Metadata = {
+  title: "Simple Creature » Interactive Animation Studio",
+  description: "Simple Creature is a fun-size digital design and interactive animation studio in Burlington, VT.",
+}
 
 export default async function About() {
   const categories = await getCategoriesWithCounts()

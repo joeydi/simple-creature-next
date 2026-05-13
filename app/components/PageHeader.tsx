@@ -1,8 +1,7 @@
 "use client"
 
-import { Fragment, useEffect, useRef, useState } from "react"
+import { Fragment, useRef, useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import Container from "./Container"
 import styles from "./PageHeader.module.scss"
 
@@ -23,33 +22,22 @@ const HomeIcon = () => (
 
 const PageHeader = ({ children, crumbs }: Props) => {
   const trailRef = useRef<HTMLElement | null>(null)
-  const [trailWidth, setTrailWidth] = useState(0)
   const [hovered, setHovered] = useState(false)
-  const pathname = usePathname()
-
-  useEffect(() => {
-    const el = trailRef.current
-    if (!el) return
-
-    const measure = () => setTrailWidth(el.getBoundingClientRect().width)
-    measure()
-
-    if (typeof document !== "undefined" && "fonts" in document) {
-      document.fonts.ready.then(measure)
-    }
-
-    const observer = new ResizeObserver(measure)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [pathname, crumbs])
 
   return (
     <div className={styles.pageHeader}>
       <Container>
         <div
           className={`${styles.row}${hovered ? ` ${styles.hovered}` : ""}`}
-          style={{ "--trail-width": `${trailWidth}px` } as React.CSSProperties}
-          onMouseEnter={() => setHovered(true)}
+          onMouseEnter={(e) => {
+            if (trailRef.current) {
+              e.currentTarget.style.setProperty(
+                "--trail-width",
+                `${trailRef.current.getBoundingClientRect().width}px`,
+              )
+            }
+            setHovered(true)
+          }}
           onMouseLeave={() => setHovered(false)}
         >
           {crumbs && (

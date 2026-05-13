@@ -1,3 +1,4 @@
+import { Metadata } from "next"
 import Column from "@/components/Column"
 import Container from "@/components/Container"
 import FeaturedProjects from "@/components/FeaturedProjects"
@@ -8,6 +9,11 @@ import PageHeader from "@/components/PageHeader"
 import Row from "@/components/Row"
 import ScrambleText from "@/components/ScrambleText"
 import SplitHeading from "@/components/SplitHeading"
+
+export const metadata: Metadata = {
+  title: "Services",
+  description: "Simple Creature is a fun-size digital design and interactive animation studio in Burlington, VT.",
+}
 
 const projects = [
   "151Jwyic0i7-A3EIfWpI9", // FLW Members

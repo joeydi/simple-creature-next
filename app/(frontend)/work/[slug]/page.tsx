@@ -1,5 +1,5 @@
+import { Metadata } from "next"
 import PageHeader from "@/components/PageHeader"
-import MaskHeading from "@/components/MaskHeading"
 import Container from "@/components/Container"
 import { getProjectBySlug, getProjects } from "@/(admin)/admin/projects/actions"
 import { ContentWithMedia } from "@/components/content-with-media"
@@ -11,6 +11,17 @@ import Column from "@/components/Column"
 import { ProjectContent } from "@/lib/schemas/project-content"
 import Main from "@/components/main"
 import ScrambleText from "@/components/ScrambleText"
+
+export async function generateMetadata(props: PageProps<"/work/[slug]">): Promise<Metadata> {
+  const { slug } = await props.params
+  const project = await getProjectBySlug(slug)
+
+  if (!project) return {}
+
+  return {
+    title: project.title,
+  }
+}
 
 const blockMap = {
   "full-width-media": FullWidthMedia,
@@ -82,7 +93,6 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
   )
 }
 
-// This stays the same
 export async function generateStaticParams() {
   const { projects } = await getProjects(1, 100)
   return projects.map((project) => ({ slug: project.slug }))

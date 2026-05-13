@@ -17,7 +17,10 @@ const clash = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "Interactive Animation Studio » Simple Creature",
+  title: {
+    template: "%s » Simple Creature",
+    default: "Simple Creature » Interactive Animation Studio",
+  },
   description: "Simple Creature is a fun-size digital design and interactive animation studio in Burlington, VT.",
 }
 
