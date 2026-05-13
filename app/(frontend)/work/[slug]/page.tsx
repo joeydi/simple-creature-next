@@ -32,7 +32,7 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
     <Main className="pb-(--spacing-sm)">
       <PageHeader crumbs={[{ href: "/work", label: "Work" }]}>
         <h1 className="text-header">
-          <ScrambleText duration={0.5}>{project.title}</ScrambleText>
+          <ScrambleText reset={true}>{project.title}</ScrambleText>
         </h1>
       </PageHeader>
       <Container className="my-(--spacing-xxl)">

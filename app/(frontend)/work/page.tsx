@@ -13,7 +13,7 @@ export default async function Work() {
     <Main className="pb-(--spacing-sm)">
       <PageHeader crumbs={[]}>
         <h1 className="text-header">
-          <ScrambleText duration={0.5}>Design + Technology</ScrambleText>
+          <ScrambleText reset={true}>Design + Technology</ScrambleText>
         </h1>
       </PageHeader>
       <div className="overflow-hidden">

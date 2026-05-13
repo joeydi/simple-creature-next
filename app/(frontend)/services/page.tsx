@@ -21,7 +21,7 @@ export default function Services() {
     <Main>
       <PageHeader crumbs={[]}>
         <h1 className="text-header">
-          <ScrambleText duration={0.5}>Creative, Elegant, and Responsive</ScrambleText>
+          <ScrambleText reset={true}>Creative, Elegant, and Responsive</ScrambleText>
         </h1>
       </PageHeader>
       <Container>
