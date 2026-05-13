@@ -229,7 +229,7 @@ export const InteractiveServices = () => {
       drawSVG: "0 100% live",
       ease: "none",
       scrollTrigger: {
-        markers: true,
+        // markers: true,
         trigger: sectionRef.current,
         start: "top 90%",
         end: "bottom 75%",
