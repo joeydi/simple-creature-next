@@ -8,7 +8,7 @@
 }
 
 .list1 {
-  aspect-ratio: 2.5;
+  aspect-ratio: 2;
   display: grid;
   grid-template-columns: repeat(20, minmax(0, 1fr));
   grid-template-rows: repeat(10, minmax(0, 1fr));
