@@ -7,6 +7,13 @@ import { LogoGrid } from "@/components/LogoGrid"
 import Main from "@/components/main"
 import HomepageReels from "@/components/HomepageReels"
 
+const projects = [
+  "ilEgu2ukNZTOkVgibQh0Y", // OLG Level Up
+  "QT9t3lA-tWlN8HJRsU72i", // Rowland
+  "vBW5WPYvgLVI7u9ojrOon", // Zeiss Neuro
+  "1C803Vt_ZyrjBSd9_Ye5b", // Mamava
+]
+
 export default function Home() {
   return (
     <Main>
@@ -17,7 +24,7 @@ export default function Home() {
       </PageHeader>
       <Hero />
       <HomepageReels />
-      <FeaturedProjects />
+      <FeaturedProjects ids={projects} />
       <ServicesMarquee />
       <LogoGrid />
     </Main>
