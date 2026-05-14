@@ -8,19 +8,19 @@ const list1: Service[] = [
     label: "2D Motion Graphics",
     description:
       "Kinetic typography, stylized characters, broadcast graphics, and animated transitions tailored to elevate any brand.",
-    trigger: 0.16,
+    trigger: 0.13,
   },
   {
     label: "3D Product Tours",
     description:
       "Photorealistic or stylized 3D visuals and camera animations crafted to elevate every detail of your product.",
-    trigger: 0.21,
+    trigger: 0.18,
   },
   {
     label: "3D Dynamic Simulations",
     description:
       "Particles, smoke, fire, fluids, and soft body simulations that evolve and react naturally to create cinematic, immersive visuals.",
-    trigger: 0.26,
+    trigger: 0.24,
   },
   {
     label: "Explainer Videos",
@@ -32,7 +32,7 @@ const list1: Service[] = [
     label: "Social Media Content",
     description:
       "The art of capturing attention in an increasingly fast-paced digital landscape. We create bold, concise messaging that freezes thumbs and drives engagement.",
-    trigger: 0.37,
+    trigger: 0.36,
   },
 ]
 
@@ -41,27 +41,27 @@ const list2: Service[] = [
     label: "Interactive Components",
     description:
       "Not all buttons are created equal. Our interactive elements combine thoughtful motion, detail, and responsiveness to create memorable user experiences.",
-    trigger: 0.1,
+    trigger: 0.58,
   },
   {
     label: "Photo-Real Rendering",
     description:
       "Photoreal product renderings crafted for any environment, atmosphere, or lighting style and tailored to fit your brand vision.",
-    trigger: 0.58,
+    trigger: 0.63,
   },
   {
     label: "Live Action Integration",
     description:
       "Advanced camera tracking and cinematic lighting techniques seamlessly integrate live actors into richly imagined 3D environments.",
-    trigger: 0.69,
+    trigger: 0.7,
   },
   {
     placeholder: true,
-    trigger: 0.82,
+    trigger: 0.8,
   },
   {
     placeholder: true,
-    trigger: 0.82,
+    trigger: 0.9,
   },
 ]
 

@@ -46,19 +46,19 @@ const list2: Service[] = [
   {
     label: "Website Migrations",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
+      "Smooth, carefully managed website migrations with minimal downtime, preserving content, performance, SEO, and functionality throughout the transition.",
     trigger: 0.63,
   },
   {
     label: "Creative Coding",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
+      "Custom-built interactive experiences that blend design, animation, and technology to create memorable digital moments.",
     trigger: 0.7,
   },
   {
     label: "Performance Analysis",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
+      "In-depth performance analysis focused on speed, accessibility, SEO, and technical optimization to improve the overall user experience.",
     trigger: 0.77,
   },
   {

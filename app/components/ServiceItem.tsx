@@ -17,15 +17,7 @@ interface Props {
   description?: string
 }
 
-export const ServiceItem = ({
-  progress,
-  trigger,
-  align = "left",
-  style,
-  placeholder,
-  label,
-  description,
-}: Props) => {
+export const ServiceItem = ({ progress, trigger, align = "left", style, placeholder, label, description }: Props) => {
   const boxRef = useRef<HTMLDivElement>(null)
   const dotRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)

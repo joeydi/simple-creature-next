@@ -65,7 +65,7 @@ export const ServicesPath = ({ list1, list2, gradientColors, textColors }: Servi
       })
 
       // Insert one point at the start to the top left of the first item
-      points.unshift([-window.innerWidth / 4, (points[0][1] + list1Rect.height / 4) * scaleFactor])
+      points.unshift([-window.innerWidth / 10, (points[0][1] + list1Rect.height / 4) * scaleFactor])
 
       // Insert one point after the first list to the right
       points.push([window.innerWidth * 1.25, (sectionRect.height / 2) * scaleFactor])
@@ -79,7 +79,7 @@ export const ServicesPath = ({ list1, list2, gradientColors, textColors }: Servi
       })
 
       // Insert one point at the end to the bottom left of the last item
-      points.push([-window.innerWidth / 4, sectionRect.height * scaleFactor])
+      points.push([-window.innerWidth / 10, sectionRect.height * scaleFactor])
 
       const spline = new BSpline(points, 3, false)
 
