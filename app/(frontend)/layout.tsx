@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/next"
 import localFont from "next/font/local"
 import Header from "@/components/Header"
 import { MenuProvider } from "@/contexts/MenuContext"
@@ -40,6 +41,7 @@ export default function RootLayout({
             <FooterContent />
           </PlayableVideoProvider>
         </MenuProvider>
+        <Analytics />
       </body>
     </html>
   )
