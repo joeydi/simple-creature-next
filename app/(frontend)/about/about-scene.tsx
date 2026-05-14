@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useMemo, useEffect } from "react"
+import { useRef, useMemo, useEffect } from "react"
 import * as THREE from "three"
 import { useFrame, ThreeEvent } from "@react-three/fiber"
 import { RigidBody, Physics, BallCollider, RapierRigidBody, RapierCollider, useSpringJoint } from "@react-three/rapier"
@@ -49,7 +49,7 @@ function AnimatedSphere({ id, position, radius, materialType, color, type }: Ani
   }
 
   // Create spring joint between the sphere and a fixed anchor point
-  useSpringJoint(rigidBodyRef, anchorRef, [
+  useSpringJoint(rigidBodyRef as React.RefObject<RapierRigidBody>, anchorRef as React.RefObject<RapierRigidBody>, [
     [0, 0, 0], // Attach point on sphere (center)
     [0, 0, 0], // Attach point on anchor (center)
     springRestLength,

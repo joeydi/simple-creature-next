@@ -12,7 +12,7 @@ interface SplitRevealProps {
   left: React.ReactNode
   right: React.ReactNode
   className?: string
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
   onFrame?: (lerpedX: number) => void
 }
 

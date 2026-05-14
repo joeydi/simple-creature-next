@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback, useRef, useEffect, useLayoutEffect } from "react"
+import { useState, useMemo, useCallback, useRef, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
