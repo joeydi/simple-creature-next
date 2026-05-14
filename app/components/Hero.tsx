@@ -19,6 +19,7 @@ const GRADIENT_COLORS = ["#1A3EBF", "#4A79A6", "#1A3EBF", "#000000", "#F43791"]
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const gradientRef = useRef<HTMLDivElement>(null)
   const logoRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLDivElement>(null)
@@ -35,6 +36,26 @@ const Hero = () => {
           ease: "none",
           duration: 30,
           repeat: Infinity,
+        },
+        0,
+      )
+
+      gsap.set(wrapperRef.current, {
+        transformOrigin: "50% 0%",
+      })
+
+      // Fade in the wrapper
+      timeline.fromTo(
+        wrapperRef.current,
+        {
+          opacity: 0,
+          scale: 0.9,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          ease: "expo.out",
+          duration: 1,
         },
         0,
       )
@@ -86,7 +107,10 @@ const Hero = () => {
   return (
     <div className="mb-(--spacing-lg)" ref={heroRef}>
       <Container>
-        <div className="mb-(--spacing-xs) rounded-media relative aspect-[2.55] overflow-hidden bg-black">
+        <div
+          ref={wrapperRef}
+          className="mb-(--spacing-xs) rounded-media relative aspect-[2.55] overflow-hidden bg-black opacity-0"
+        >
           <div ref={gradientRef} className="opacity-0">
             <AnimatedGradient colors={GRADIENT_COLORS} amount={0.15} frequencyX={2} frequencyY={2} speed={0.2} />
           </div>
