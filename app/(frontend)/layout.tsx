@@ -36,8 +36,8 @@ export default function RootLayout({
           <PlayableVideoProvider>
             <Header />
             <BackgroundGradient />
-            <FooterContent />
             <SmoothScroller>{children}</SmoothScroller>
+            <FooterContent />
           </PlayableVideoProvider>
         </MenuProvider>
       </body>
