@@ -24,10 +24,10 @@ const interactiveProjects = [
 ]
 
 const motionProjects = [
-  "151Jwyic0i7-A3EIfWpI9", // FLW Members
-  "KdG-W6MYDdcoc26Mon67v", // Progress Meter
-  "QT9t3lA-tWlN8HJRsU72i", // Rowland
-  "rVtdVYq7KJgIKCtEyjmTw", // 1% For the Planet
+  "4GvYLW61eCBKj3L26GKsr", // Mummy Dogs
+  "BOC_AlqByuER-o9a2h1G2", // Chefs on the Line
+  "bTaK8Xgv-QTCiooYsUNTX", // Meta Reels
+  "8ItVI4se_TR8Qt-nJnQ4R", // What is 0x
 ]
 
 export default function Services() {
