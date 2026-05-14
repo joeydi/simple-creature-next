@@ -5,6 +5,7 @@
 
 @utility rounded-media {
   border-radius: clamp(16px, 9.14286px + 1.19048vw, 32px);
+  overflow: hidden;
 
   @supports (corner-shape: superellipse(0.5)) {
     border-radius: clamp(30px, 17.1429px + 2.23214vw, 60px);

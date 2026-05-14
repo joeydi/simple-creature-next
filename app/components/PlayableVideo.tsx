@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { usePlayableVideoAudio } from "@/contexts/PlayableVideoContext"
 import styles from "./PlayableVideo.module.scss"
+import { cn } from "@/lib/utils"
 
 type PlayableVideoProps = {
   src: string
@@ -217,7 +218,7 @@ export function PlayableVideo({ src, poster, width, height, className }: Playabl
   return (
     <div
       ref={containerRef}
-      className={`${styles.container} ${className ?? ""}`}
+      className={cn(styles.container, className)}
       onMouseMove={showControlsTemporarily}
       onClick={showControlsTemporarily}
     >
