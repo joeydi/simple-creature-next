@@ -25,7 +25,6 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
       content: "#smooth-content",
       smooth: 0.5,
       smoothTouch: 0.1,
-      effects: true,
     })
   })
 

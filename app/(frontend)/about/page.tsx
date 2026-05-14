@@ -41,13 +41,13 @@ export default async function About() {
               </h1>
             </Column>
             <Column lg="5" className="lg:mt-4">
-              <p data-lag="0.05" className="text-balance">
+              <p className="text-balance">
                 <ScrambleText>
                   We&rsquo;re James Kowalski and Joe di Stefano—long-time friends and a design-development duo crafting
                   bold digital experiences.
                 </ScrambleText>
               </p>
-              <p data-lag="0.05" className="text-balance">
+              <p className="text-balance">
                 <ScrambleText>
                   From CMS websites and mobile apps to motion graphics, explainer videos, visual effects, and UI/UX
                   design, we combine creative design with reliable code to build thoughtful, engaging digital work.
@@ -72,7 +72,7 @@ export default async function About() {
               </h1>
             </Column>
             <Column lg="4" className="lg:mt-4">
-              <p data-lag="0.05" className="text-balance">
+              <p className="text-balance">
                 <ScrambleText>
                   We collaborate closely with our clients to design and develop digital solutions that are visually
                   compelling and strategically effective. Through a thoughtful, intentional process, we create
@@ -91,14 +91,14 @@ export default async function About() {
               <CategoryFilter categories={categories} linkTo="/work" />
             </Column>
             <Column lg="4" xl="3">
-              <p data-lag="0.05" className="text-balance">
+              <p className="text-balance">
                 Though our team is small, our expertise runs deep—enabling us to deliver a wide range of digital
                 products. We proudly serve clients from local startups to global brands, and we approach every project,
                 big or small, with the same level of commitment and creativity.
               </p>
             </Column>
             <Column lg="4" xl="3" className="ml-auto">
-              <p data-lag="0.075" className="text-balance">
+              <p className="text-balance">
                 We&rsquo;re a full-service creative studio for strategic design and execution and a fast, flexible
                 production partner when larger agencies need extra support without the overhead.
               </p>

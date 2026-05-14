@@ -47,7 +47,7 @@ export default function Services() {
             </h1>
           </Column>
           <Column lg="4" className="lg:mt-4">
-            <p data-lag="0.05">
+            <p>
               <ScrambleText>
                 Interactive work sparked our journey and still sits at the core of what we do. It continues to shape how
                 we think, create, and collaborate—bringing clients thoughtful, evolving solutions grounded in
@@ -75,7 +75,7 @@ export default function Services() {
               </h1>
             </Column>
             <Column lg="4" className="text-balance lg:mt-4">
-              <p data-lag="0.05" className="ml-(--spacing-xs) lg:ml-0">
+              <p className="ml-(--spacing-xs) lg:ml-0">
                 <ScrambleText>
                   We offer a diverse range of interactive services to support your online projects at every stage.
                   Whether you’re looking for a comprehensive solution or targeted expertise, we can seamlessly align
@@ -100,7 +100,7 @@ export default function Services() {
             </h1>
           </Column>
           <Column lg="4" className="lg:mt-4">
-            <p data-lag="0.05">
+            <p>
               <ScrambleText>
                 Animation plays a key role in both our interactive and standalone projects, helping us convey complex
                 ideas and tone with clarity—requiring little effort from the viewer.
@@ -127,7 +127,7 @@ export default function Services() {
               </h1>
             </Column>
             <Column lg="4" className="text-balance lg:mt-4">
-              <p data-lag="0.05" className="ml-(--spacing-xs) lg:ml-0">
+              <p className="ml-(--spacing-xs) lg:ml-0">
                 <ScrambleText>
                   Our animation work scales to fit the project—ranging from focused contributions within large
                   initiatives to end-to-end solutions tailored to any scope or scale.
