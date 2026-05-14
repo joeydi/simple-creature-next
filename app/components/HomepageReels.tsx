@@ -32,7 +32,8 @@ const HomepageReels = () => {
       left={
         <>
           <video
-            src="https://simplecreature.us/assets/reelEdit_web.mp4"
+            className="w-full"
+            src="https://simple-creature-website-assets.s3.amazonaws.com/simplecreature/reelEdit_web_muted.mp4"
             width="1920"
             height="1080"
             autoPlay
@@ -52,6 +53,7 @@ const HomepageReels = () => {
       right={
         <>
           <video
+            className="w-full"
             src="https://simple-creature-website-assets.s3.amazonaws.com/simplecreature/sc_interactive_reel_edit_v1_web.mp4"
             width="1920"
             height="1080"
