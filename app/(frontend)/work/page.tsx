@@ -17,7 +17,7 @@ export default async function Work() {
   const [{ projects }, categories] = await Promise.all([getProjects(1, 100), getCategoriesWithCounts()])
 
   return (
-    <Main className="pb-(--spacing-sm)">
+    <Main className="pb-(--spacing-xl)">
       <PageHeader crumbs={[]}>
         <h1 className="text-header">
           <ScrambleText reset={true}>Design + Technology</ScrambleText>
