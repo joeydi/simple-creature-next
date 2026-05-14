@@ -62,9 +62,9 @@ export default function Services() {
             <Column lg="4" className="text-balance lg:mt-4">
               <p data-lag="0.05" className="ml-(--spacing-xs) lg:ml-0">
                 <ScrambleText>
-                  Interactive work sparked our journey and still sits at the core of what we do. It continues to shape
-                  how we think, create, and collaborate—bringing clients thoughtful, evolving solutions grounded in
-                  experience.
+                  We offer a diverse range of interactive services to support your online projects at every stage.
+                  Whether you’re looking for a comprehensive solution or targeted expertise, we can seamlessly align
+                  with your needs.
                 </ScrambleText>
               </p>
             </Column>
