@@ -244,7 +244,7 @@ export const InteractiveServices = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative mb-[25vw] bg-black text-white"
+      className="relative mb-[25vw]"
       onClick={() => {
         setReset(reset + 1)
       }}
