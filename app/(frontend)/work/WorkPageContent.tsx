@@ -11,6 +11,7 @@ import ProjectCard from "@/components/ProjectCard"
 import CategoryFilter from "@/components/CategoryFilter"
 import { Project } from "@/(admin)/admin/projects/types"
 import { CategoryWithCount } from "./actions"
+import ScrambleText from "@/components/ScrambleText"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -65,11 +66,15 @@ export default function WorkPageContent({ projects, categories }: Props) {
         </Column>
         <Column sm="6">
           <p className="max-w-2xl text-balance">
-            We create immersive digital experiences where design, motion, and technology work together as one system.
+            <ScrambleText>
+              We create immersive digital experiences where design, motion, and technology work together as one system.
+            </ScrambleText>
           </p>
           <p className="max-w-2xl text-balance">
-            From interactive websites and branded experiences to visual effects, UI design, and animation, we focus on
-            crafting work that feels polished, responsive, and full of personality.
+            <ScrambleText>
+              From interactive websites and branded experiences to visual effects, UI design, and animation, we focus on
+              crafting work that feels polished, responsive, and full of personality.
+            </ScrambleText>
           </p>
         </Column>
       </Row>
