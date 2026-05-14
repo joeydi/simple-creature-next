@@ -12,11 +12,20 @@ interface Props {
   trigger: number
   align?: "left" | "right"
   style?: CSSProperties & Record<`--${string}`, string | number>
-  label: string
+  placeholder?: boolean
+  label?: string
   description?: string
 }
 
-export const ServiceItem = ({ progress, trigger, align = "left", style, label, description }: Props) => {
+export const ServiceItem = ({
+  progress,
+  trigger,
+  align = "left",
+  style,
+  placeholder,
+  label,
+  description,
+}: Props) => {
   const boxRef = useRef<HTMLDivElement>(null)
   const dotRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
@@ -85,7 +94,7 @@ export const ServiceItem = ({ progress, trigger, align = "left", style, label, d
 
   return (
     <li className={`${styles.item} ${styles[align]}`} style={style}>
-      {label && (
+      {!placeholder && label && (
         <>
           <div ref={boxRef} className={styles.box}>
             <div ref={dotRef} className={styles.dot}></div>
@@ -97,7 +106,9 @@ export const ServiceItem = ({ progress, trigger, align = "left", style, label, d
           </div>
         </>
       )}
-      {description && <div className={styles.description} dangerouslySetInnerHTML={{ __html: description }}></div>}
+      {!placeholder && description && (
+        <div className={styles.description} dangerouslySetInnerHTML={{ __html: description }}></div>
+      )}
     </li>
   )
 }

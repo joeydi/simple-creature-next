@@ -80,6 +80,11 @@
   );
   border-radius: clamp(16px, 9.14286px + 1.19048vw, 32px);
 
+  [class*="list2"] li:nth-child(2) &,
+  [class*="list2"] li:nth-child(4) & {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+
   @supports (corner-shape: superellipse(0.5)) {
     border-radius: clamp(30px, 17.1429px + 2.23214vw, 60px);
     corner-shape: superellipse(2);

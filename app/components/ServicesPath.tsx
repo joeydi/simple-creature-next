@@ -4,9 +4,9 @@ import { gsap } from "gsap"
 import { useGSAP } from "@gsap/react"
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import styles from "./InteractiveServices.module.scss"
+import styles from "./ServicesPath.module.scss"
 import Container from "./Container"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { BSpline } from "@/lib/BSpline"
 import { ServiceItem } from "./ServiceItem"
 
@@ -14,82 +14,32 @@ gsap.registerPlugin(useGSAP, DrawSVGPlugin, ScrollTrigger)
 
 const NUM_SEGMENTS = 12
 const STROKE_WIDTH = 48
-const GRADIENT_COLORS = ["#000000", "#1A3EBF", "#B6FD6E", "#FFFFFF", "#1A3EBF", "#F43791", "#000000"]
-const TEXT_COLORS = ["#FFFFFF", "#1A3EBF", "#B6FD6E", "#FFFFFF", "#1A3EBF", "#F43791", "#FFFFFF"]
 
-const list1 = [
-  {
-    label: "Front End Design",
-    description:
-      "Thoughtfully designed, responsive interfaces that balance visual clarity, usability, and performance across every screen size.",
-    trigger: 0.16,
-  },
-  {
-    label: "Interactive Animation",
-    description:
-      "Custom motion and interactive experiences that bring digital products to life through purposeful, engaging animation.",
-    trigger: 0.21,
-  },
-  {
-    label: "Content Management",
-    description:
-      "Flexible content management systems that make it easy for teams to update, organize, and scale website content.",
-    trigger: 0.26,
-  },
-  {
-    label: "App Development",
-    description:
-      "Custom web applications built for speed, reliability, and seamless user experiences across modern devices and platforms.",
-    trigger: 0.31,
-  },
-  {
-    label: "Back End Integrations",
-    description:
-      "Reliable integrations connecting websites and applications with third-party platforms, APIs, databases, and business systems.",
-    trigger: 0.37,
-  },
-]
+export type Service = {
+  label?: string
+  description?: string
+  trigger: number
+  placeholder?: boolean
+}
 
-const list2 = [
-  {
-    label: "Monthly Maintenance",
-    description:
-      "Website maintenance focused on security, performance, updates, backups, and ongoing support to keep your site stable, fast, and running smoothly.",
-    trigger: 0.1,
-  },
-  {
-    label: "Website Migrations",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
-    trigger: 0.58,
-  },
-  {
-    label: "Creative Coding",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
-    trigger: 0.69,
-  },
-  {
-    label: "Performance Analysis",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
-    trigger: 0.82,
-  },
-  {
-    label: "",
-    description: "",
-    trigger: 0.82,
-  },
-]
+export type ServicesPathProps = {
+  list1: Service[]
+  list2: Service[]
+  gradientColors: string[]
+  textColors: string[]
+}
 
-export const InteractiveServices = () => {
+export const ServicesPath = ({ list1, list2, gradientColors, textColors }: ServicesPathProps) => {
+  const uid = useId().replace(/:/g, "")
+  const maskId = `${uid}-line-mask`
+  const gradId = (i: number) => `${uid}-grad-${i}`
+
   const sectionRef = useRef<HTMLElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const polylineRef = useRef<SVGPolylineElement>(null)
   const list1Ref = useRef<HTMLUListElement>(null)
   const list2Ref = useRef<HTMLUListElement>(null)
 
-  // const [referencePoints, setReferencePoints] = useState<number[][]>()
   const [splinePoints, setSplinePoints] = useState<number[][]>()
   const [timelineProgress, setTimelineProgress] = useState(0)
 
@@ -138,7 +88,6 @@ export const InteractiveServices = () => {
         tempPoints.push(spline.calcAt(t))
       }
 
-      // setReferencePoints(points)
       setSplinePoints(tempPoints)
     }
 
@@ -205,11 +154,11 @@ export const InteractiveServices = () => {
         y1,
         x2,
         y2,
-        color0: gsap.utils.interpolate(GRADIENT_COLORS, i / NUM_SEGMENTS - STROKE_WIDTH / 2 / totalLength),
-        color1: gsap.utils.interpolate(GRADIENT_COLORS, (i + 1) / NUM_SEGMENTS),
+        color0: gsap.utils.interpolate(gradientColors, i / NUM_SEGMENTS - STROKE_WIDTH / 2 / totalLength),
+        color1: gsap.utils.interpolate(gradientColors, (i + 1) / NUM_SEGMENTS),
       }
     })
-  }, [splinePoints])
+  }, [splinePoints, gradientColors])
 
   useGSAP(() => {
     if (!splinePoints || !splinePoints.length || !polylineRef.current) {
@@ -222,12 +171,13 @@ export const InteractiveServices = () => {
       drawSVG: "0 100% live",
       ease: "none",
       scrollTrigger: {
-        // markers: true,
         trigger: sectionRef.current,
         start: "top 90%",
         end: "bottom 75%",
         scrub: 1,
         onUpdate: (self) => {
+          console.log(self.progress.toFixed(2))
+
           setTimelineProgress(self.progress)
         },
       },
@@ -237,7 +187,7 @@ export const InteractiveServices = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative mb-[25vw]"
+      className="relative"
       onClick={() => {
         setReset(reset + 1)
       }}
@@ -247,7 +197,7 @@ export const InteractiveServices = () => {
           {segments.map((s, i) => (
             <linearGradient
               key={`grad-${i}`}
-              id={`grad-${i}`}
+              id={gradId(i)}
               gradientUnits="userSpaceOnUse"
               x1={s.x1}
               y1={s.y1}
@@ -258,7 +208,7 @@ export const InteractiveServices = () => {
               <stop offset="100%" stopColor={s.color1} />
             </linearGradient>
           ))}
-          <mask id="line-mask" maskUnits="userSpaceOnUse">
+          <mask id={maskId} maskUnits="userSpaceOnUse">
             <rect width="100%" height="100%" fill="black" />
             <polyline
               ref={polylineRef}
@@ -270,12 +220,12 @@ export const InteractiveServices = () => {
             />
           </mask>
         </defs>
-        <g mask="url(#line-mask)">
+        <g mask={`url(#${maskId})`}>
           {segments.map((s, i) => (
             <polyline
               key={`seg-${i}`}
               points={s.pointsAttr}
-              stroke={`url(#grad-${i})`}
+              stroke={`url(#${gradId(i)})`}
               strokeWidth={STROKE_WIDTH}
               strokeLinecap="round"
               fill="none"
@@ -285,36 +235,38 @@ export const InteractiveServices = () => {
       </svg>
       <Container>
         <ul ref={list1Ref} className={styles.list1}>
-          {list1.map((service) => (
+          {list1.map((service, i) => (
             <ServiceItem
-              key={service.label}
+              key={i}
               style={{
-                "--color": gsap.utils.interpolate(TEXT_COLORS, service.trigger),
-                "--colorStart": gsap.utils.interpolate(TEXT_COLORS, service.trigger - 0.05),
-                "--colorEnd": gsap.utils.interpolate(TEXT_COLORS, service.trigger + 0.05),
+                "--color": gsap.utils.interpolate(textColors, service.trigger),
+                "--colorStart": gsap.utils.interpolate(textColors, service.trigger - 0.05),
+                "--colorEnd": gsap.utils.interpolate(textColors, service.trigger + 0.05),
               }}
               progress={timelineProgress}
               trigger={service.trigger}
               align="left"
+              placeholder={service.placeholder}
               label={service.label}
               description={service.description}
             />
           ))}
         </ul>
         <ul ref={list2Ref} className={styles.list2}>
-          {list2.map((service) => (
+          {list2.map((service, i) => (
             <ServiceItem
-              key={service.label}
+              key={i}
               style={{
-                "--color": gsap.utils.interpolate(TEXT_COLORS, service.trigger),
-                "--colorStart": gsap.utils.interpolate(TEXT_COLORS, service.trigger - 0.05),
-                "--colorEnd": gsap.utils.interpolate(TEXT_COLORS, service.trigger + 0.05),
+                "--color": gsap.utils.interpolate(textColors, service.trigger),
+                "--colorStart": gsap.utils.interpolate(textColors, service.trigger - 0.05),
+                "--colorEnd": gsap.utils.interpolate(textColors, service.trigger + 0.05),
               }}
               progress={timelineProgress}
               trigger={service.trigger}
               align="right"
+              placeholder={service.placeholder}
               label={service.label}
-              description={service?.description}
+              description={service.description}
             />
           ))}
         </ul>
