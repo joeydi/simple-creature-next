@@ -85,14 +85,18 @@ export const ServiceItem = ({ progress, trigger, align = "left", style, label, d
 
   return (
     <li className={`${styles.item} ${styles[align]}`} style={style}>
-      <div ref={boxRef} className={styles.box}>
-        <div ref={dotRef} className={styles.dot}></div>
-      </div>
-      <div className={styles.mask}>
-        <div ref={titleRef} className={styles.title}>
-          {label}
-        </div>
-      </div>
+      {label && (
+        <>
+          <div ref={boxRef} className={styles.box}>
+            <div ref={dotRef} className={styles.dot}></div>
+          </div>
+          <div className={styles.mask}>
+            <h3 ref={titleRef} className={styles.title}>
+              {label}
+            </h3>
+          </div>
+        </>
+      )}
       {description && <div className={styles.description} dangerouslySetInnerHTML={{ __html: description }}></div>}
     </li>
   )

@@ -19,12 +19,6 @@ const TEXT_COLORS = ["#FFFFFF", "#1A3EBF", "#B6FD6E", "#FFFFFF", "#1A3EBF", "#F4
 
 const list1 = [
   {
-    label: "Monthly Maintenance",
-    description:
-      "Website maintenance focused on security, performance, updates, backups, and ongoing support to keep your site stable, fast, and running smoothly.",
-    trigger: 0.1,
-  },
-  {
     label: "Front End Design",
     description:
       "Thoughtfully designed, responsive interfaces that balance visual clarity, usability, and performance across every screen size.",
@@ -58,16 +52,16 @@ const list1 = [
 
 const list2 = [
   {
+    label: "Monthly Maintenance",
+    description:
+      "Website maintenance focused on security, performance, updates, backups, and ongoing support to keep your site stable, fast, and running smoothly.",
+    trigger: 0.1,
+  },
+  {
     label: "Website Migrations",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
     trigger: 0.58,
-  },
-  {
-    label: "Front End Design",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
-    trigger: 0.62,
   },
   {
     label: "Creative Coding",
@@ -76,15 +70,14 @@ const list2 = [
     trigger: 0.69,
   },
   {
-    label: "Back End Integrations",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
-    trigger: 0.76,
-  },
-  {
     label: "Performance Analysis",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
+    trigger: 0.82,
+  },
+  {
+    label: "",
+    description: "",
     trigger: 0.82,
   },
 ]
@@ -122,7 +115,7 @@ export const InteractiveServices = () => {
       })
 
       // Insert one point at the start to the top left of the first item
-      points.unshift([-window.innerWidth / 4, (points[0][1] - list1Rect.height / 4) * scaleFactor])
+      points.unshift([-window.innerWidth / 4, (points[0][1] + list1Rect.height / 4) * scaleFactor])
 
       // Insert one point after the first list to the right
       points.push([window.innerWidth * 1.25, (sectionRect.height / 2) * scaleFactor])

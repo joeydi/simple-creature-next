@@ -50,6 +50,10 @@
   overflow: hidden;
 }
 
+.title {
+  font-size: var(--text-base);
+}
+
 .description {
   position: absolute;
   top: 100%;
@@ -67,6 +71,7 @@
   padding: var(--spacing-md);
   white-space: wrap;
   color: white;
+  font-weight: 400;
   backdrop-filter: blur(32px);
   background: linear-gradient(
     to right,
