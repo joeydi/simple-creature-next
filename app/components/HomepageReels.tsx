@@ -42,7 +42,7 @@ const HomepageReels = () => {
           />
           <Link
             ref={leftBioRef}
-            href="/services"
+            href="/services#motion"
             className="absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-white/15 px-12 py-8 text-center text-black shadow-2xl backdrop-blur-xl backdrop-brightness-110 backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
           >
             <h3 className="text-h2 mb-0">Motion</h3>
