@@ -139,23 +139,89 @@ export default function AnimatedGradient({
   useEffect(() => {
     if (!rendererRef.current || !gradientRef.current || !clockRef.current || !cameraRef.current) return
 
-    const animate = () => {
-      if (rendererRef.current && gradientRef.current && clockRef.current && cameraRef.current) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+    const renderOnce = () => {
+      if (rendererRef.current && gradientRef.current && clockRef.current && cameraRef.current && sceneRef.current) {
         const elapsedTime = clockRef.current.getElapsedTime()
         gradientRef.current.update(elapsedTime)
-        rendererRef.current.render(sceneRef.current!, cameraRef.current)
+        rendererRef.current.render(sceneRef.current, cameraRef.current)
+      }
+    }
+
+    const animate = () => {
+      if (rendererRef.current && gradientRef.current && clockRef.current && cameraRef.current && sceneRef.current) {
+        renderOnce()
         animationFrameIdRef.current = requestAnimationFrame(animate)
       }
     }
 
-    if (isAnimating) {
-      animate()
-    } else {
-      // Cancel animation
+    const cancel = () => {
       if (animationFrameIdRef.current) {
         cancelAnimationFrame(animationFrameIdRef.current)
         animationFrameIdRef.current = null
       }
+    }
+
+    if (!isAnimating) {
+      cancel()
+      return
+    }
+
+    if (prefersReducedMotion) {
+      renderOnce()
+      return
+    }
+
+    let startTimeoutId: number | null = null
+    let idleCallbackId: number | null = null
+
+    const start = () => {
+      if (document.visibilityState === "visible") {
+        animate()
+      }
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        if (animationFrameIdRef.current === null) {
+          animate()
+        }
+      } else {
+        cancel()
+      }
+    }
+
+    const scheduleStart = () => {
+      const ric = (window as Window & { requestIdleCallback?: typeof requestIdleCallback }).requestIdleCallback
+      if (typeof ric === "function") {
+        idleCallbackId = ric(() => start(), { timeout: 2000 })
+      } else {
+        startTimeoutId = window.setTimeout(start, 1000)
+      }
+    }
+
+    if (document.readyState === "complete") {
+      scheduleStart()
+    } else {
+      window.addEventListener("load", scheduleStart, { once: true })
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
+    return () => {
+      window.removeEventListener("load", scheduleStart)
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+      if (startTimeoutId !== null) {
+        clearTimeout(startTimeoutId)
+      }
+      if (idleCallbackId !== null) {
+        const cic = (window as Window & { cancelIdleCallback?: typeof cancelIdleCallback }).cancelIdleCallback
+        if (typeof cic === "function") {
+          cic(idleCallbackId)
+        }
+      }
+      cancel()
     }
   }, [isAnimating])
 
