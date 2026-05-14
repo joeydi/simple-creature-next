@@ -51,7 +51,12 @@ export default function Services() {
       </Container>
       <FeaturedProjects ids={projects} />
 
-      <div className="bg-black pb-1 text-white">
+      <div className="relative bg-black pb-1 text-white">
+        <div
+          className="absolute inset-0 w-full opacity-10 mix-blend-lighten"
+          style={{ backgroundImage: "url(/noise.gif)" }}
+        ></div>
+
         <Container className="py-(--spacing-xl)">
           <Row>
             <Column lg="6">
