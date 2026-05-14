@@ -22,6 +22,26 @@ export default function AboutHero() {
     requestIdleCallback(() => {
       const timeline = gsap.timeline()
 
+      gsap.set(heroRef.current, {
+        transformOrigin: "50% 0%",
+      })
+
+      // Fade in the wrapper
+      timeline.fromTo(
+        heroRef.current,
+        {
+          opacity: 0,
+          scale: 0.9,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          ease: "expo.out",
+          duration: 1,
+        },
+        0,
+      )
+
       // Scroll the logo in a loop
       timeline.to(
         logoRef.current,
@@ -79,7 +99,7 @@ export default function AboutHero() {
   })
 
   return (
-    <div ref={heroRef} className="rounded-media relative aspect-video overflow-hidden bg-black">
+    <div ref={heroRef} className="rounded-media relative aspect-video overflow-hidden bg-black opacity-0">
       <div ref={gradientRef} className="opacity-0">
         <AnimatedGradient colors={GRADIENT_COLORS} amount={0.15} frequencyX={2} frequencyY={2} speed={0.5} />
       </div>

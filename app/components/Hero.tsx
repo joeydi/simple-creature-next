@@ -28,18 +28,6 @@ const Hero = () => {
     requestIdleCallback(() => {
       const timeline = gsap.timeline()
 
-      // Scroll the logo in a loop
-      timeline.to(
-        logoRef.current,
-        {
-          yPercent: -66,
-          ease: "none",
-          duration: 30,
-          repeat: Infinity,
-        },
-        0,
-      )
-
       gsap.set(wrapperRef.current, {
         transformOrigin: "50% 0%",
       })
@@ -56,6 +44,18 @@ const Hero = () => {
           scale: 1,
           ease: "expo.out",
           duration: 1,
+        },
+        0,
+      )
+
+      // Scroll the logo in a loop
+      timeline.to(
+        logoRef.current,
+        {
+          yPercent: -66,
+          ease: "none",
+          duration: 30,
+          repeat: Infinity,
         },
         0,
       )
