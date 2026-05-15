@@ -82,7 +82,7 @@ const MenuLink = ({ title, url }: MenuLinkProps) => {
       ref={linkRef}
       style={{ fontSize: fluid(36, 72) }}
       className={cn(
-        "block whitespace-nowrap p-4 text-7xl font-[450] md:font-normal",
+        "block whitespace-nowrap p-2 text-7xl font-[450] md:p-4 md:font-normal",
         "text-black transition-transform duration-300 hover:-translate-x-6 md:text-white",
       )}
       href={url}
