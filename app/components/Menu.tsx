@@ -76,6 +76,25 @@ const MenuLink = ({ title, url }: MenuLinkProps) => {
       stagger: duration / chars.length / 2,
       ease: "none",
     })
+
+    gsap.to(chars, {
+      opacity: 0.5,
+      scale: 1.333,
+      filter: "blur(8px)",
+      duration: duration / 4,
+      stagger: duration / chars.length / 2,
+      ease: "none",
+    })
+
+    gsap.to(chars, {
+      delay: duration / 4,
+      opacity: 1,
+      scale: 1,
+      filter: "blur(0px)",
+      duration: duration / 2,
+      stagger: duration / chars.length / 2,
+      ease: "none",
+    })
   }
 
   return (
