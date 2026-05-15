@@ -43,7 +43,7 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
 
         const windowWidth = window.innerWidth
         const windowHeight = window.innerHeight
-        const paddingX = fluidValue(20, 80, undefined, undefined, windowWidth)
+        const paddingX = fluidValue(20, 120, undefined, undefined, windowWidth)
         const menuRect = menu.getBoundingClientRect()
 
         if (windowWidth >= 768) {
