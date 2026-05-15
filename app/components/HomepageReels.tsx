@@ -44,7 +44,7 @@ const HomepageReels = () => {
           <Link
             ref={leftBioRef}
             href="/services#motion"
-            className="absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-white/15 px-12 py-8 text-center text-black shadow-2xl backdrop-blur-xl backdrop-brightness-110 backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
+            className="backdrop-brightness-140 absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-white/15 px-12 py-8 text-center text-black shadow-2xl backdrop-blur-xl backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
           >
             <h3 className="text-h2 mb-0">Motion</h3>
           </Link>
@@ -65,7 +65,7 @@ const HomepageReels = () => {
           <Link
             ref={rightBioRef}
             href="/services"
-            className="absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-black/15 px-12 py-8 text-center text-white shadow-2xl backdrop-blur-xl backdrop-brightness-90 backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
+            className="backdrop-brightness-80 absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-black/15 px-12 py-8 text-center text-white shadow-2xl backdrop-blur-xl backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
           >
             <h3 className="text-h2 mb-0">Interactive</h3>
           </Link>
