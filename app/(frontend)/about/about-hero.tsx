@@ -55,32 +55,6 @@ export default function AboutHero() {
         0,
       )
 
-      // Fade in the video
-      timeline.fromTo(
-        videoRef.current,
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 1,
-          duration: 1,
-        },
-        0,
-      )
-
-      // Fade in the gradient
-      timeline.fromTo(
-        gradientRef.current,
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 1,
-          duration: 3,
-        },
-        0,
-      )
-
       // Fade in the logo
       timeline.fromTo(
         logoRef.current,
@@ -91,10 +65,24 @@ export default function AboutHero() {
         {
           filter: "blur(0px)",
           opacity: 1,
-          duration: 2.5,
+          duration: 1.5,
           ease: "expo.out",
         },
         0.5,
+      )
+
+      // Fade in the gradient
+      timeline.fromTo(
+        gradientRef.current,
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 1,
+          duration: 1.5,
+          ease: "expo.out",
+        },
+        0,
       )
     })
   })
@@ -107,7 +95,7 @@ export default function AboutHero() {
       <div ref={logoRef} className="aspect-1217/1401 absolute -left-0.5 top-0 w-[calc(100%+4px)] opacity-0">
         <LogoDistortion />
       </div>
-      <div ref={videoRef} className="opacity-0">
+      <div ref={videoRef}>
         <AlphaVideo src="/aboutLoop_alpha.mp4" />
       </div>
     </div>
