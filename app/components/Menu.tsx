@@ -31,10 +31,24 @@ const MenuLink = ({ title, url }: MenuLinkProps) => {
       const split = new SplitText(linkRef.current, { type: "chars" })
       charsRef.current = split.chars as HTMLElement[]
       originalsRef.current = split.chars.map((c) => c.textContent || "")
-      ;(split.chars as HTMLElement[]).forEach((char) => {
-        char.style.width = `${char.clientWidth}px`
-      })
+
+      const measureChars = () => {
+        const chars = charsRef.current
+        chars.forEach((char) => {
+          char.style.width = ""
+        })
+        chars.forEach((char) => {
+          char.style.width = `${char.clientWidth}px`
+        })
+      }
+
+      measureChars()
+
+      const observer = new ResizeObserver(measureChars)
+      observer.observe(linkRef.current)
+
       return () => {
+        observer.disconnect()
         split.revert()
       }
     },
