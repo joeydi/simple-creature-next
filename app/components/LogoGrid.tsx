@@ -85,7 +85,7 @@ export const LogoGrid = () => {
 
     // Batch all reads first to avoid forced reflows
     const gridWidth = grid.clientWidth
-    const gridHeight = grid.clientWidth
+    const gridHeight = grid.clientHeight
     const viewportWidth = window.innerWidth
     const viewportHeight = window.innerHeight
 
