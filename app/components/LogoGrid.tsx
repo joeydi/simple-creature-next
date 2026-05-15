@@ -35,29 +35,29 @@ import Link from "next/link"
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const logos = [
-  { logo: astonMartin },
-  { logo: arizonaStateUninversity },
-  { logo: capitalOne },
-  { logo: dell },
-  { logo: fantasy },
-  { logo: ford },
-  { logo: generalMills },
-  { logo: huge },
-  { logo: keurig },
-  { logo: lincoln },
-  { logo: mamava, link: "/work/mamava-product-tour" },
-  { logo: meta },
-  { logo: nickelodeon },
-  { logo: nissan },
-  { logo: nokianTyres },
+  { logo: astonMartin, title: "Aston Martin" },
+  { logo: arizonaStateUninversity, title: "Arizona State University" },
+  { logo: capitalOne, title: "CapitalOne" },
+  { logo: dell, title: "Dell" },
+  { logo: fantasy, title: "Fantasy" },
+  { logo: ford, title: "Ford" },
+  { logo: generalMills, link: "/work/general-mills-chefs-on-the-line", title: "General Mills Chefs on the Line" },
+  { logo: huge, title: "Huge" },
+  { logo: keurig, title: "Keurig" },
+  { logo: lincoln, title: "Lincoln" },
+  { logo: mamava, link: "/work/mamava-product-tour", title: "Mamava Product Tour" },
+  { logo: meta, link: "/work/meta", title: "Meta Reels" },
+  { logo: nickelodeon, title: "Nickelodeon" },
+  { logo: nissan, link: "/work/nissan-ims-concept-car", title: "Nissan IMs Concept Car" },
+  { logo: nokianTyres, title: "Nokian Tyres" },
   { logo: olg, link: "/work/olg-level-up" },
-  { logo: onePercent, link: "/work/1-percent-for-the-planet" },
-  { logo: popularScience },
-  { logo: principal },
-  { logo: ramble },
-  { logo: razorfish },
-  { logo: sandwich },
-  { logo: zeiss },
+  { logo: onePercent, link: "/work/1-percent-for-the-planet", title: "OLG Level Up" },
+  { logo: popularScience, link: "/work/popular-science-series", title: "Popular Science Series" },
+  { logo: principal, title: "Principal" },
+  { logo: ramble, title: "Ramble Maps" },
+  { logo: razorfish, title: "Razorfish" },
+  { logo: sandwich, link: "/work/what-is-0x", title: "Sandwich What is 0x?" },
+  { logo: zeiss, link: "/work/zeiss-neurology", title: "Zeiss Neurology" },
 ]
 
 export const LogoGrid = () => {
@@ -165,14 +165,18 @@ export const LogoGrid = () => {
                   href={logo.link}
                   className="logo translate-[-50%,-50%] before:filter-[blur(20px)] absolute rounded-xl p-4 before:pointer-events-none before:absolute before:inset-0 before:bg-black"
                 >
-                  <Image className="aspect-2 pointer-events-none relative w-[10vw]" src={logo.logo} alt="" />
+                  <Image
+                    className="aspect-2 pointer-events-none relative w-[10vw]"
+                    src={logo.logo}
+                    alt={logo.title ?? ""}
+                  />
                 </Link>
               ) : (
                 <div
                   key={`div-${i}`}
                   className="logo translate-[-50%,-50%] before:filter-[blur(20px)] pointer-events-none absolute rounded-xl p-4 before:absolute before:inset-0 before:bg-black"
                 >
-                  <Image className="aspect-2 relative w-[10vw]" src={logo.logo} alt="" />
+                  <Image className="aspect-2 relative w-[10vw]" src={logo.logo} alt={logo.title ?? ""} />
                 </div>
               )
             })}
