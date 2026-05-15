@@ -30,6 +30,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
     gsap.set(imageRef.current, {
       scale: 1.5,
       filter: "blur(8px)",
+      opacity: 0,
     })
 
     const timeline = gsap.timeline({
@@ -42,6 +43,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
         onEnter: () => {
           gsap.to(imageRef.current, {
             scale: 1,
+            opacity: 1,
             filter: "blur(0px)",
             ease: "expo.out",
             duration: 1.5,
@@ -50,6 +52,7 @@ const ProjectCard = ({ project, className = "", align = "left" }: Props) => {
         onEnterBack: () => {
           gsap.to(imageRef.current, {
             scale: 1,
+            opacity: 1,
             filter: "blur(0px)",
             ease: "expo.out",
             duration: 1.5,
