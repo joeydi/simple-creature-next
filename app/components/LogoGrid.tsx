@@ -4,8 +4,6 @@ import { useRef, useState, useEffect } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Container from "./Container"
-import MaskHeading from "./MaskHeading"
 import { getRandom, getRandomInt } from "@/lib/utils"
 
 import astonMartin from "@/images/logos/aston-martin.svg"
@@ -32,33 +30,34 @@ import razorfish from "@/images/logos/razorfish.svg"
 import sandwich from "@/images/logos/sandwich.svg"
 import zeiss from "@/images/logos/zeiss.svg"
 import Image from "next/image"
+import Link from "next/link"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const logos = [
-  astonMartin,
-  arizonaStateUninversity,
-  capitalOne,
-  dell,
-  fantasy,
-  ford,
-  generalMills,
-  huge,
-  keurig,
-  lincoln,
-  mamava,
-  meta,
-  nickelodeon,
-  nissan,
-  nokianTyres,
-  olg,
-  onePercent,
-  popularScience,
-  principal,
-  ramble,
-  razorfish,
-  sandwich,
-  zeiss,
+  { logo: astonMartin },
+  { logo: arizonaStateUninversity },
+  { logo: capitalOne },
+  { logo: dell },
+  { logo: fantasy },
+  { logo: ford },
+  { logo: generalMills },
+  { logo: huge },
+  { logo: keurig },
+  { logo: lincoln },
+  { logo: mamava, link: "/work/mamava-product-tour" },
+  { logo: meta },
+  { logo: nickelodeon },
+  { logo: nissan },
+  { logo: nokianTyres },
+  { logo: olg, link: "/work/olg-level-up" },
+  { logo: onePercent, link: "/work/1-percent-for-the-planet" },
+  { logo: popularScience },
+  { logo: principal },
+  { logo: ramble },
+  { logo: razorfish },
+  { logo: sandwich },
+  { logo: zeiss },
 ]
 
 export const LogoGrid = () => {
@@ -98,13 +97,15 @@ export const LogoGrid = () => {
       return {
         x: column * (gridWidth / columns) + (row % 2) * (gridWidth / columns / 2),
         y: row * (gridHeight / rows),
-        z: getRandom(-viewportWidth / 2, viewportWidth / 4),
+        z: getRandom(0, viewportWidth / 2),
       }
     })
 
     const sizeValues = Array.from(stars).map(() => {
       return getRandomInt(5, 20)
     })
+
+    gsap.set(grid, { z: -viewportWidth / 2 })
 
     // Then batch all writes
     logos.forEach((logo, i) => {
@@ -143,27 +144,35 @@ export const LogoGrid = () => {
         ease: "none",
       },
     )
-  })
+  }, [randomLogos])
 
   return (
     <section className="relative">
       <div
         ref={maskRef}
-        className="perspective-[100vw] relative aspect-[0.75] w-full overflow-hidden bg-black lg:aspect-video"
+        className="perspective-[100vw] relative aspect-[1] w-full overflow-hidden bg-black lg:aspect-[1.5]"
       >
-        <div className="bg-linear-[to_bottom,rgba(0,0,0,1),transparent_300px,transparent_calc(100%-100px),rgba(0,0,0,0.5)] z-1 absolute inset-0"></div>
+        <div className="bg-linear-[to_bottom,rgba(0,0,0,1),transparent_300px,transparent_calc(100%-100px),rgba(0,0,0,0.5)] z-1 pointer-events-none absolute inset-0"></div>
         <div ref={gridRef} className="transform-3d relative size-[200%]">
           {Array(columns * rows)
             .fill(0)
             .map((_, i) => {
               const logo = randomLogos[i % randomLogos.length]
 
-              return (
+              return logo.link ? (
+                <Link
+                  key={`div-${i}`}
+                  href={logo.link}
+                  className="logo translate-[-50%,-50%] before:filter-[blur(20px)] absolute rounded-xl p-4 before:pointer-events-none before:absolute before:inset-0 before:bg-black"
+                >
+                  <Image className="aspect-2 pointer-events-none relative w-[10vw]" src={logo.logo} alt="" />
+                </Link>
+              ) : (
                 <div
                   key={`div-${i}`}
-                  className="logo translate-[-50%,-50%] before:filter-[blur(20px)] absolute rounded-xl p-4 before:absolute before:inset-0 before:bg-black"
+                  className="logo translate-[-50%,-50%] before:filter-[blur(20px)] pointer-events-none absolute rounded-xl p-4 before:absolute before:inset-0 before:bg-black"
                 >
-                  <Image className="aspect-2 relative w-[10vw]" src={logo} alt="" />
+                  <Image className="aspect-2 relative w-[10vw]" src={logo.logo} alt="" />
                 </div>
               )
             })}
