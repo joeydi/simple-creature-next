@@ -123,7 +123,7 @@ const Menu = () => {
     <ul
       id="menu"
       className={cn(
-        "absolute -right-3 top-[calc(100%+16px)] flex min-w-80 origin-top list-none flex-col items-end gap-px rounded-2xl transition-all",
+        "absolute -right-3 top-[calc(100%+16px)] flex min-w-60 origin-top list-none flex-col items-end gap-px rounded-2xl transition-all",
         "bg-white/25 p-2 shadow-xl backdrop-blur-[20px] md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none",
         isActive ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
       )}

@@ -10,7 +10,7 @@ export default function FooterContent() {
     <div className="text-white">
       <p
         className={cn(
-          "left-(--container-padding) text-h2 duration-600 fixed top-10 transition-all ease-out",
+          "left-(--container-padding) text-h3 md:text-h2 duration-600 fixed top-10 transition-all ease-out",
           isActive ? "delay-250 translate-none opacity-100 blur-none" : "-translate-y-24 opacity-0 blur-md delay-0",
         )}
       >
@@ -20,7 +20,7 @@ export default function FooterContent() {
       </p>
       <p
         className={cn(
-          "left-(--container-padding) duration-600 fixed bottom-10 font-medium text-white transition-all ease-out",
+          "left-(--container-padding) duration-600 fixed bottom-10 hidden font-medium text-white transition-all ease-out md:block",
           isActive ? "delay-250 translate-none opacity-100 blur-none" : "translate-y-24 opacity-0 blur-md delay-0",
         )}
       >
@@ -30,7 +30,7 @@ export default function FooterContent() {
       </p>
       <ul
         className={cn(
-          "right-(--container-padding) duration-600 fixed bottom-10 flex gap-8 font-medium text-white transition-all ease-out sm:justify-end",
+          "left-(--container-padding) md:right-(--container-padding) duration-600 fixed bottom-10 flex gap-8 font-medium text-white transition-all ease-out sm:justify-end md:left-auto",
           isActive ? "delay-250 translate-none opacity-100 blur-none" : "translate-y-24 opacity-0 blur-md delay-0",
         )}
       >
