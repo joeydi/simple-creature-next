@@ -26,7 +26,10 @@
 
   > * {
     opacity: 0;
-    transition: opacity 300ms ease;
+    filter: blur(4px);
+    transition:
+      opacity 300ms ease,
+      filter 200ms ease;
 
     &:nth-last-child(1) {
       transition-delay: 100ms;
@@ -52,7 +55,10 @@
   @media (hover: hover) {
     .row.hovered & > * {
       opacity: 1;
-      transition: opacity 300ms ease;
+      filter: blur(0px);
+      transition:
+        opacity 300ms ease,
+        filter 200ms ease;
 
       &:nth-child(1) {
         transition-delay: 0ms;
