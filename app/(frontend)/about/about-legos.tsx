@@ -34,16 +34,22 @@ export default function AboutLegos() {
           <AboutJoe containerRef={containerRef} />
           <div
             ref={leftBioRef}
-            className="absolute left-[10%] top-[25%] w-[40%] max-w-lg rounded-lg bg-black/15 p-12 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms]"
+            className="md:p-(--spacing-sm) absolute left-0 top-[60%] max-w-lg rounded-lg bg-black/15 px-4 py-2 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms] lg:left-[10%] lg:top-[25%] lg:w-[40%]"
           >
-            <div className="mb-3 flex items-center gap-4">
-              <Image width="800" height="800" className="size-16 rounded-full" src={"/jd.jpg"} alt="Joe di Stefano" />
+            <div className="flex items-center gap-4">
+              <Image
+                width="800"
+                height="800"
+                className="hidden size-16 rounded-full sm:block"
+                src={"/jd.jpg"}
+                alt="Joe di Stefano"
+              />
               <div>
                 <h3 className="mb-0">Joe di Stefano</h3>
                 <p className="font-sm text-white/70">Technical Director</p>
               </div>
             </div>
-            <p className="text-balance">
+            <p className="mt-3 hidden text-balance lg:block">
               Joe is a designer and developer who specializes in crafting high-performance digital experiences that
               blend thoughtful design with clean, scalable code.
             </p>
@@ -55,22 +61,22 @@ export default function AboutLegos() {
           <AboutJames containerRef={containerRef} />
           <div
             ref={rightBioRef}
-            className="absolute right-[10%] top-[25%] w-[40%] max-w-lg rounded-lg bg-black/15 p-12 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms]"
+            className="md:p-(--spacing-sm) absolute right-0 top-[20%] max-w-lg rounded-lg bg-black/15 px-4 py-2 text-white backdrop-blur-xl [transition:opacity_250ms,filter_250ms,transform_0ms] lg:right-[10%] lg:top-[25%] lg:w-[40%]"
           >
-            <div className="mb-3 flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <Image
                 width="800"
                 height="800"
-                className="size-16 rounded-full"
+                className="hidden size-16 rounded-full sm:block"
                 src={"/jk.jpg"}
-                alt="James Kowalskiadd"
+                alt="James Kowalski"
               />
               <div>
                 <h3 className="mb-0">James Kowalski</h3>
                 <p className="font-sm text-white/70">Creative Director</p>
               </div>
             </div>
-            <p className="text-balance">
+            <p className="mt-3 hidden text-balance lg:block">
               James is a motion designer and visual storyteller known for creating cinematic animations, immersive
               interfaces, and richly detailed digital experiences.
             </p>
