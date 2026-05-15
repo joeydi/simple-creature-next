@@ -40,13 +40,13 @@ export default function Services() {
       </PageHeader>
 
       <Container>
-        <Row className="justify-between">
-          <Column lg="6">
-            <h1 className="ml-(--spacing-xs)">
+        <Row>
+          <Column md="6" className="pl-(--spacing-xxs)">
+            <h1>
               <MaskHeading>Interactive</MaskHeading>
             </h1>
           </Column>
-          <Column lg="4" className="lg:mt-4">
+          <Column md="6" lg="5" xl="4" className="pl-(--spacing-xxs) md:mt-(--spacing-xxs) md:pl-0">
             <p>
               <ScrambleText>
                 Interactive work sparked our journey and still sits at the core of what we do. It continues to shape how
@@ -55,7 +55,6 @@ export default function Services() {
               </ScrambleText>
             </p>
           </Column>
-          <Column lg="2"></Column>
         </Row>
       </Container>
 
@@ -69,13 +68,13 @@ export default function Services() {
 
         <Container className="py-(--spacing-xl)">
           <Row>
-            <Column lg="6">
-              <h1 className="ml-(--spacing-xs)">
+            <Column md="6" className="pl-(--spacing-xxs)">
+              <h1>
                 <SplitHeading>Interactive Services</SplitHeading>
               </h1>
             </Column>
-            <Column lg="4" className="text-balance lg:mt-4">
-              <p className="ml-(--spacing-xs) lg:ml-0">
+            <Column md="6" lg="5" xl="4" className="pl-(--spacing-xxs) md:mt-(--spacing-xxs) text-balance md:pl-0">
+              <p>
                 <ScrambleText>
                   We offer a diverse range of interactive services to support your online projects at every stage.
                   Whether you’re looking for a comprehensive solution or targeted expertise, we can seamlessly align
@@ -93,13 +92,13 @@ export default function Services() {
       <div id="motion"></div>
 
       <Container>
-        <Row className="justify-between">
-          <Column lg="6">
-            <h1 className="ml-(--spacing-xs)">
+        <Row>
+          <Column md="6" className="pl-(--spacing-xxs)">
+            <h1>
               <MaskHeading>Motion Design</MaskHeading>
             </h1>
           </Column>
-          <Column lg="4" className="lg:mt-4">
+          <Column md="6" lg="5" xl="4" className="pl-(--spacing-xxs) md:mt-(--spacing-xxs) text-balance md:pl-0">
             <p>
               <ScrambleText>
                 Animation plays a key role in both our interactive and standalone projects, helping us convey complex
@@ -121,20 +120,19 @@ export default function Services() {
 
         <Container className="py-(--spacing-xl)">
           <Row>
-            <Column lg="6">
-              <h1 className="ml-(--spacing-xs)">
+            <Column md="6" className="pl-(--spacing-xxs)">
+              <h1>
                 <SplitHeading>Animation Services</SplitHeading>
               </h1>
             </Column>
-            <Column lg="4" className="text-balance lg:mt-4">
-              <p className="ml-(--spacing-xs) lg:ml-0">
+            <Column md="6" lg="5" xl="4" className="pl-(--spacing-xxs) md:mt-(--spacing-xxs) text-balance md:pl-0">
+              <p>
                 <ScrambleText>
                   Our animation work scales to fit the project—ranging from focused contributions within large
                   initiatives to end-to-end solutions tailored to any scope or scale.
                 </ScrambleText>
               </p>
             </Column>
-            <Column lg="2"></Column>
           </Row>
         </Container>
 

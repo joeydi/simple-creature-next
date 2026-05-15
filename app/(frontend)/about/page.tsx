@@ -21,7 +21,7 @@ export default async function About() {
   const categories = await getCategoriesWithCounts()
 
   return (
-    <Main className="pb-(--spacing-sm)">
+    <Main className="pb-(--spacing-xl)">
       <PageHeader crumbs={[]}>
         <h1 className="text-header">
           <ScrambleText reset={true}>a veritable force</ScrambleText>
@@ -35,16 +35,16 @@ export default async function About() {
       <div className="my-(--spacing-xxl)">
         <Container>
           <Row>
-            <Column lg="6">
+            <Column md="6" className="pl-(--spacing-xxs)">
               <h1>
                 <MaskHeading>Who is we?</MaskHeading>
               </h1>
             </Column>
-            <Column lg="5" className="lg:mt-4">
+            <Column md="6" lg="5" className="pl-(--spacing-xxs) md:mt-(--spacing-xxs) md:pl-0">
               <p className="text-balance">
                 <ScrambleText>
-                  We&rsquo;re James Kowalski and Joe di Stefano—long-time friends and a design-development duo crafting
-                  bold digital experiences.
+                  We&rsquo;re James Kowalski and Joe di Stefano — long-time friends and a design-development duo
+                  crafting bold digital experiences.
                 </ScrambleText>
               </p>
               <p className="text-balance">
@@ -63,7 +63,7 @@ export default async function About() {
       <div className="my-(--spacing-xxl)">
         <Container>
           <Row>
-            <Column lg="6">
+            <Column md="6" className="pl-(--spacing-xxs)">
               <h1>
                 <SplitHeading>
                   Prowess &amp;
@@ -71,7 +71,7 @@ export default async function About() {
                 </SplitHeading>
               </h1>
             </Column>
-            <Column lg="4" className="lg:mt-4">
+            <Column md="6" lg="5" className="pl-(--spacing-xxs) md:mt-(--spacing-xxs) md:pl-0">
               <p className="text-balance">
                 <ScrambleText>
                   We collaborate closely with our clients to design and develop digital solutions that are visually
@@ -87,36 +87,35 @@ export default async function About() {
       <div className="my-(--spacing-xxl)">
         <Container>
           <Row>
-            <Column lg="4" xl="3">
+            <Column md="4" className="pl-(--spacing-xxs)">
               <CategoryFilter categories={categories} linkTo="/work" />
             </Column>
-            <Column lg="4" xl="3">
+            <Column md="4" className="pl-(--spacing-xxs) xl:pr-(--spacing-lg) md:pl-0">
               <p className="text-balance">
                 Though our team is small, our expertise runs deep—enabling us to deliver a wide range of digital
                 products. We proudly serve clients from local startups to global brands, and we approach every project,
                 big or small, with the same level of commitment and creativity.
               </p>
             </Column>
-            <Column lg="4" xl="3" className="ml-auto">
+            <Column md="4" className="pl-(--spacing-xxs) xl:pr-(--spacing-lg) md:pl-0">
               <p className="text-balance">
                 We&rsquo;re a full-service creative studio for strategic design and execution and a fast, flexible
                 production partner when larger agencies need extra support without the overhead.
               </p>
             </Column>
-            <Column xl="2"></Column>
           </Row>
         </Container>
       </div>
 
       <div>
         <Container>
-          <div className="mb-(--spacing-xs)">
+          <div className="mb-(--spacing-xs) pl-(--spacing-xxs)">
             <ScrambleText>
               <h2>Frequently Asked Questions</h2>
             </ScrambleText>
           </div>
           <Row>
-            <Column md="6" lg="5" xl="4">
+            <Column md="6" lg="5" xl="4" className="pl-(--spacing-xxs)">
               <div className="gap-(--spacing-xs) flex flex-col">
                 <div>
                   <h3 className="mb-2 text-gray-400">What type of projects do you work on?</h3>
@@ -153,7 +152,7 @@ export default async function About() {
                 </div>
               </div>
             </Column>
-            <Column md="6" lg="5" xl="4" className="ml-auto">
+            <Column md="6" lg="5" xl="4" className="pl-(--spacing-xxs) ml-auto md:pl-0">
               <div className="gap-(--spacing-xs) flex flex-col">
                 <div>
                   <h3 className="mb-2 text-gray-400">What industries do you specialize in?</h3>

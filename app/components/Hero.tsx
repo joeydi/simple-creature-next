@@ -122,16 +122,16 @@ const Hero = () => {
             <AlphaVideo src="/clothLoop_alpha.mp4" />
           </div>
         </div>
-        <Row className="justify-between">
-          <Column lg="6">
-            <h1 className="ml-4">
+        <Row>
+          <Column md="7" lg="6" className="pl-(--spacing-xxs)">
+            <h1>
               <SplitHeading delay={0.5}>
                 Web Design <br />
                 &amp; Animation
               </SplitHeading>
             </h1>
           </Column>
-          <Column lg="4" className="lg:mt-4">
+          <Column md="5" lg="5" className="pl-(--spacing-xxs) md:mt-(--spacing-xxs) md:pl-0">
             <p data-lag="0.05">
               <ScrambleText delay={1.25}>
                 We believe the best digital work feels effortless &mdash; precisely because it&rsquo;s built with care.

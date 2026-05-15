@@ -51,12 +51,12 @@ export default async function Project(props: PageProps<"/work/[slug]">) {
       </PageHeader>
       <Container className="my-(--spacing-xxl)">
         <Row className="justify-between">
-          <Column md={8} lg={7} xl={8} className="px-(--spacing-xs)">
+          <Column md={8} lg={7} xl={8} className="pl-(--spacing-xxs)">
             <FadeIn delay={0.25}>
               <h2>{project.longDescription}</h2>
             </FadeIn>
           </Column>
-          <Column md={4} xl={3}>
+          <Column md={4} xl={3} className="pl-(--spacing-xxs) md:pl-0">
             <ProjectTags tags={projectTags ?? []} liveUrl={project.url} />
           </Column>
         </Row>

@@ -80,8 +80,8 @@ const ServicesMarquee = () => {
       <div ref={spacerRef} className="overflow-hidden bg-black">
         <div
           ref={marqueeRef}
-          style={{ fontSize: fluid(90, 180) }}
-          className="text-h1 flex flex-col bg-black py-[100px] leading-[1.2] text-white"
+          style={{ fontSize: fluid(45, 180) }}
+          className="text-h1 py-(--spacing-lg) flex flex-col bg-black leading-[1.2] text-white"
         >
           <MarqueeSpan>
             Strategy &bull; Design &bull; Motion &bull; Consulting &bull; Interactive &bull; Production

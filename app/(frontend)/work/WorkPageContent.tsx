@@ -57,14 +57,14 @@ export default function WorkPageContent({ projects, categories }: Props) {
   return (
     <Container>
       <Row className="mb-(--spacing-lg)">
-        <Column sm="6" className="px-(--spacing-xs)">
+        <Column sm="6" className="pl-(--spacing-xxs)">
           <CategoryFilter
             categories={categories}
             activeCategory={activeCategory}
             onCategoryChange={handleCategoryChange}
           />
         </Column>
-        <Column sm="6">
+        <Column sm="6" className="pl-(--spacing-xxs) sm:pl-0">
           <p className="max-w-2xl text-balance">
             <ScrambleText delay={0.5}>
               We create immersive digital experiences where design, motion, and technology work together as one system.
