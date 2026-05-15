@@ -12,6 +12,7 @@ import ScrambleText from "@/components/ScrambleText"
 import SplitHeading from "./SplitHeading"
 import { AlphaVideo } from "./alpha-video"
 import AnimatedGradient from "./animated-gradient"
+import { onIdle } from "@/lib/utils"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -25,7 +26,7 @@ const Hero = () => {
   const videoRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    requestIdleCallback(() => {
+    onIdle(() => {
       const timeline = gsap.timeline()
 
       gsap.set(wrapperRef.current, {

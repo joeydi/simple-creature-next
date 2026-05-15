@@ -95,6 +95,20 @@ export function fluidValue(
 }
 
 /**
+ * Schedules a callback when the browser is idle, falling back to setTimeout
+ * on platforms without requestIdleCallback (e.g. iOS Safari).
+ */
+export function onIdle(callback: () => void, timeout = 2000): void {
+  const ric = (globalThis as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number })
+    .requestIdleCallback
+  if (typeof ric === "function") {
+    ric(callback, { timeout })
+  } else {
+    setTimeout(callback, 1)
+  }
+}
+
+/**
  * Formats a file size in bytes to a human-readable string
  * @param bytes - File size in bytes
  * @returns Formatted string (e.g., "1.5 MB")

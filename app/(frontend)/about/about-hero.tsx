@@ -7,6 +7,7 @@ import { useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { onIdle } from "@/lib/utils"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -19,7 +20,7 @@ export default function AboutHero() {
   const videoRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    requestIdleCallback(() => {
+    onIdle(() => {
       const timeline = gsap.timeline()
 
       gsap.set(heroRef.current, {

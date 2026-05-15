@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
 import { AnimatedGradient as AnimatedGradientShader } from "@/lib/animated-gradient-shader/animated-gradient-shader"
-import { cn } from "@/lib/utils"
+import { cn, onIdle } from "@/lib/utils"
 
 type Props = React.ComponentProps<"canvas"> & {
   colors?: string[]
@@ -173,10 +173,10 @@ export default function AnimatedGradient({
       return
     }
 
-    let startTimeoutId: number | null = null
-    let idleCallbackId: number | null = null
+    let cancelled = false
 
     const start = () => {
+      if (cancelled) return
       if (document.visibilityState === "visible") {
         animate()
       }
@@ -192,14 +192,7 @@ export default function AnimatedGradient({
       }
     }
 
-    const scheduleStart = () => {
-      const ric = (window as Window & { requestIdleCallback?: typeof requestIdleCallback }).requestIdleCallback
-      if (typeof ric === "function") {
-        idleCallbackId = ric(() => start(), { timeout: 2000 })
-      } else {
-        startTimeoutId = window.setTimeout(start, 1000)
-      }
-    }
+    const scheduleStart = () => onIdle(start, 2000)
 
     if (document.readyState === "complete") {
       scheduleStart()
@@ -210,17 +203,9 @@ export default function AnimatedGradient({
     document.addEventListener("visibilitychange", handleVisibilityChange)
 
     return () => {
+      cancelled = true
       window.removeEventListener("load", scheduleStart)
       document.removeEventListener("visibilitychange", handleVisibilityChange)
-      if (startTimeoutId !== null) {
-        clearTimeout(startTimeoutId)
-      }
-      if (idleCallbackId !== null) {
-        const cic = (window as Window & { cancelIdleCallback?: typeof cancelIdleCallback }).cancelIdleCallback
-        if (typeof cic === "function") {
-          cic(idleCallbackId)
-        }
-      }
       cancel()
     }
   }, [isAnimating])
