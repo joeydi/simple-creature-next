@@ -44,9 +44,9 @@ const HomepageReels = () => {
           <Link
             ref={leftBioRef}
             href="/services#motion"
-            className="backdrop-brightness-140 absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-white/15 px-12 py-8 text-center text-black shadow-2xl backdrop-blur-xl backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
+            className="backdrop-brightness-140 absolute left-[35%] top-[50%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-white/15 px-4 py-2 text-center text-black shadow-2xl backdrop-blur-xl backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms] md:w-[30%] md:px-12 md:py-8"
           >
-            <h3 className="text-h2 mb-0">Motion</h3>
+            <h3 className="md:text-h2 mb-0">Motion</h3>
           </Link>
         </>
       }
@@ -65,9 +65,9 @@ const HomepageReels = () => {
           <Link
             ref={rightBioRef}
             href="/services"
-            className="backdrop-brightness-80 absolute left-[35%] top-[50%] w-[30%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-black/15 px-12 py-8 text-center text-white shadow-2xl backdrop-blur-xl backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms]"
+            className="backdrop-brightness-80 absolute left-[35%] top-[50%] max-w-lg translate-y-[-50%] rounded-full border border-white/25 bg-black/15 px-4 py-2 text-center text-white shadow-2xl backdrop-blur-xl backdrop-saturate-150 [transition:opacity_250ms,filter_250ms,transform_0ms] md:w-[30%] md:px-12 md:py-8"
           >
-            <h3 className="text-h2 mb-0">Interactive</h3>
+            <h3 className="md:text-h2 mb-0">Interactive</h3>
           </Link>
         </>
       }
