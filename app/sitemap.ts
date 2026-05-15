@@ -12,13 +12,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/work`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/services`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/news`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
   ]
 
-  const projects = await db
-    .select({ slug: project.slug, updatedAt: project.updatedAt })
-    .from(project)
+  const projects = await db.select({ slug: project.slug, updatedAt: project.updatedAt }).from(project)
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
     url: `${baseUrl}/work/${p.slug}`,
