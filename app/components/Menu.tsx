@@ -20,6 +20,7 @@ interface MenuLinkProps {
 }
 
 const MenuLink = ({ title, url }: MenuLinkProps) => {
+  const { setIsActive } = useMenu()
   const linkRef = useRef<HTMLAnchorElement>(null)
   const charsRef = useRef<HTMLElement[]>([])
   const originalsRef = useRef<string[]>([])
@@ -87,6 +88,7 @@ const MenuLink = ({ title, url }: MenuLinkProps) => {
       )}
       href={url}
       onMouseEnter={handleMouseEnter}
+      onClick={() => setIsActive(false)}
     >
       {title}
     </Link>
