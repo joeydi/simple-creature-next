@@ -82,7 +82,7 @@ export function fluidReverse(
 export function fluidValue(
   minValue: number,
   maxValue: number,
-  minWidth: number = 375,
+  minWidth: number = 640,
   maxWidth: number = 1920,
   currentWidth: number,
 ): number {
