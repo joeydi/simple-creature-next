@@ -116,7 +116,7 @@ const Header = () => {
 
   return (
     <header
-      className="pointer-events-none fixed z-10 flex h-[clamp(100px,84px+5vw,180px)] w-full items-center"
+      className="pointer-events-none fixed z-10 flex h-[clamp(80px,40px+6.25vw,160px)] w-full items-center"
       ref={headerRef}
     >
       <Container className="flex justify-end">

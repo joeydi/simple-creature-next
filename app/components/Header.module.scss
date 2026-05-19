@@ -9,11 +9,12 @@
   display: block;
   width: 72px;
   height: 72px;
-  // margin-right: 8px;
   background-color: rgba(255, 255, 255, 0.25);
   border-radius: 50%;
   border: none;
   backdrop-filter: blur(20px);
+  transform-origin: 100% 50%;
+  transform: scale(clamp(0.65, calc(0.5 + (100vw - 640px) / 2560px), 1));
   transition: background-color 200ms;
   overflow: hidden;
 

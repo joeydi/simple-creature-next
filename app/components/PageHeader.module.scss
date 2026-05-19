@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  min-height: clamp(100px, 84px + 5vw, 180px);
+  min-height: fluid(80, 160, $sm, $max);
   overflow: hidden;
 }
 
