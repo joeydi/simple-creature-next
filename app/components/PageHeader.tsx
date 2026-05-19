@@ -26,15 +26,12 @@ const PageHeader = ({ children, crumbs }: Props) => {
 
   return (
     <div className={styles.pageHeader}>
-      <Container>
+      <Container className="flex items-center">
         <div
           className={`${styles.row}${hovered ? ` ${styles.hovered}` : ""}`}
           onMouseEnter={(e) => {
             if (trailRef.current) {
-              e.currentTarget.style.setProperty(
-                "--trail-width",
-                `${trailRef.current.getBoundingClientRect().width}px`,
-              )
+              e.currentTarget.style.setProperty("--trail-width", `${trailRef.current.getBoundingClientRect().width}px`)
             }
             setHovered(true)
           }}
