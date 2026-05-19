@@ -7,26 +7,24 @@ import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ScrollSmoother } from "gsap/ScrollSmoother"
 import { useMenu } from "@/contexts/MenuContext"
-import { cn, fluidValue, onIdle } from "@/lib/utils"
+import { cn, fluidValue } from "@/lib/utils"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother)
 
 const SmoothScroller = ({ children }: React.PropsWithChildren) => {
   const pathname = usePathname()
-  const { isActive, setIsActive } = useMenu()
+  const { isActive } = useMenu()
   const smoother = useRef<ReturnType<typeof ScrollSmoother.create> | null>(null)
 
   const [scale, setScale] = useState(0.75)
   const [translate, setTranslate] = useState(20)
 
   useGSAP(() => {
-    onIdle(() => {
-      smoother.current = ScrollSmoother.create({
-        wrapper: "#smooth-wrapper",
-        content: "#smooth-content",
-        smooth: 0.5,
-        smoothTouch: 0.1,
-      })
+    smoother.current = ScrollSmoother.create({
+      wrapper: "#smooth-wrapper",
+      content: "#smooth-content",
+      smooth: 0.5,
+      smoothTouch: 0.1,
     })
   })
 
