@@ -1,12 +1,8 @@
 import { cn } from "@/lib/utils"
 
-interface Props {
-  className?: string
-}
-
-const Container = ({ className, children }: React.PropsWithChildren<Props>) => {
+const Container = ({ className, children, ...props }: React.ComponentProps<"div">) => {
   return (
-    <div className={cn("max-w-(--container-max-width) px-(--container-padding) mx-auto w-full", className)}>
+    <div className={cn("max-w-(--container-max-width) px-(--container-padding) mx-auto w-full", className)} {...props}>
       {children}
     </div>
   )
