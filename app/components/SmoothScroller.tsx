@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -27,6 +27,29 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
       smoothTouch: 0.1,
     })
   })
+
+  // Native anchor scrolling doesn't work with ScrollSmoother (the page is
+  // pinned and faked via transforms), so drive hash navigation through the
+  // smoother instead.
+  const scrollToHash = useCallback((smooth: boolean) => {
+    const hash = window.location.hash
+    if (!hash || hash.length < 2) return
+
+    const target = document.querySelector(hash)
+    if (!target) return
+
+    smoother.current?.scrollTo(target as HTMLElement, smooth)
+  }, [])
+
+  useEffect(() => {
+    // Initial load and cross-page navigation are handled by the refresh effect
+    // below (it must re-measure the smoother before scrolling). Here we only
+    // need to handle in-page hash changes (clicking an anchor link).
+    const onHashChange = () => scrollToHash(true)
+    window.addEventListener("hashchange", onHashChange)
+
+    return () => window.removeEventListener("hashchange", onHashChange)
+  }, [scrollToHash])
 
   useEffect(() => {
     let rafId: number | null = null
@@ -75,10 +98,11 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
     const id = requestAnimationFrame(() => {
       smoother.current?.refresh()
       ScrollTrigger.refresh()
+      scrollToHash(false)
     })
 
     return () => window.cancelAnimationFrame(id)
-  }, [pathname])
+  }, [pathname, scrollToHash])
 
   useEffect(() => {
     const id = window.setTimeout(() => {
