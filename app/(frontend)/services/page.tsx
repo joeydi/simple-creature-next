@@ -89,9 +89,7 @@ export default function Services() {
         <InteractiveServices />
       </div>
 
-      <div id="motion"></div>
-
-      <Container>
+      <Container id="motion">
         <Row>
           <Column md="6" className="pl-(--spacing-xxs)">
             <h1>
