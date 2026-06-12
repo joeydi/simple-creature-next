@@ -7,7 +7,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { nanoid } from "nanoid"
-import { desc, count, eq, inArray, or, ilike } from "drizzle-orm"
+import { asc, desc, count, eq, inArray, min, or, ilike } from "drizzle-orm"
 import { Asset } from "../assets/types"
 import { projectContentSchema } from "@/lib/schemas/project-content"
 import { ZodError } from "zod"
@@ -125,6 +125,10 @@ export async function createProject(formData: FormData) {
     slug = await ensureUniqueSlug(baseSlug)
   }
 
+  // Place the new project at the top of the order (below the current minimum)
+  const [{ minOrder }] = await db.select({ minOrder: min(project.sortOrder) }).from(project)
+  const topSortOrder = (minOrder !== null ? Number(minOrder) : 0) - 1
+
   // Insert project
   const projectId = nanoid()
   await db.insert(project).values({
@@ -137,6 +141,7 @@ export async function createProject(formData: FormData) {
     thumbnailId: thumbnailId || null,
     tags,
     content,
+    sortOrder: topSortOrder,
     createdAt: new Date(),
     updatedAt: new Date(),
   })
@@ -206,13 +211,14 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
       thumbnailAlt: asset.altText,
       tags: project.tags,
       content: project.content,
+      sortOrder: project.sortOrder,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
     })
     .from(project)
     .leftJoin(asset, eq(project.thumbnailId, asset.id))
     .where(whereClause)
-    .orderBy(desc(project.createdAt))
+    .orderBy(asc(project.sortOrder), desc(project.createdAt))
     .limit(pageSize)
     .offset(offset)) as Project[]
 
@@ -248,6 +254,28 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
   }
 }
 
+export async function reorderProjects(orderedIds: string[]) {
+  // Check authentication
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+
+  // Persist each project's position as its index in the ordered list.
+  // neon-http doesn't support transactions, but db.batch runs all statements atomically.
+  if (orderedIds.length > 0) {
+    const updates = orderedIds.map((id, i) => db.update(project).set({ sortOrder: i }).where(eq(project.id, id)))
+    await db.batch(updates as [typeof updates[number], ...typeof updates])
+  }
+
+  // Revalidate frontend pages that render projects in order
+  revalidatePath("/work")
+  revalidatePath("/")
+}
+
 export async function getProjectsByIds(ids: string[]): Promise<Project[]> {
   if (ids.length === 0) return []
 
@@ -263,6 +291,7 @@ export async function getProjectsByIds(ids: string[]): Promise<Project[]> {
       thumbnailAlt: asset.altText,
       tags: project.tags,
       content: project.content,
+      sortOrder: project.sortOrder,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
     })

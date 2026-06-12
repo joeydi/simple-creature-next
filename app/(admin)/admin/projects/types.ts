@@ -17,6 +17,7 @@ export interface Project {
   thumbnailAlt?: string
   tags: unknown
   content: unknown
+  sortOrder: number
   createdAt: Date
   updatedAt: Date
   categoryIds: string[]
