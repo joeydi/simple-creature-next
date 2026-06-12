@@ -23,31 +23,36 @@ const SplitHeading = ({ reset = false, delay = 0, children }: React.PropsWithChi
 
     const split = new SplitText(divRef.current, { type: "lines,words" })
 
-    // First batch of writes
+    // Apply the final line styling up front. Doing this here (rather than a
+    // frame later) avoids a post-mount layout shift from the collapsing
+    // line-height, which would knock anchor scroll positions off.
     gsap.set(split.lines, {
       overflow: "hidden",
-      display: "inline-block",
+      display: "block",
+      lineHeight: "1",
+      marginBottom: "-0.2em",
     })
 
     // Use RAF to batch reads after writes complete
     const rafId = requestAnimationFrame(() => {
       if (!divRef.current || split.lines.length < 2) return
 
+      // Lines are full-width blocks, so we can't read their content width
+      // directly — measure it from each line's word children instead.
+      const contentWidth = (line: Element) => {
+        const words = line.querySelectorAll("div")
+        if (!words.length) return 0
+        const first = words[0].getBoundingClientRect()
+        const last = words[words.length - 1].getBoundingClientRect()
+        return last.right - first.left
+      }
+
       // Batch all reads together to avoid forced reflows
-      const divRect = divRef.current.getBoundingClientRect()
-      const line1Rect = split.lines[0].getBoundingClientRect()
-      const line2Rect = split.lines[1].getBoundingClientRect()
+      const divWidth = divRef.current.getBoundingClientRect().width
 
       // Calculate values before any more writes
-      const line1Offset = divRect.width - line1Rect.width
-      const line2Offset = (divRect.width - line2Rect.width) / 2
-
-      // Then do all writes together
-      gsap.set(split.lines, {
-        display: "block",
-        lineHeight: "1",
-        marginBottom: "-0.2em",
-      })
+      const line1Offset = divWidth - contentWidth(split.lines[0])
+      const line2Offset = (divWidth - contentWidth(split.lines[1])) / 2
 
       const timeline = gsap.timeline({
         scrollTrigger: {
