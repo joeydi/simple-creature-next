@@ -38,7 +38,8 @@ const SmoothScroller = ({ children }: React.PropsWithChildren) => {
     const target = document.querySelector(hash)
     if (!target) return
 
-    smoother.current?.scrollTo(target as HTMLElement, smooth)
+    // Leave a little breathing room above the target (scroll-padding-top).
+    smoother.current?.scrollTo(target as HTMLElement, smooth, "top 40px")
   }, [])
 
   useEffect(() => {
