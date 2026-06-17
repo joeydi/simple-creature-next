@@ -97,7 +97,7 @@ export const LogoGrid = () => {
       return {
         x: column * (gridWidth / columns) + (row % 2) * (gridWidth / columns / 2),
         y: row * (gridHeight / rows),
-        z: getRandom(0, -viewportWidth / 2),
+        // z: getRandom(0, -viewportWidth / 2),
       }
     })
 
