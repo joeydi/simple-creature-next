@@ -134,12 +134,12 @@ export const LogoGrid = () => {
       {
         xPercent: 0,
         yPercent: 0,
-        rotateY: 10,
+        // rotateY: 10,
       },
       {
         xPercent: -50,
         yPercent: -50,
-        rotateY: -10,
+        // rotateY: -10,
         duration: 1,
         ease: "none",
       },
