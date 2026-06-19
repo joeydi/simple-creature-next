@@ -29,9 +29,7 @@ const list1: Service[] = [
     trigger: 0.31,
   },
   {
-    label: "Social Media Content",
-    description:
-      "The art of capturing attention in an increasingly fast-paced digital landscape. We create bold, concise messaging that freezes thumbs and drives engagement.",
+    placeholder: true,
     trigger: 0.36,
   },
 ]
@@ -56,7 +54,9 @@ const list2: Service[] = [
     trigger: 0.7,
   },
   {
-    placeholder: true,
+    label: "Social Media Content",
+    description:
+      "The art of capturing attention in an increasingly fast-paced digital landscape. We create bold, concise messaging that freezes thumbs and drives engagement.",
     trigger: 0.8,
   },
   {
