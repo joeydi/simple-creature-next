@@ -49,18 +49,6 @@ const Hero = () => {
         0,
       )
 
-      // Scroll the logo in a loop
-      timeline.to(
-        logoRef.current,
-        {
-          yPercent: -66,
-          ease: "none",
-          duration: 30,
-          repeat: Infinity,
-        },
-        0,
-      )
-
       // Fade in the logo
       timeline.fromTo(
         logoRef.current,
@@ -103,7 +91,7 @@ const Hero = () => {
           <div ref={gradientRef} className="opacity-0">
             <AnimatedGradient colors={GRADIENT_COLORS} amount={0.15} frequencyX={2} frequencyY={2} speed={0.2} />
           </div>
-          <div ref={logoRef} className="aspect-1217/1401 absolute left-0 top-0 w-full opacity-0">
+          <div ref={logoRef} className="absolute inset-0 opacity-0">
             <LogoDistortion />
           </div>
           <div ref={videoRef}>

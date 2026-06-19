@@ -25,19 +25,40 @@ const fragment = `
     varying vec2 vUv;
     uniform vec4 res;
 
+    uniform float uScroll;
+    uniform vec2 uTile;
+    uniform float uPadding;
+    uniform float uGap;
+
     void main() {
         // R and G values are velocity in the x and y direction
         // B value is the velocity length
         vec3 flow = texture2D(tFlow, vUv).rgb;
 
-        vec2 uv = .5 * gl_FragCoord.xy / res.xy ;
-        vec2 myUV = (uv - vec2(0.5))*res.zw + vec2(0.5);
-        // myUV -= flow.xy * (0.15 * 0.7);
+        // Work in canvas-width units so padding is even on every side.
+        // x: 0..1 across the canvas. y: 0..(H/W), same physical unit as x.
+        float xw = gl_FragCoord.x / res.x;
+        float yw = gl_FragCoord.y / res.x;
+
+        float tileAspect = uTile.y / uTile.x;
+        float logoW = 1.0 - 2.0 * uPadding;   // logo width (side margins of uPadding)
+        float logoH = logoW * tileAspect;     // logo height (keeps aspect)
+        float cellH = logoH + uGap;           // vertical repeat period
+
+        // Wrap into one cell, scrolling by whole cells for a seamless loop.
+        float v = mod(yw + uScroll * cellH, cellH);
+
+        // uGap is split top/bottom so the gap between stacked logos equals uGap.
+        vec2 myUV = vec2((xw - uPadding) / logoW, (v - 0.5 * uGap) / logoH);
+
         myUV -= flow.xy * uDeformationSize;
+
+        // Transparent outside the logo box (the padding margin).
+        float inside = step(0.0, myUV.x) * step(myUV.x, 1.0) * step(0.0, myUV.y) * step(myUV.y, 1.0);
 
         vec4 tex = texture2D(tWater, myUV);
 
-        gl_FragColor = vec4(tex.rgb, tex.a);
+        gl_FragColor = vec4(tex.rgb, tex.a) * inside;
     }
 `
 
@@ -50,11 +71,18 @@ const LogoDistortion = () => {
 
   // Set up OGL canvas
   useEffect(() => {
-    const falloff = 0.5
+    const falloff = 1
     const dissipation = 0.95
     const deformationSize = 0.025
-    const imgSize = [2560, 2922]
-    const imageAspect = imgSize[1] / imgSize[0]
+    // Dimensions of one seamlessly-tiling logo tile (logo-background.svg)
+    const tileSize = [2560, 891.511]
+    // Scroll: tile periods per second, and direction (+1 / -1)
+    const scrollSpeed = -1 / 15
+    const scrollDirection = 1
+    // Horizontal side margin around the logo, in fractions of the canvas width (0 = full bleed)
+    const padding = 0.04
+    // Vertical space between stacked logos, in fractions of the canvas width
+    const gap = 0.05
     const canvas = canvasRef.current
 
     if (!canvas) return
@@ -73,18 +101,9 @@ const LogoDistortion = () => {
     const velocity = new Vec2() as MyVec2
 
     const resize = () => {
-      let a1, a2
-
-      if (canvas.clientHeight / canvas.clientWidth < imageAspect) {
-        a1 = 1
-        a2 = canvas.clientHeight / canvas.clientWidth / imageAspect
-      } else {
-        a1 = (canvas.clientWidth / canvas.clientHeight) * imageAspect
-        a2 = 1
-      }
-
-      mesh.program.uniforms.res.value = new Vec4(canvas.clientWidth, canvas.clientHeight, a1, a2)
       renderer.setSize(canvas.clientWidth, canvas.clientHeight)
+      // gl_FragCoord is in framebuffer pixels (canvas size × dpr), so res must match.
+      mesh.program.uniforms.res.value = new Vec4(gl.drawingBufferWidth, gl.drawingBufferHeight, 0, 0)
       aspect = canvas.clientWidth / canvas.clientHeight
     }
 
@@ -102,6 +121,10 @@ const LogoDistortion = () => {
     const texture = new Texture(gl, {
       minFilter: gl.LINEAR,
       magFilter: gl.LINEAR,
+      // mod() in the shader handles the seamless wrap; clamp both axes so edge
+      // texels don't bleed across the padding mask.
+      wrapS: gl.CLAMP_TO_EDGE,
+      wrapT: gl.CLAMP_TO_EDGE,
     })
 
     const img = new Image()
@@ -111,15 +134,6 @@ const LogoDistortion = () => {
     img.crossOrigin = "Anonymous"
     img.src = Logo.src
 
-    let a1, a2
-    if (canvas.clientHeight / canvas.clientWidth < imageAspect) {
-      a1 = 1
-      a2 = canvas.clientHeight / canvas.clientWidth / imageAspect
-    } else {
-      a1 = (canvas.clientWidth / canvas.clientHeight) * imageAspect
-      a2 = 1
-    }
-
     const program = new Program(gl, {
       vertex,
       fragment,
@@ -127,9 +141,12 @@ const LogoDistortion = () => {
         uTime: { value: 0 },
         tWater: { value: texture },
         res: {
-          value: new Vec4(canvas.clientWidth, canvas.clientHeight, a1, a2),
+          value: new Vec4(canvas.clientWidth, canvas.clientHeight, 0, 0),
         },
-        img: { value: new Vec2(imgSize[0], imgSize[1]) },
+        uScroll: { value: 0 },
+        uTile: { value: new Vec2(tileSize[0], tileSize[1]) },
+        uPadding: { value: padding },
+        uGap: { value: gap },
         // Note that the uniform is applied without using an object and value property
         // This is because the class alternates this texture between two render targets
         // and updates the value property after each render.
@@ -191,6 +208,8 @@ const LogoDistortion = () => {
       flowmap.velocity.lerp(velocity, velocity.len() ? 0.2 : 0.1)
       flowmap.update()
       program.uniforms.uTime.value = t * 0.01
+      // Advance the seamless scroll: tile periods per second (t is ms).
+      program.uniforms.uScroll.value = t * 0.001 * scrollSpeed * scrollDirection
       renderer.render({ scene: mesh })
     }
 
