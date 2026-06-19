@@ -101,10 +101,7 @@ const MenuLink = ({ title, url }: MenuLinkProps) => {
     <Link
       ref={linkRef}
       style={{ fontSize: fluid(36, 72) }}
-      className={cn(
-        "group block whitespace-nowrap p-2 text-7xl font-[450] md:p-4 md:font-normal",
-        "text-black md:text-white",
-      )}
+      className="group block whitespace-nowrap p-2 text-7xl font-[450] text-black md:p-4 md:font-normal md:text-white"
       href={url}
       onMouseEnter={handleMouseEnter}
       onClick={() => setIsActive(false)}
