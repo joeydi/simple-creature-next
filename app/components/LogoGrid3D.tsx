@@ -387,10 +387,21 @@ export const LogoGrid3D = () => {
       raf = requestAnimationFrame(update)
     }
 
-    setup()
+    // Defer image loading + scene build until the section approaches the viewport.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect()
+          setup()
+        }
+      },
+      { rootMargin: "400px 0px" },
+    )
+    observer.observe(wrapper)
 
     return () => {
       cancelled = true
+      observer.disconnect()
       cancelAnimationFrame(raf)
       disposers.forEach((d) => d())
     }
