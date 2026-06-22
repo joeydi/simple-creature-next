@@ -397,10 +397,10 @@ export const LogoGrid3D = () => {
   }, [router])
 
   return (
-    <section className="bg-black">
+    <section className="bg-pink">
       <div
         ref={maskRef}
-        className="perspective-[100vw] mask-[linear-gradient(to_bottom,transparent_0px,black_300px,black_100%)] relative aspect-[1] w-full overflow-hidden lg:aspect-[1.5]"
+        className="perspective-[100vw] mask-[linear-gradient(to_bottom,transparent_0px,black_25%,black_100%)] relative aspect-[1] w-full overflow-hidden lg:aspect-[1.5]"
       >
         <canvas ref={canvasRef} className="absolute left-0 top-0 size-full" />
       </div>
