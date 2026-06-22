@@ -64,15 +64,6 @@ const ServicesMarquee = () => {
         0,
       )
     }
-
-    timeline.fromTo(
-      marqueeRef.current,
-      {
-        y: -100,
-      },
-      { y: 100, duration: 1, ease: "none" },
-      0,
-    )
   })
 
   return (
