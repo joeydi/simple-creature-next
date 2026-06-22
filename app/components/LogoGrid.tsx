@@ -153,7 +153,7 @@ export const LogoGrid = () => {
         className="perspective-[100vw] mask-[linear-gradient(to_bottom,transparent_0px,black_300px,black_100%)] aspect-[1] w-full overflow-hidden lg:aspect-[1.5]"
       >
         {/* <div className="bg-linear-[to_bottom,rgba(0,0,0,1),transparent_300px,transparent_calc(100%-100px),rgba(0,0,0,0.5)] z-1 pointer-events-none absolute inset-0"></div> */}
-        <div ref={gridRef} className="transform-3d size-[200%]">
+        <div ref={gridRef} className="transform-3d size-[200%] backface-hidden will-change-transform">
           {Array(columns * rows)
             .fill(0)
             .map((_, i) => {
