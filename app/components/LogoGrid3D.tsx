@@ -397,7 +397,7 @@ export const LogoGrid3D = () => {
   }, [router])
 
   return (
-    <section className="bg-pink">
+    <section className="bg-black">
       <div
         ref={maskRef}
         className="perspective-[100vw] mask-[linear-gradient(to_bottom,transparent_0px,black_25%,black_100%)] relative aspect-[1] w-full overflow-hidden lg:aspect-[1.5]"
