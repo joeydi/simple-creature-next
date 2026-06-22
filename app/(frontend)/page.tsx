@@ -3,7 +3,7 @@ import Hero from "@/components/Hero"
 import ScrambleText from "@/components/ScrambleText"
 import FeaturedProjects from "@/components/FeaturedProjects"
 import ServicesMarquee from "@/components/ServicesMarquee"
-import { LogoGrid } from "@/components/LogoGrid"
+import { LogoGrid3D } from "@/components/LogoGrid3D"
 import Main from "@/components/main"
 import HomepageReels from "@/components/HomepageReels"
 
@@ -26,7 +26,7 @@ export default function Home() {
       <HomepageReels />
       <FeaturedProjects ids={projects} />
       <ServicesMarquee />
-      <LogoGrid />
+      <LogoGrid3D />
     </Main>
   )
 }
