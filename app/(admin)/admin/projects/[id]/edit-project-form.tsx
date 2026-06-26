@@ -14,6 +14,7 @@ import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { AssetSelectorModal } from "../asset-selector-modal"
 import { ThumbnailDropzone } from "../thumbnail-dropzone"
+import { MetaDescriptionField } from "../meta-description-field"
 import { DeleteProjectButton } from "./delete-project-button"
 import { ProjectContentBuilder, ProjectContentBuilderRef } from "../project-content-builder"
 import { Category, Project } from "../types"
@@ -177,9 +178,11 @@ export function EditProjectForm({ project, categories, updateProjectAction }: Ed
                     name="longDescription"
                     defaultValue={project.longDescription || ""}
                     placeholder="Detailed description of the project"
-                    rows={8}
+                    rows={3}
                   />
                 </div>
+
+                <MetaDescriptionField defaultValue={project.metaDescription} />
 
                 <div className="space-y-2">
                   <Label htmlFor="url">URL</Label>

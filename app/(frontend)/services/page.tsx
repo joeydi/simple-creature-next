@@ -13,7 +13,8 @@ import MotionServices from "./MotionServices"
 
 export const metadata: Metadata = {
   title: "Services",
-  description: "Simple Creature is a fun-size digital design and interactive animation studio in Burlington, VT.",
+  description:
+    "Simple Creature blends web design, animation, and development to create thoughtful websites, apps, motion graphics, and digital experiences.",
   openGraph: {
     url: "/services",
   },

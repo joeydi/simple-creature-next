@@ -11,6 +11,7 @@ export interface Project {
   slug: string
   shortDescription: string
   longDescription: string | null
+  metaDescription: string | null
   url: string | null
   thumbnailId: string | null
   thumbnailUrl?: string

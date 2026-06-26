@@ -14,6 +14,7 @@ import { TagsInput } from "../tags-input"
 import { CategorySelect } from "../category-select"
 import { AssetSelectorModal } from "../asset-selector-modal"
 import { ThumbnailDropzone } from "../thumbnail-dropzone"
+import { MetaDescriptionField } from "../meta-description-field"
 import { generateSlug } from "../slug-utils"
 import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { Asset } from "../../assets/types"
@@ -131,9 +132,11 @@ export function AddProjectForm({ categories }: { categories: Category[] }) {
                     id="longDescription"
                     name="longDescription"
                     placeholder="Detailed description of the project"
-                    rows={8}
+                    rows={3}
                   />
                 </div>
+
+                <MetaDescriptionField />
 
                 <div className="space-y-2">
                   <Label htmlFor="url">URL</Label>

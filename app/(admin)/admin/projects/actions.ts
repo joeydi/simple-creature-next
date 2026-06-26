@@ -64,6 +64,7 @@ export async function createProject(formData: FormData) {
   const slugInput = formData.get("slug") as string | null
   const shortDescription = formData.get("shortDescription") as string
   const longDescription = formData.get("longDescription") as string
+  const metaDescription = formData.get("metaDescription") as string
   const url = formData.get("url") as string
   const thumbnailId = formData.get("thumbnailId") as string | null
   const tagsInput = formData.get("tags") as string
@@ -137,6 +138,7 @@ export async function createProject(formData: FormData) {
     slug,
     shortDescription,
     longDescription: longDescription || null,
+    metaDescription: metaDescription || null,
     url: url || null,
     thumbnailId: thumbnailId || null,
     tags,
@@ -206,6 +208,7 @@ export async function getProjects(page: number = 1, pageSize: number = 20, searc
       slug: project.slug,
       shortDescription: project.shortDescription,
       longDescription: project.longDescription,
+      metaDescription: project.metaDescription,
       thumbnailId: project.thumbnailId,
       thumbnailUrl: asset.s3Url,
       thumbnailAlt: asset.altText,
@@ -286,6 +289,7 @@ export async function getProjectsByIds(ids: string[]): Promise<Project[]> {
       slug: project.slug,
       shortDescription: project.shortDescription,
       longDescription: project.longDescription,
+      metaDescription: project.metaDescription,
       thumbnailId: project.thumbnailId,
       thumbnailUrl: asset.s3Url,
       thumbnailAlt: asset.altText,
@@ -378,6 +382,7 @@ export async function updateProject(id: string, formData: FormData) {
   const slugInput = formData.get("slug") as string | null
   const shortDescription = formData.get("shortDescription") as string
   const longDescription = formData.get("longDescription") as string
+  const metaDescription = formData.get("metaDescription") as string
   const url = formData.get("url") as string
   const thumbnailId = formData.get("thumbnailId") as string | null
   const tagsInput = formData.get("tags") as string
@@ -449,6 +454,7 @@ export async function updateProject(id: string, formData: FormData) {
       slug,
       shortDescription,
       longDescription: longDescription || null,
+      metaDescription: metaDescription || null,
       url: url || null,
       thumbnailId: thumbnailId || null,
       tags,

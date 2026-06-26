@@ -7,7 +7,8 @@ import Main from "@/components/main"
 
 export const metadata: Metadata = {
   title: "Simple Creature » Interactive Animation Studio",
-  description: "Simple Creature is a fun-size digital design and interactive animation studio in Burlington, VT.",
+  description:
+    "Simple Creature blends web design, animation, and development to create thoughtful websites, apps, motion graphics, and digital experiences.",
 }
 
 export default async function NotFound() {
