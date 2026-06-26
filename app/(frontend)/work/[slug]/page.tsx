@@ -24,6 +24,7 @@ export async function generateMetadata(props: PageProps<"/work/[slug]">): Promis
     title: project.title,
     description: project.metaDescription || project.longDescription,
     openGraph: {
+      type: "article",
       url: `/work/${slug}`,
     },
   }

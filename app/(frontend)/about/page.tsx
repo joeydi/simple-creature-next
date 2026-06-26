@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description:
     "Simple Creature blends web design, animation, and development to create thoughtful websites, apps, motion graphics, and digital experiences.",
   openGraph: {
+    type: "website",
     url: "/about",
   },
 }

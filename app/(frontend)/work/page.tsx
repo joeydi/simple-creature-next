@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description:
     "From interactive websites and branded experiences to UI, animation, and visual effects, we craft polished digital work full of personality.",
   openGraph: {
+    type: "website",
     url: "/work",
   },
 }
