@@ -15,6 +15,9 @@ import { getCategoriesWithCounts } from "@/(frontend)/work/actions"
 export const metadata: Metadata = {
   title: "Simple Creature » Interactive Animation Studio",
   description: "Simple Creature is a fun-size digital design and interactive animation studio in Burlington, VT.",
+  openGraph: {
+    url: "/about",
+  },
 }
 
 export default async function About() {

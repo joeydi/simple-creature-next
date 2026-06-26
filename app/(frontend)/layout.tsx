@@ -18,11 +18,15 @@ const clash = localFont({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
     template: "%s » Simple Creature",
     default: "Simple Creature » Interactive Animation Studio",
   },
   description: "Simple Creature is a fun-size digital design and interactive animation studio in Burlington, VT.",
+  openGraph: {
+    url: "/",
+  },
 }
 
 export default function RootLayout({

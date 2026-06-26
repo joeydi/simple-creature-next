@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Work",
   description:
     "From interactive websites and branded experiences to visual effects, UI design, and animation, we focus on crafting work that feels polished, responsive, and full of personality.",
+  openGraph: {
+    url: "/work",
+  },
 }
 
 export default async function Work({
