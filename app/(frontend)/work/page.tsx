@@ -9,17 +9,13 @@ import { getCategoriesWithCounts } from "./actions"
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "From interactive websites and branded experiences to visual effects, UI design, and animation, we focus on crafting work that feels polished, responsive, and full of personality.",
+    "From interactive websites and branded experiences to UI, animation, and visual effects, we craft polished digital work full of personality.",
   openGraph: {
     url: "/work",
   },
 }
 
-export default async function Work({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string | string[] }>
-}) {
+export default async function Work({ searchParams }: { searchParams: Promise<{ category?: string | string[] }> }) {
   const [{ projects }, categories] = await Promise.all([getProjects(1, 100), getCategoriesWithCounts()])
 
   const { category } = await searchParams
