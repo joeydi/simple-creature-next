@@ -1,4 +1,3 @@
-import { Suspense } from "react"
 import { Metadata } from "next"
 import PageHeader from "@/components/PageHeader"
 import { getProjects } from "@/(admin)/admin/projects/actions"
@@ -13,8 +12,16 @@ export const metadata: Metadata = {
     "From interactive websites and branded experiences to visual effects, UI design, and animation, we focus on crafting work that feels polished, responsive, and full of personality.",
 }
 
-export default async function Work() {
+export default async function Work({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string | string[] }>
+}) {
   const [{ projects }, categories] = await Promise.all([getProjects(1, 100), getCategoriesWithCounts()])
+
+  const { category } = await searchParams
+  const categorySlug = Array.isArray(category) ? category[0] : category
+  const initialCategoryId = categories.find((c) => c.slug === categorySlug)?.id ?? null
 
   return (
     <Main className="pb-(--spacing-xl)">
@@ -24,9 +31,7 @@ export default async function Work() {
         </h1>
       </PageHeader>
       <div className="overflow-hidden">
-        <Suspense fallback={null}>
-          <WorkPageContent projects={projects} categories={categories} />
-        </Suspense>
+        <WorkPageContent projects={projects} categories={categories} initialCategoryId={initialCategoryId} />
       </div>
     </Main>
   )
